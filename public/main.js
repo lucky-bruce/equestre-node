@@ -24,7 +24,7 @@ $(function () {
     // Prompt for setting a username
     var connected = false;
     var socket = io();
-
+    
     socket.emit("subscribe", "consumer");
 //
 
@@ -138,11 +138,10 @@ $(function () {
     // update ranking info
     socket.on('ranking', function (data) {
         console.log("[on] ranking:" + data.length/* + JSON.stringify(data) */);
-
-        // resort by ranking
-        data.sort((a, b) => {
-            return a.rank - b.rank;
-        });
+      //  resort by ranking
+         data.sort((a, b) => {
+             return a.rank - b.rank;
+         });
 
         rankings = data;
         for (let i = 0 ; i < rankings.length ; i++) {
@@ -227,7 +226,6 @@ $(function () {
 				    started = realtime.score.lane2.time;
 			    }
 			    console.log('timer synced: tickFrom=' + tickFrom + ", started=" + started);
-			    show_timer = false;
 		    } else {
 			    show_timer = true;
 		    }
@@ -241,7 +239,6 @@ $(function () {
     // racing is paused (every round)
     socket.on('pause', function (data) {
         console.log("[on] pause");
-
         // stop rolling timer
         clearInterval(rolling_timer);
         timer_running = false;
@@ -439,6 +436,12 @@ $(function () {
 
     function updateRuntimeTimer(lane, value)
     {
+	const diff = Date.now() - realtime.updateTick;
+	if (diff >= 300) {
+		show_timer = false;
+	} else {
+		show_timer = true;
+	}
         let label = formatFloat(Math.abs(value) / 1000, 1, 'floor');
 	if (!show_timer) { label = ''; }
         var tr = $('#live-realtime tr');
@@ -688,5 +691,4 @@ $(".nav .nav-link").click(function() {
         $("section#sec-ranking").css("display", "block");
     }
 });
-
 

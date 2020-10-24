@@ -13,7 +13,6 @@ var dbconnection = mysql.createConnection({
     database: process.env.DB_DATABASE || 'equestre'
 });
 
-
 exports.findEvent = function(eventTitle, eventDate) {
     var deferred = Q.defer();
     dbconnection.query('SELECT * from tb_events WHERE eventName = ? AND eventDate = ?',
