@@ -27,6 +27,7 @@ app.use(express.static(__dirname + '/public'));
         horses: [{}]            // from <horses> command
         ranking: [{}]           // from <ranking> command
         startlist: []           // from <startlist> command
+        round1TableType: number // table 1 sort type
         realtime: {
             no, lane, startTime, score: { lane1: { time, timePenalty, point, pointPenalty }, lane2: { time, timePenalty, point, pointPenalty } }
         }                       // updated from <run> <timer1> <dnf> <final>

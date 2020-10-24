@@ -138,11 +138,67 @@ $(function () {
     // update ranking info
     socket.on('ranking', function (data) {
         console.log("[on] ranking:" + data.length/* + JSON.stringify(data) */);
+        console.log(`event table type: ${eventInfo.round1TableType}`);
       //  resort by ranking
-         data.sort((a, b) => {
-             return a.rank - b.rank;
-         });
+        if (eventInfo.round1TableType === 0) {
+            data.sort((a, b) => {
+                const timeA = a.score.lane1.time + a.score.lane1.timePenalty;
+                const timeB = b.score.lane1.time + b.score.lane1.timePenalty;
+                return timeA - timeB;
+            });
+            data.sort((a, b) => {
+                const scoreA = a.score.lane1.point + a.score.lane1.pointPenalty;
+                const scoreB = b.score.lane1.point + b.score.lane1.pointPenalty;
+                return scoreA - scoreB;
+            });
+        } else if (eventInfo.round1TableType === 1) {
+            data.sort((a, b) => {
+                const timeA = a.score.lane1.time + a.score.lane1.timePenalty;
+                const timeB = b.score.lane1.time + b.score.lane1.timePenalty;
+                return timeA - timeB;
+            });
+        } else if (eventInfo.round1TableType === 2) {
+            data.sort((a, b) => {
+                const timeA = a.score.lane1.time + a.score.lane1.timePenalty;
+                const timeB = b.score.lane1.time + b.score.lane1.timePenalty;
+                return timeA - timeB;
+            });
+            data.sort((a, b) => {
+                const scoreA = a.score.lane1.point + a.score.lane1.pointPenalty;
+                const scoreB = b.score.lane1.point + b.score.lane1.pointPenalty;
+                return scoreB - scoreA;
+            });
+        } else if (eventInfo.round1TableType === 10) {
+            data.sort((a, b) => {
+                const timeA = a.score.lane1.time + a.score.lane1.timePenalty;
+                const timeB = b.score.lane1.time + b.score.lane1.timePenalty;
+                return timeA - timeB;
+            });
+            data.sort((a, b) => {
+                const scoreA = a.score.lane1.point + a.score.lane1.pointPenalty;
+                const scoreB = b.score.lane1.point + b.score.lane1.pointPenalty;
+                return scoreA - scoreB;
+            });            
+        }
+        // move "labeled" to the bottom
+        data.sort((a, b) => {
+            const scoreA = a.score.lane1.point;
+            const scoreB = b.score.lane1.point;
+            if (scoreA < 0 && scoreB >= 0) {
+                return 1;
+            }
+            if (scoreA < 0 && scoreB < 0) {
+                return 0;
+            }
+            if (scoreA >= 0 && scoreB >= 0) {
+                return 0;
+            }
+            if (scoreA >= 0 && scoreB < 0) {
+                return -1;
+            }
+        });
 
+        console.log(data[0]);
         rankings = data;
         for (let i = 0 ; i < rankings.length ; i++) {
             let num = rankings[i].num;
