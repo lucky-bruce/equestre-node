@@ -19,7 +19,7 @@ function generateRanking(roundScore, jumpoffScore,
     }
 
     // format result table
-    let result = Array(riderCount + 1).fill(0).map(() => Array(columnCount).fill(0));
+    let result = Array(riderCount + 1).fill(0).map(() => Array(columnCount).fill(''));
 
     // format result table header
     result[0][0] = "Rnk";
@@ -58,10 +58,10 @@ function generateRanking(roundScore, jumpoffScore,
         result[i + 1][0] = rank;
         result[i + 1][1] = num;
         for (let j = 0; j < roundDisplayCount; j++) {
-            const score = scoreList.find(s => s.num === num);
+            const score = scoreList[j].find(s => s.num === num);
             if (!score) { continue; }
-            result[i + 1 + 4 + j * 2] = score.point < 0 ? score.point : score.point + score.pointPlus;
-            result[i + 1 + 4 + j * 2 + 1] = score.point < 0 ? '' : score.time + score.timePlus;
+            result[i + 1][4 + j * 2] = score.point < 0 ? score.point : score.point + score.pointPlus;
+            result[i + 1][4 + j * 2 + 1] = score.point < 0 ? '' : score.time + score.timePlus;
         }
     }
     return result;
