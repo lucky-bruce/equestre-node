@@ -371,18 +371,11 @@ io.on('connection', function (socket) {
         // jumpoff_count
         // round_table_types
         // jumpoff_table_types
+        // allowed_time_rounds
+        // allowed_time_jumpoffs
         //      table types - 0: Table A, 1: Table C, 2: Table Penalties, 10: Table Optimum
 
         console.log(`round: ${command.round}, jumpoff: ${command.jumpoff}`);
-
-        // for(let rank of command.list) {
-        //     let entry = { num: rank.num, rank: rank.rank, score:
-        //             {   lane1: { time: rank.time1, timePenalty: rank.timePlus1, point: rank.point1, pointPenalty: rank.pointPlus1 },
-        //                 lane2: { time: rank.time2, timePenalty: rank.timePlus2, point: rank.point2, pointPenalty: rank.pointPlus2 }
-        //             }
-        //     };
-        //     event.ranking.push(entry);
-        // }
 
         // alarm to client
         console.log("[emit] " + event.id + ":ranking ");
