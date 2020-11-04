@@ -64,7 +64,7 @@ const allowedTimeClockRounds = [false, false, false, false];
 const allowedTimeClockJumpoffs = [false, false, false, false];
 
 function testRanking() {
-    const ranking = require("./ranking");
+    const ranking = require("./ranking.js");
     const result = ranking.generateRanking(roundScore, jumpoffScore, roundCount, jumpoffCount, round, jumpoff,
         roundTableTypes, jumpoffTableTypes, allowedTimeRounds, allowedTimeJumpoffs, allowedTimeClockRounds, allowedTimeClockJumpoffs);
     console.log(result);

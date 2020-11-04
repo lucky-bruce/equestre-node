@@ -8,9 +8,15 @@ function generateRanking(roundScore, jumpoffScore,
     const scoreList = [...roundScore.slice(0, roundCount), ...jumpoffScore.slice(0, jumpoffCount)];
     const tableTypeList = [...roundTableTypes.slice(0, roundCount), ...jumpoffTableTypes.slice(0, jumpoffCount)];
     const allowedTimesList = [...allowedTimeRounds.slice(0, roundCount), ...allowedTimeJumpoffs.slice(0, jumpoffCount)];
-    const againstTimeClockList = [...againstTimeClockRounds.slice(0, roundCount), ...againstTimeClockJumpoffs(0, jumpoffCount)];
+    const againstTimeClockList = [...againstTimeClockRounds.slice(0, roundCount), ...againstTimeClockJumpoffs.slice(0, jumpoffCount)];
     const columnCount = 4 + 2 * roundDisplayCount;
-    const riderCount = scoreList[0].length;
+    let riderCount = scoreList[0].length;
+
+    for (let i = 1; i < roundDisplayCount; i ++) {
+        if (scoreList[i].length > riderCount) {
+            riderCount = scoreList[i].length;
+        }
+    }
 
     // format result table
     let result = Array(riderCount + 1).fill(Array(columnCount).fill(0));
@@ -27,9 +33,14 @@ function generateRanking(roundScore, jumpoffScore,
     }
 
     // calculate ranking
+    let resultNums = [];
     for (let i = 0; i < roundDisplayCount; i++) {
-        const resultNums = [];
-        const tableSlice = scoreList[roundDisplayCount - i - 1].filter(s => !resultNums.find(s.num));
+        const tableSlice = scoreList[roundDisplayCount - i - 1]
+            .filter(s => {
+                const num = s.num;
+                const found = resultNums.find(r => r[0] === num);
+                return !found;
+            });
         let applyAgainstTimeClock = false;
         if (jumpoffCount === 0 || (jumpoffCount > 1 && i >= roundCount)) {
             applyAgainstTimeClock = againstTimeClockList[i];
@@ -138,3 +149,5 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
         }
     }
 }
+
+module.exports = { generateRanking };
