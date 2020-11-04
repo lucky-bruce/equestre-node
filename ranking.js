@@ -34,15 +34,15 @@ function generateRanking(roundScore, jumpoffScore,
 
     // calculate ranking
     let resultNums = [];
-    for (let i = 0; i < roundDisplayCount; i++) {
-        const tableSlice = scoreList[roundDisplayCount - i - 1]
+    for (let i = roundDisplayCount - 1; i >= 0; i --) {
+        const tableSlice = scoreList[i]
             .filter(s => {
                 const num = s.num;
-                const found = resultNums.find(r => r[0] === num);
+                const found = resultNums.find(r => r[1] === num);
                 return !found;
             });
         let applyAgainstTimeClock = false;
-        if (jumpoffCount === 0 || (jumpoffCount > 1 && i >= roundCount)) {
+        if (jumpoffCount === 0 || (jumpoffCount >= 1 && i >= roundCount)) {
             applyAgainstTimeClock = againstTimeClockList[i];
         }
         const sortResult = sortTable(tableSlice, tableTypeList[i], applyAgainstTimeClock, allowedTimesList[i]);
@@ -55,7 +55,7 @@ function generateRanking(roundScore, jumpoffScore,
     // write result table
     for (let i = 0; i < riderCount; i++) {
         const [rank, num] = resultNums[i];
-        result[i + 1][0] = rank;
+        result[i + 1][0] = rank + 1;
         result[i + 1][1] = num;
         for (let j = 0; j < roundDisplayCount; j++) {
             const score = scoreList[j].find(s => s.num === num);

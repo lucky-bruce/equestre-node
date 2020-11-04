@@ -45,8 +45,7 @@ const jumpoffScore = [
     ],
     [
       { num: 6, point: 0, pointPlus: 0, pos: 6, time: 28624, timePlus: 0 },
-      { num: 7, point: 0, pointPlus: 0, pos: 7, time: 29111, timePlus: 0 },
-      { num: 10, point: 0, pointPlus: 0, pos: 10, time: 20096, timePlus: 0 }
+      { num: 7, point: 0, pointPlus: 0, pos: 7, time: 29111, timePlus: 0 }
     ],
     [],
     []
@@ -54,14 +53,14 @@ const jumpoffScore = [
 
 const roundCount = 2;
 const jumpoffCount = 2;
-const round = 1;
-const jumpoff = 0;
+const round = 0;
+const jumpoff = 2;
 const roundTableTypes = [0, 0, 0, 0];
 const jumpoffTableTypes = [0, 0, 0, 0];
 const allowedTimeRounds = [0, 0, 0, 0];
 const allowedTimeJumpoffs = [0, 0, 0, 0];
-const allowedTimeClockRounds = [false, false, false, false];
-const allowedTimeClockJumpoffs = [false, false, false, false];
+const allowedTimeClockRounds = [true, true, true, true];
+const allowedTimeClockJumpoffs = [true, true, true, true];
 
 function testRanking() {
     const ranking = require("./ranking.js");
