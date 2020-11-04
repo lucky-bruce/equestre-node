@@ -373,6 +373,8 @@ io.on('connection', function (socket) {
         // jumpoff_table_types
         // allowed_time_rounds
         // allowed_time_jumpoffs
+        // against_time_clock_rounds
+        // against_time_clock_jumpoffs
         //      table types - 0: Table A, 1: Table C, 2: Table Penalties, 10: Table Optimum
 
         console.log(`round: ${command.round}, jumpoff: ${command.jumpoff}`);
@@ -409,12 +411,15 @@ io.on('connection', function (socket) {
                                    roundCount, jumpoffCount,
                                    round, jumpoff,
                                    roundTableTypes, jumpoffTableTypes,
-                                   optimumTime) {
+                                   allowedTimeRounds, allowedTimeJumpoffs,
+                                   againstTimeClockRounds, againstTimeClockJumpoffs) {
         console.log("generating rank list");
         // TODO: optimumTime should be come from requestre live app
         const roundDisplayCount = round !== 0 ? round : (roundCount + jumpoff);
         const scoreList = [...roundScore.slice(0, roundCount), ...jumpoffScore.slice(0, jumpoffCount)];
         const tableTypeList = [...roundTableTypes.slice(0, roundCount), ...jumpoffTableTypes.slice(0, jumpoffCount)];
+        const allowedTimesList = [...allowedTimeRounds.slice(0, roundCount), ...allowedTimeJumpoffs.slice(0, jumpoffCount)];
+        const againstTimeClockList = [...againstTimeClockRounds.slice(0, roundCount), ...againstTimeClockJumpoffs(0, jumpoffCount)];
         const columnCount = 4 + 2 * roundDisplayCount;
         const riderCount = scoreList[0].length;
 
@@ -436,14 +441,21 @@ io.on('connection', function (socket) {
         for (let i = 0; i < roundDisplayCount; i ++) {
             const resultNums = [];
             const tableSlice = scoreList[roundDisplayCount - i - 1].filter(s => !resultNums.find(s.num));
-            const sortResult = sortTable(tableSlice, tableTypeList[i], optimumTime);
+            let applyAgainstTimeClock = false;
+            if (jumpoffCount === 0 || (jumpoffCount > 1 && i >= roundCount)) {
+                applyAgainstTimeClock = againstTimeClockList[i];
+            }
+            const sortResult = sortTable(tableSlice, tableTypeList[i], applyAgainstTimeClock, allowedTimesList[i]);
+            sortResult.forEach(s => {
+                s[0] = s[0] + resultNums.length;
+            });
             resultNums = [...resultNums, ...sortResult];
         }
 
         // write result table
         for (let i = 0; i < riderCount; i ++) {
-            const num = resultNums[i];
-            result[i][0] = i + 1; // TODO: should consider same ranking num
+            const [rank, num] = resultNums[i];
+            result[i][0] = rank;
             result[i][1] = num;
             for (let j = 0; j < roundDisplayCount; j ++) {
                 const score = scoreList.find(s => s.num === num);
@@ -455,23 +467,34 @@ io.on('connection', function (socket) {
         return result;
     }
 
-    function sortTable(scoreTableSlice, tableType, optimumTime) {
-        let result = scoreTableSlice.slice();
-        const cnt = result.length;
-        for (let i = 0; i < cnt - 1; i ++) {
-            for (let j = i + 1; j < cnt; j ++) {
-                if (compareFn(result[j], result[i], tableType, optimumTime)) {
-                    const temp = result[i].slice();
-                    result[i] = result[j].slice();
-                    result[j] = temp;
+    function sortTable(scoreTableSlice, tableType, applyAgainstTimeClock, optimumTime) {
+        let scoreTable = scoreTableSlice.slice();
+        const cnt = scoreTable.length;
+        let result = Array(cnt).fill([0, 0]);
+        let rankCounter = 0;
+        for (let i = 0; i < cnt; i ++) {
+            const max = scoreTable[0];
+            const n = scoreTable.length;
+            for (let j = 1; j < n; j ++) {
+                const compareResult = compareFn(max, scoreTable[j], tableType, applyAgainstTimeClock, optimumTime);
+                if (compareResult > 1) {
+                    max = scoreTable[j];
                 }
             }
+            if (i === 0) {
+                result[i] = [0, max.num];
+            } else {
+                const compareResult = compareFn(max, result[i - 1], tableType, applyAgainstTimeClock, optimumTime);
+                if (compareResult === -1) {
+                    rankCounter ++;
+                }
+                result[i] = [rankCounter, max.num];
+            }
         }
-        return result.map(r => r.num);
+        return result;
     }
 
-    function compareFn(score1, score2, tableType, optimumTime) {
-        // TODO: implement compare function base on table type
+    function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime) {
         const pointA = score1.point + score1.pointPlus;
         const pointB = score2.point + score2.pointPlus;
         const timeA = score1.time + score1.timePlus;
@@ -483,6 +506,7 @@ io.on('connection', function (socket) {
                 if (score2.point < 0) { return  1; }
                 if (pointA < pointB) { return 1; }
                 else if(pointA === pointB) {
+                    if (!applyAgainstTimeClock) { return 1; }
                     if (timeA < timeB) { return 1; }
                     else if (timeA === timeB) { return 0; }
                     else { return -1; }
@@ -500,6 +524,7 @@ io.on('connection', function (socket) {
                 if (score2.point < 0) { return  1; }
                 if (pointA > pointB) { return 1; }
                 else if(pointA === pointB) {
+                    if (!applyAgainstTimeClock) { return 1; }
                     if (timeA < timeB) { return 1; }
                     else if (timeA === timeB) { return 0; }
                     else { return -1; }
