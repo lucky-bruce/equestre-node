@@ -40,9 +40,24 @@ function generateRanking(roundScore, jumpoffScore,
                 const num = s.num;
                 const found = resultNums.find(r => r[1] === num);
                 return !found;
-            });
+            }).map(s => ({...s}));
+        if (i === roundCount - 1) {
+            for (let j = 0; j < tableSlice.length; j ++) {
+                tableSlice[j].point = 0;
+                tableSlice[j].pointPlus = 0;
+            }
+            for (let j = 0; j <= i; j ++) {
+                const table = scoreList[j];
+                for (let k = 0; k < tableSlice.length; k ++) {
+                    const num = tableSlice[k].num;
+                    const found = table.find(t => t.num === num);
+                    if (!found) { continue; }
+                    tableSlice[k].point += found.point + found.pointPlus;
+                }
+            }
+        }
         let applyAgainstTimeClock = false;
-        if (jumpoffCount === 0 || (jumpoffCount >= 1 && i >= roundCount)) {
+        if (jumpoffCount === 0 || (jumpoffCount >= 1 && i >= roundCount) || roundCount === round) {
             applyAgainstTimeClock = againstTimeClockList[i];
         }
         const sortResult = sortTable(tableSlice, tableTypeList[i], applyAgainstTimeClock, allowedTimesList[i]);
@@ -89,7 +104,7 @@ function sortTable(scoreTableSlice, tableType, applyAgainstTimeClock, optimumTim
         } else {
             const compareResult = compareFn(max, lastMax, tableType, applyAgainstTimeClock, optimumTime);
             if (compareResult === -1) {
-                rankCounter++;
+                rankCounter = i;
             }
             result[i] = [rankCounter, max.num];
         }

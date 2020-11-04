@@ -377,7 +377,8 @@ io.on('connection', function (socket) {
         // against_time_clock_jumpoffs
         //      table types - 0: Table A, 1: Table C, 2: Table Penalties, 10: Table Optimum
 
-        console.log(`round: ${command.round}, jumpoff: ${command.jumpoff}`);
+        console.log(command.round_score);
+        console.log(command.jumpoff_score);
 
         // alarm to client
         console.log("[emit] " + event.id + ":ranking ");
