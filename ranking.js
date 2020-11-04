@@ -19,7 +19,7 @@ function generateRanking(roundScore, jumpoffScore,
     }
 
     // format result table
-    let result = Array(riderCount + 1).fill(Array(columnCount).fill(0));
+    let result = Array(riderCount + 1).fill(0).map(() => Array(columnCount).fill(0));
 
     // format result table header
     result[0][0] = "Rnk";
@@ -55,13 +55,13 @@ function generateRanking(roundScore, jumpoffScore,
     // write result table
     for (let i = 0; i < riderCount; i++) {
         const [rank, num] = resultNums[i];
-        result[i][0] = rank;
-        result[i][1] = num;
+        result[i + 1][0] = rank;
+        result[i + 1][1] = num;
         for (let j = 0; j < roundDisplayCount; j++) {
             const score = scoreList.find(s => s.num === num);
             if (!score) { continue; }
-            result[i + 4 + j * 2] = score.point < 0 ? score.point : score.point + score.pointPlus;
-            result[i + 4 + j * 2 + 1] = score.point < 0 ? '' : score.time + score.timePlus;
+            result[i + 1 + 4 + j * 2] = score.point < 0 ? score.point : score.point + score.pointPlus;
+            result[i + 1 + 4 + j * 2 + 1] = score.point < 0 ? '' : score.time + score.timePlus;
         }
     }
     return result;
@@ -72,24 +72,29 @@ function sortTable(scoreTableSlice, tableType, applyAgainstTimeClock, optimumTim
     const cnt = scoreTable.length;
     let result = Array(cnt).fill([0, 0]);
     let rankCounter = 0;
+    let lastMax;
     for (let i = 0; i < cnt; i++) {
-        const max = scoreTable[0];
+        let max = scoreTable[0];
+        let iMax = 0;
         const n = scoreTable.length;
         for (let j = 1; j < n; j++) {
             const compareResult = compareFn(max, scoreTable[j], tableType, applyAgainstTimeClock, optimumTime);
-            if (compareResult > 1) {
+            if (compareResult === -1) {
                 max = scoreTable[j];
+                iMax = j;
             }
         }
         if (i === 0) {
             result[i] = [0, max.num];
         } else {
-            const compareResult = compareFn(max, result[i - 1], tableType, applyAgainstTimeClock, optimumTime);
+            const compareResult = compareFn(max, lastMax, tableType, applyAgainstTimeClock, optimumTime);
             if (compareResult === -1) {
                 rankCounter++;
             }
             result[i] = [rankCounter, max.num];
         }
+        lastMax = max;
+        scoreTable.splice(iMax, 1);
     }
     return result;
 }

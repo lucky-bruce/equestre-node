@@ -4,7 +4,7 @@
   "description": "real-time equestre site",
   "main": "push_server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node test.js",
     "start": "node push_server.js"
   },
   "dependencies": {
