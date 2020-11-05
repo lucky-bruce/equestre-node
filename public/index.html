@@ -34,12 +34,12 @@
       </div>
       <table class="table table-scoreboard eventboard">
         <thead>
-        <tr>
-          <th class="col-4">Event</th>
-          <th class="col-4">Competition</th>
-          <th class="col-2">Start Date</th>
-          <th class="col-2">End Date</th>
-        </tr>
+          <tr class="d-flex">
+            <th class="col-3">Event</th>
+            <th class="col-5">Competition</th>
+            <th class="col-2">Start Date</th>
+            <th class="col-2">End Date</th>
+          </tr>
         </thead>
         <tbody id="live-events">
         </tbody>
@@ -75,16 +75,16 @@
     </div>
     <table class="table table-scoreboard">
       <thead>
-      <tr class="d-flex">
-        <th class="col-xs">Pos</th>
-        <th class="col-xs">Num</th>
-        <th class="col-3">Horse</th>
-        <th class="col-3">Rider</th>
-        <th class="col-xs">Nation</th>
-        <th class="col-sm">&nbsp</th>
-        <th class="col-sm">&nbsp</th>
-        <th class="col-sm">&nbsp</th>
-        <th class="col-sm">&nbsp</th>
+      <tr>
+        <th>Pos</th>
+        <th>Num</th>
+        <th>Horse</th>
+        <th>Rider</th>
+        <th>Nation</th>
+        <th>&nbsp</th>
+        <th>&nbsp</th>
+        <th>&nbsp</th>
+        <th>&nbsp</th>
       </tr>
       </thead>
       <tbody id="live-atstart">
@@ -97,29 +97,29 @@
       </div>
       <table class="table table-scoreboard highlight">
         <thead>
-          <tr class="d-flex">
-            <th class="col-xs">Rank</th>
-            <th class="col-xs">Num</th>
-            <th class="col-3">Horse</th>
-            <th class="col-3">Rider</th>
-            <th class="col-xs">Nation</th>
-	    <th class="col-sm small-font text-center">Round/<br>Point</th>
-	    <th class="col-sm small-font text-center">Round/<br>Time</th>
-	    <th class="col-sm small-font text-center">Jump-Off/<br>Point</th>
-	    <th class="col-sm small-font text-center">Jump-Off/<br>Time</th>
+          <tr>
+            <th>Rank</th>
+            <th>Num</th>
+            <th>Horse</th>
+            <th>Rider</th>
+            <th>Nation</th>
+            <th>Round Point</th>
+            <th>Round Time</th>
+            <th>Jump-Off Point</th>
+            <th>Jump-Off Time</th>
           </tr>
         </thead>
         <tbody id="live-realtime">
-          <tr class="d-flex">
-            <td class="col-xs center bold">&nbsp</td>
-            <td class="col-xs center bold">&nbsp</td>
-            <td class="col-3 left bold">&nbsp</td>
-            <td class="col-3 left bold">&nbsp</td>
-            <td class="col-xs flag bold">&nbsp</td>
-            <td class="col-sm right bold">&nbsp</td>
-            <td class="col-sm right bold">&nbsp</td>
-            <td class="col-sm right bold">&nbsp</td>
-            <td class="col-sm right bold">&nbsp</td>
+          <tr>
+            <td>&nbsp</td>
+            <td>&nbsp</td>
+            <td>&nbsp</td>
+            <td>&nbsp</td>
+            <td>&nbsp</td>
+            <td>&nbsp</td>
+            <td>&nbsp</td>
+            <td>&nbsp</td>
+            <td>&nbsp</td>
           </tr>
         </tbody>
       </table>
@@ -130,16 +130,16 @@
       </div>
        <table class="table table-scoreboard">
         <thead>
-          <tr class="d-flex">
-            <th class="col-xs">Rank</th>
-            <th class="col-xs">Num</th>
-            <th class="col-3">Horse</th>
-            <th class="col-3">Rider</th>
-            <th class="col-xs">Nation</th>
-	    <th class="col-sm small-font text-center">Round/<br>Point</th>
-	    <th class="col-sm small-font text-center">Round/<br>Time</th>
-	    <th class="col-sm small-font text-center">Jump-Off/<br>Point</th>
-	    <th class="col-sm small-font text-center">Jump-Off/<br>Time</th>
+          <tr>
+            <th>Rank</th>
+            <th>Num</th>
+            <th>Horse</th>
+            <th>Rider</th>
+            <th>Nation</th>
+            <th>Round/<br>Point</th>
+            <th>Round/<br>Time</th>
+            <th>Jump-Off/<br>Point</th>
+            <th>Jump-Off/<br>Time</th>
           </tr>
         </thead>
         <tbody id="live-atfinish">
@@ -151,21 +151,8 @@
       <h3>Ranking</h3>
     </div>
     <table class="table table-scoreboard">
-      <thead>
-      <tr class="d-flex">
-        <th class="col-xs">Rank</th>
-        <th class="col-xs">Num</th>
-        <th class="col-3">Horse</th>
-        <th class="col-3">Rider</th>
-        <th class="col-xs">Nation</th>
-	<th class="col-sm small-font text-center">Round/<br>Point</th>
-	<th class="col-sm small-font text-center">Round/<br>Time</th>
-	<th class="col-sm small-font text-center">Jump-Off/<br>Point</th>
-	<th class="col-sm small-font text-center">Jump-Off/<br>Time</th>
-      </tr>
-      </thead>
-      <tbody id="live-ranking">
-      </tbody>
+      <thead id="ranking_header"></thead>
+      <tbody id="ranking_body"></tbody>
     </table>
   </div>
     <!--<button class="btn btn-success load">Load</button>-->
@@ -174,16 +161,16 @@
     <div class="subboard">
     <table class="table table-scoreboard">
       <thead>
-      <tr class="d-flex">
-        <th class="col-xs">Pos</th>
-        <th class="col-xs">Num</th>
-        <th class="col-2">Horse</th>
-        <th class="col-4">Rider</th>
-        <th class="col-xs">Nation</th>
-	<th class="col-sm small-font text-center">Round/<br>Point</th>
-	<th class="col-sm small-font text-center">Round/<br>Time</th>
-	<th class="col-sm small-font text-center">Jump-Off/<br>Point</th>
-	<th class="col-sm small-font text-center">Jump-Off/<br>Time</th>
+      <tr>
+        <th>Pos</th>
+        <th>Num</th>
+        <th>Horse</th>
+        <th>Rider</th>
+        <th>Nation</th>
+        <th>Round/<br>Point</th>
+        <th>Round/<br>Time</th>
+        <th>Jump-Off/<br>Point</th>
+        <th>Jump-Off/<br>Time</th>
       </tr>
       </thead>
       <tbody id="startlist">
@@ -195,16 +182,16 @@
     <div class="subboard">
     <table class="table table-scoreboard">
       <thead>
-      <tr class="d-flex">
-        <th class="col-xs">Rank</th>
-        <th class="col-xs">Num</th>
-        <th class="col-2">Horse</th>
-        <th class="col-4">Rider</th>
-        <th class="col-xs">Nation</th>
-	<th class="col-sm small-font text-center">Round/<br>Point</th>
-	<th class="col-sm small-font text-center">Round/<br>Time</th>
-	<th class="col-sm small-font text-center">Jump-Off/<br>Point</th>
-	<th class="col-sm small-font text-center">Jump-Off/<br>Time</th>
+      <tr>
+        <th>Rank</th>
+        <th>Num</th>
+        <th>Horse</th>
+        <th>Rider</th>
+        <th>Nation</th>
+        <th>Round/<br>Point</th>
+        <th>Round/<br>Time</th>
+        <th>Jump-Off/<br>Point</th>
+        <th>Jump-Off/<br>Time</th>
       </tr>
       </thead>
       <tbody id="ranking">

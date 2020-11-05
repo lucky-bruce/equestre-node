@@ -106,7 +106,7 @@ const jumpoffScore = [
 
 const roundCount = 2;
 const jumpoffCount = 2;
-const round = 1;
+const round = 2;
 const jumpoff = 0;
 const roundTableTypes = [0, 0, 0, 0];
 const jumpoffTableTypes = [0, 0, 0, 0];

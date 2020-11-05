@@ -138,74 +138,18 @@ $(function () {
     // update ranking info
     socket.on('ranking', function (data) {
         console.log("[on] ranking:" + data.length/* + JSON.stringify(data) */);
-        console.log(`event table type: ${eventInfo.round1TableType}`);
-      //  resort by ranking
-        if (eventInfo.round1TableType === 0) {
-            data.sort((a, b) => {
-                const timeA = a.score.lane1.time + a.score.lane1.timePenalty;
-                const timeB = b.score.lane1.time + b.score.lane1.timePenalty;
-                return timeA - timeB;
-            });
-            data.sort((a, b) => {
-                const scoreA = a.score.lane1.point + a.score.lane1.pointPenalty;
-                const scoreB = b.score.lane1.point + b.score.lane1.pointPenalty;
-                return scoreA - scoreB;
-            });
-        } else if (eventInfo.round1TableType === 1) {
-            data.sort((a, b) => {
-                const timeA = a.score.lane1.time + a.score.lane1.timePenalty;
-                const timeB = b.score.lane1.time + b.score.lane1.timePenalty;
-                return timeA - timeB;
-            });
-        } else if (eventInfo.round1TableType === 2) {
-            data.sort((a, b) => {
-                const timeA = a.score.lane1.time + a.score.lane1.timePenalty;
-                const timeB = b.score.lane1.time + b.score.lane1.timePenalty;
-                return timeA - timeB;
-            });
-            data.sort((a, b) => {
-                const scoreA = a.score.lane1.point + a.score.lane1.pointPenalty;
-                const scoreB = b.score.lane1.point + b.score.lane1.pointPenalty;
-                return scoreB - scoreA;
-            });
-        } else if (eventInfo.round1TableType === 10) {
-            data.sort((a, b) => {
-                const timeA = a.score.lane1.time + a.score.lane1.timePenalty;
-                const timeB = b.score.lane1.time + b.score.lane1.timePenalty;
-                return timeA - timeB;
-            });
-            data.sort((a, b) => {
-                const scoreA = a.score.lane1.point + a.score.lane1.pointPenalty;
-                const scoreB = b.score.lane1.point + b.score.lane1.pointPenalty;
-                return scoreA - scoreB;
-            });            
-        }
         // move "labeled" to the bottom
-        data.sort((a, b) => {
-            const scoreA = a.score.lane1.point;
-            const scoreB = b.score.lane1.point;
-            if (scoreA < 0 && scoreB >= 0) {
-                return 1;
-            }
-            if (scoreA < 0 && scoreB < 0) {
-                return 0;
-            }
-            if (scoreA >= 0 && scoreB >= 0) {
-                return 0;
-            }
-            if (scoreA >= 0 && scoreB < 0) {
-                return -1;
-            }
-        });
-
-        console.log(data[0]);
         rankings = data;
-        for (let i = 0 ; i < rankings.length ; i++) {
-            let num = rankings[i].num;
+        for (let i = 1 ; i < rankings.length ; i++) {
+            let num = rankings[i][1];
             let startlistentry = startlistmap[num];
             if(startlistentry !== undefined) {
-                rankings[i].horse_idx = startlistentry.horse_idx;
-                rankings[i].rider_idx = startlistentry.rider_idx;
+                const horseIdx = startlistentry.horse_idx;
+                const riderIdx = startlistentry.rider_idx;
+                const rider = riders[riderIdx];
+
+                rankings[i][2] = horses[horseIdx].name || '';
+                rankings[i][3] = rider ? `${rider.firstName} ${rider.lastName}` : '';
             }
         }
 
@@ -482,6 +426,9 @@ $(function () {
     }
 
     function updateLiveRankingList() {
+
+        // TODO: 
+        return;
         clearRanking("live-ranking");
         var index = 1;
         for (let ranking of rankings) {
@@ -576,13 +523,46 @@ $(function () {
     }
 
     function updateRankingList() {
+        if (rankings.length <= 1) { return; }
         clearRanking("ranking");
+        // const rnkClass = 'col-xs';
+        // const numClass = 'col-xs';
+        // const riderClass = 'flex-grow-1';
+        // const horseClass = 'flex-grow-1';
+        // const pointsClass = 'col-sm';
+        // const timeClass = 'col-sm';
+        const rnkClass = '';
+        const numClass = '';
+        const riderClass = '';
+        const horseClass = '';
+        const pointsClass = '';
+        const timeClass = '';
 
-        var index = 1;
-        for (let ranking of rankings) {
-            addToRankingList("ranking", index++, ranking);
+        const addRow = (rowData, container, colType) => {
+            const row = $("<tr class=''></tr>");
+            for (let i = 0; i < rowData.length; i ++) {
+                let style = '';
+                if (i === 0) { style = rnkClass; }
+                if (i === 1) { style = numClass; }
+                if (i === 2) { style = horseClass; }
+                if (i === 3) { style = riderClass; }
+                if (i >= 4 && i % 2 === 0) { style = pointsClass; }
+                if (i >= 4 && i % 2 === 1) { style = timeClass; }
+                const col = $(`<${colType} class='${style}'>${rowData[i]}</${colType}>`);
+                row.append(col);
+            }
+            container.append(row);
+        };
+
+        const tableHeader = $("#ranking_header");
+        const tableBody = $("#ranking_body");
+        tableHeader.html('');
+        tableBody.html('');
+
+        addRow(rankings[0], tableHeader, 'th');
+        for (let i = 1; i < rankings.length; i ++) {
+            addRow(rankings[i], tableBody, 'td');
         }
-        // clearRankingRemains("ranking", index);
     }
 
     function addToRankingList(tableId, i, ranking) {
@@ -671,12 +651,12 @@ $(function () {
         $('#live-events').html('');
 
         for(event of events) {
-            $('#live-events').append($('<tr>'));
+            $('#live-events').append($('<tr class="d-flex">'));
             tr = $('#live-events tr:last');
-            tr.append($('<td>').addClass("col-4 left").html("&nbsp"));
-            tr.append($('<td>').addClass("col-4 left").html("&nbsp"));
-            tr.append($('<td>').addClass("col-2 center").html("&nbsp"));
-            tr.append($('<td>').addClass("col-2 center").html("&nbsp"));
+            tr.append($('<td>').addClass("col-3 left").html("&nbsp"));
+            tr.append($('<td>').addClass("col-5 left").html("&nbsp"));
+            tr.append($('<td>').addClass("col-2 left").html("&nbsp"));
+            tr.append($('<td>').addClass("col-2 left").html("&nbsp"));
 
             tr.children("td:nth-child(1)").html(event.info.title);
             tr.children("td:nth-child(2)").html(event.info.eventTitle);

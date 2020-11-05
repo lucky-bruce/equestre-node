@@ -88,13 +88,13 @@ function generateRanking(roundScore, jumpoffScore,
         }
         if (!displayRank) { result[i + 1][0] = ''; }
         if (round > 1 && round <= roundCount) {
-            result[i + 1][4 + roundDisplayCount * 2 + 2] = displayRank ? formatPoint(scoreSummary) : '';
+            result[i + 1][4 + (roundDisplayCount - 1) * 2 + 2] = displayRank ? formatPoint(scoreSummary) : '';
         }
     }
 
     // update table header
     if (round > 1 && round <= roundCount) {
-        result[0][4 + roundDisplayCount * 2 + 2] = 'Points';
+        result[0][4 + (roundDisplayCount - 1) * 2 + 2] = 'Points';
     }
     if (round === 1) {
         result[0][4] = 'Points';
