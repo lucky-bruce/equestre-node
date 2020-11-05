@@ -358,30 +358,26 @@ $(function () {
         let headers = $(".table-scoreboard thead tr");
 
          if(eventInfo.jumpoffNumber > 0) {
-             headers.children("th:nth-child(6)").removeClass("col-2").addClass("col-1").addClass("small-font");
-             headers.children("th:nth-child(7)").removeClass("col-2").addClass("col-1").addClass("small-font");
-             headers.children("th:nth-child(8)").removeClass("col-2").addClass("col-1").css("display", "inline-block").addClass("small-font");
-             headers.children("th:nth-child(9)").removeClass("col-2").addClass("col-1").css("display", "inline-block").addClass("small-font");
+             headers.children("th:nth-child(6)").addClass("small-font");
+             headers.children("th:nth-child(7)").addClass("small-font");
+             headers.children("th:nth-child(8)").addClass("small-font");
          } else {
-             headers.children("th:nth-child(6)").removeClass("col-1").addClass("col-2").removeClass("small-font");
-             headers.children("th:nth-child(7)").removeClass("col-1").addClass("col-2").removeClass("small-font");
-             headers.children("th:nth-child(8)").css("display", "none").removeClass("small-font");
-             headers.children("th:nth-child(9)").css("display", "none").removeClass("small-font");
+             headers.children("th:nth-child(6)").removeClass("small-font");
+             headers.children("th:nth-child(7)").removeClass("small-font");
+             headers.children("th:nth-child(8)").removeClass("small-font");
          }
 
         // realtime
         var tr = $('#live-realtime tr:first');
 
         if(eventInfo.jumpoffNumber > 0) {
-            tr.children("td:nth-child(6)").removeClass("col-2").addClass("col-1");
-            tr.children("td:nth-child(7)").removeClass("col-2").addClass("col-1");
-            tr.children("td:nth-child(8)").removeClass("col-2").addClass("col-1").css("display", "inline-block");
-            tr.children("td:nth-child(9)").removeClass("col-2").addClass("col-1").css("display", "inline-block");
+            tr.children("td:nth-child(6)");
+            tr.children("td:nth-child(7)");
+            tr.children("td:nth-child(8)");
         } else {
-            tr.children("td:nth-child(6)").removeClass("col-1").addClass("col-2");
-            tr.children("td:nth-child(7)").removeClass("col-1").addClass("col-2");
-            tr.children("td:nth-child(8)").css("display", "none");
-            tr.children("td:nth-child(9)").css("display", "none");
+            tr.children("td:nth-child(6)");
+            tr.children("td:nth-child(7)");
+            tr.children("td:nth-child(8)");
         }
     }
 
@@ -526,20 +522,20 @@ $(function () {
         if (rankings.length <= 1) { return; }
         clearRanking("ranking");
         const headerClasses = {
-            rnkClass: 'rnk-col text-center',
-            numClass: 'num-col text-center',
+            rnkClass: 'col-40 text-center',
+            numClass: 'col-40 text-center',
             riderClass: '',
             horseClass: '',
-            pointsClass: 'points-col',
-            timeClass: 'time-col'
+            pointsClass: 'col-50',
+            timeClass: 'col-50'
         };
         const dataClasses = {
-            rnkClass: 'rnk-col text-center bg-color-macaroni text-color-black',
-            numClass: 'num-col text-center bg-white text-color-black',
+            rnkClass: 'col-40 text-center bg-color-macaroni text-color-black',
+            numClass: 'col-40 text-center bg-white text-color-black',
             riderClass: '',
             horseClass: '',
-            pointsClass: 'points-col text-right',
-            timeClass: 'time-col text-right'
+            pointsClass: 'col-50 text-right',
+            timeClass: 'col-50 text-right'
         };
 
 
@@ -577,22 +573,22 @@ $(function () {
         let startlistentry = startlistmap[ranking.num];
 
         if (tr.length == 0) {
-            $('#' + tableId).append($('<tr class="d-flex">'));
+            $('#' + tableId).append($('<tr>'));
             tr = $('#' + tableId + ' tr:last');
-            tr.append($('<td>').addClass("col-xs center").html("&nbsp"));
-            tr.append($('<td>').addClass("col-xs center").html("&nbsp"));
-            tr.append($('<td>').addClass("col-3 left").html("&nbsp"));
-            tr.append($('<td>').addClass("col-3 left").html("&nbsp"));
-            tr.append($('<td>').addClass("col-xs flag").html("&nbsp"));
+            tr.append($('<td class="col-40 text-center text-color-black bg-color-macaroni">').html("&nbsp"));
+            tr.append($('<td class="col-40 text-center text-color-black bg-white">').html("&nbsp"));
+            tr.append($('<td>').html("&nbsp"));
+            tr.append($('<td>').html("&nbsp"));
+            tr.append($('<td class="col-50">').html("&nbsp"));
 
             if(eventInfo.jumpoffNumber > 0) {
-                tr.append($('<td>').addClass("col-sm right").html("&nbsp"));
-                tr.append($('<td>').addClass("col-sm right").html("&nbsp"));
-                tr.append($('<td>').addClass("col-sm right").html("&nbsp"));
-                tr.append($('<td>').addClass("col-sm right").html("&nbsp"));
+                tr.append($('<td class="col-50">').addClass("right").html("&nbsp"));
+                tr.append($('<td class="col-50">').addClass("right").html("&nbsp"));
+                tr.append($('<td class="col-50">').addClass("right").html("&nbsp"));
+                tr.append($('<td class="col-50">').addClass("right").html("&nbsp"));
             } else {
-                tr.append($('<td>').addClass("col-2 right").html("&nbsp"));
-                tr.append($('<td>').addClass("col-2 right").html("&nbsp"));
+                tr.append($('<td class="col-50">').addClass("right").html("&nbsp"));
+                tr.append($('<td class="col-50">').addClass("right").html("&nbsp"));
             }
         }
 
@@ -659,10 +655,10 @@ $(function () {
         for(event of events) {
             $('#live-events').append($('<tr class="d-flex">'));
             tr = $('#live-events tr:last');
-            tr.append($('<td>').addClass("col-3 left").html("&nbsp"));
-            tr.append($('<td>').addClass("col-5 left").html("&nbsp"));
-            tr.append($('<td>').addClass("col-2 left").html("&nbsp"));
-            tr.append($('<td>').addClass("col-2 left").html("&nbsp"));
+            tr.append($('<td class="col-3">').html("&nbsp"));
+            tr.append($('<td class="col-5">').html("&nbsp"));
+            tr.append($('<td class="col-2">').html("&nbsp"));
+            tr.append($('<td class="col-2">').html("&nbsp"));
 
             tr.children("td:nth-child(1)").html(event.info.title);
             tr.children("td:nth-child(2)").html(event.info.eventTitle);

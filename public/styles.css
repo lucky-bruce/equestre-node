@@ -172,11 +172,11 @@ footer {
     background-color: black;
 }
 
-.rnk-col, .num-col {
+.col-40 {
     width: 40px;
 }
 
-.points-col, .time-col {
+.col-50 {
     width: 50px;
 }
 
