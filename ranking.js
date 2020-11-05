@@ -1,3 +1,5 @@
+const labels = ["Classified", "Not Present", "Not Started", "Retired", "Eliminated", "Off-course", "Disqualified"];
+
 function generateRanking(roundScore, jumpoffScore,
     roundCount, jumpoffCount,
     round, jumpoff,
@@ -41,7 +43,7 @@ function generateRanking(roundScore, jumpoffScore,
                 const found = resultNums.find(r => r[1] === num);
                 return !found;
             }).map(s => ({...s}));
-        if (i === roundCount - 1) {
+        if (i >= 1 && i < roundCount - 1) {
             for (let j = 0; j < tableSlice.length; j ++) {
                 tableSlice[j].point = 0;
                 tableSlice[j].pointPlus = 0;
@@ -72,13 +74,33 @@ function generateRanking(roundScore, jumpoffScore,
         const [rank, num] = resultNums[i];
         result[i + 1][0] = rank + 1;
         result[i + 1][1] = num;
+        let displayRank = false;
+        let scoreSummary = 0;
         for (let j = 0; j < roundDisplayCount; j++) {
             const score = scoreList[j].find(s => s.num === num);
             if (!score) { continue; }
-            result[i + 1][4 + j * 2] = score.point < 0 ? score.point : score.point + score.pointPlus;
-            result[i + 1][4 + j * 2 + 1] = score.point < 0 ? '' : score.time + score.timePlus;
+            result[i + 1][4 + j * 2] = score.point < 0 ? formatPoint(score.point) : formatPoint(score.point + score.pointPlus);
+            result[i + 1][4 + j * 2 + 1] = score.point < 0 ? '' : formatTime(score.time + score.timePlus);
+            if (score.point >= 0) {
+                displayRank = true;
+                scoreSummary += score.point;
+            }
+        }
+        if (!displayRank) { result[i + 1][0] = ''; }
+        if (round > 1 && round <= roundCount) {
+            result[i + 1][4 + roundDisplayCount * 2 + 2] = displayRank ? formatPoint(scoreSummary) : '';
         }
     }
+
+    // update table header
+    if (round > 1 && round <= roundCount) {
+        result[0][4 + roundDisplayCount * 2 + 2] = 'Points';
+    }
+    if (round === 1) {
+        result[0][4] = 'Points';
+        result[0][5] = 'Time';
+    }
+
     return result;
 }
 
@@ -168,6 +190,19 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
             return 0;
         }
     }
+}
+
+function formatPoint(score) {
+    if (score < 0) {
+        return labels[Math.abs(score) - 1];
+    }
+    const s = score / 1000;
+    return s.toFixed(2);
+}
+
+function formatTime(time) {
+    const t = time / 1000;
+    return t.toFixed(2);
 }
 
 module.exports = { generateRanking };
