@@ -149,11 +149,11 @@ footer {
     font-size: 13px;
 }
 
-.table thead th, tbody td {
+.table thead th, .table tbody td {
     vertical-align: middle;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding: 8px 2px 8px 2px;
     font-size: 14px;
+    border: 1px solid grey;
 }
 
 .table tbody {
@@ -167,6 +167,35 @@ footer {
 .table-scoreboard tr:nth-child(even) td {
     background-color: #232323;
 }
+
 .table-scoreboard tr:nth-child(odd) td {
     background-color: black;
+}
+
+.rnk-col, .num-col {
+    width: 40px;
+}
+
+.points-col, .time-col {
+    width: 50px;
+}
+
+.bg-color-macaroni {
+    background-color: #ffbf80 !important;
+}
+
+.text-color-black {
+    color: black !important;
+}
+
+.font-size-medium {
+    font-size: 12px;
+}
+
+.font-size-small {
+    font-size: 11px;
+}
+
+.no-wrap {
+    white-space: nowrap;
 }

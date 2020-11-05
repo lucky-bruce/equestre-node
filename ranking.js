@@ -30,8 +30,9 @@ function generateRanking(roundScore, jumpoffScore,
     result[0][3] = "Rider";
     for (let i = 0; i < roundDisplayCount; i++) {
         const roundType = i < roundCount ? 'Round' : 'Jump-Off';
-        result[0][4 + i * 2] = `${roundType} ${i + 1}\nPoints`;
-        result[0][4 + i * 2 + 1] = `${roundType} ${i + 1}\nTime`;
+        const ii = i < roundCount ? `${i + 1}` : `${i + 1 - roundCount}`;
+        result[0][4 + i * 2] = `<div class="font-size-medium no-wrap">${roundType} ${ii}</div><div class="font-size-small">Points</div>`;
+        result[0][4 + i * 2 + 1] = `<div class="font-size-medium no-wrap">${roundType} ${ii}</div><div class="font-size-small">Time</div>`;
     }
 
     // calculate ranking

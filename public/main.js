@@ -525,29 +525,35 @@ $(function () {
     function updateRankingList() {
         if (rankings.length <= 1) { return; }
         clearRanking("ranking");
-        // const rnkClass = 'col-xs';
-        // const numClass = 'col-xs';
-        // const riderClass = 'flex-grow-1';
-        // const horseClass = 'flex-grow-1';
-        // const pointsClass = 'col-sm';
-        // const timeClass = 'col-sm';
-        const rnkClass = '';
-        const numClass = '';
-        const riderClass = '';
-        const horseClass = '';
-        const pointsClass = '';
-        const timeClass = '';
+        const headerClasses = {
+            rnkClass: 'rnk-col text-center',
+            numClass: 'num-col text-center',
+            riderClass: '',
+            horseClass: '',
+            pointsClass: 'points-col',
+            timeClass: 'time-col'
+        };
+        const dataClasses = {
+            rnkClass: 'rnk-col text-center bg-color-macaroni text-color-black',
+            numClass: 'num-col text-center bg-white text-color-black',
+            riderClass: '',
+            horseClass: '',
+            pointsClass: 'points-col text-right',
+            timeClass: 'time-col text-right'
+        };
 
-        const addRow = (rowData, container, colType) => {
+
+        const addRow = (rowData, container, colType, classes) => {
             const row = $("<tr class=''></tr>");
+            console.log(classes);
             for (let i = 0; i < rowData.length; i ++) {
                 let style = '';
-                if (i === 0) { style = rnkClass; }
-                if (i === 1) { style = numClass; }
-                if (i === 2) { style = horseClass; }
-                if (i === 3) { style = riderClass; }
-                if (i >= 4 && i % 2 === 0) { style = pointsClass; }
-                if (i >= 4 && i % 2 === 1) { style = timeClass; }
+                if (i === 0) { style = classes.rnkClass; }
+                if (i === 1) { style = classes.numClass; }
+                if (i === 2) { style = classes.horseClass; }
+                if (i === 3) { style = classes.riderClass; }
+                if (i >= 4 && i % 2 === 0) { style = classes.pointsClass; }
+                if (i >= 4 && i % 2 === 1) { style = classes.timeClass; }
                 const col = $(`<${colType} class='${style}'>${rowData[i]}</${colType}>`);
                 row.append(col);
             }
@@ -559,9 +565,9 @@ $(function () {
         tableHeader.html('');
         tableBody.html('');
 
-        addRow(rankings[0], tableHeader, 'th');
+        addRow(rankings[0], tableHeader, 'th', headerClasses);
         for (let i = 1; i < rankings.length; i ++) {
-            addRow(rankings[i], tableBody, 'td');
+            addRow(rankings[i], tableBody, 'td', dataClasses);
         }
     }
 
