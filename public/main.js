@@ -102,7 +102,6 @@ $(function () {
         }
 
         // update UI
-        updateLiveRankingList();
         updateRankingList();
         updateStartList();
     });
@@ -116,7 +115,6 @@ $(function () {
         }
 
         // update UI
-        updateLiveRankingList();
         updateRankingList();
         updateStartList();
     });
@@ -154,7 +152,6 @@ $(function () {
         }
 
         // Update UI
-        updateLiveRankingList();
         updateRankingList();
     });
 
@@ -383,54 +380,43 @@ $(function () {
 
     //  fill the list from index to the atstart list
     function updateLiveAtStart(index) {
-        clearRanking("live-atstart");
 
         let limit = (index + 3 < startlist.length)?(index + 3):startlist.length;
 
-        var row = 1;
-        // load ranking data
-        for(i = limit - 1 ; i >= index ; i--) {
-            startlist[i].rank = i + 1; // it is pos value
-            addToRankingList("live-atstart", row++, startlist[i]);
+        const table = [];
+        if (rankings.length >= 1) {
+            table[0] = rankings[0];
         }
-        // clearRankingRemains("live-atstart", row);
+        let j = 1;
+        for(i = limit - 1 ; i >= index ; i--) {
+            const num = startlist[i].num;
+            const ranking = rankings.find(r => r[1] === num);
+            table[j] = ranking;
+            j += 1;
+        }
+        updateTable("current", table);
     }
 
     // fill the rank from index to the atstart list
     function updateLiveAtFinish(index) {
-        clearRanking("live-atfinish");
 
         let limit = (index - 3 >= 0)?(index - 3):-1;
 
-        var row = 1;
-
-        // load ranking data
+        const table = [];
+        if (rankings.length >= 1) {
+            table[0] = rankings[0];
+        }
+        let j = 1;
         for(let i = index ; i > limit ; i--) {
             let num = startlist[i].num;
 
             let ranking = rankings.find(function(ranking) {
                 return ranking.num === num;
             });
-
-            if(ranking === undefined) {
-                // add empty ranking
-                ranking = { num: num, score: { lane1: {}, lane2: {} }};
-            }
-            addToRankingList("live-atfinish", row++, ranking);
+            table[j] = ranking;
+            j += 1;
         }
-        // clearRankingRemains("live-atfinish", row);
-    }
-
-    function updateLiveRankingList() {
-
-        // TODO: 
-        return;
-        clearRanking("live-ranking");
-        var index = 1;
-        for (let ranking of rankings) {
-            addToRankingList("live-ranking", index++, ranking);
-        }
-        // clearRankingRemains("live-ranking", index);
+        updateTable("finish", table);
     }
 
     function updateRuntimeTimer(lane, value)
@@ -495,32 +481,50 @@ $(function () {
 
     function updateStartList()
     {
-        clearRanking("startlist");
-
-        var index = 1;
-        for (let i = 0 ; i < startlist.length ; i++) {
-            startlist[i].rank = i + 1; // it is pos value
-
-            let num = startlist[i].num;
-
-            let ranking = rankings.find(function(ranking) {
-                return ranking.num === num;
-            });
-            if(ranking !== undefined) {
-                // add empty ranking
-                startlist[i].score = ranking.score;
-            } else {
-                startlist[i].score = { lane1: {}, lane2: {} };
-            }
-
-            addToRankingList("startlist", index++, startlist[i]);
-        }
-        // clearRankingRemains("startlist", index);
+        const tbody = $("#startlist_body");
+        const rows = startlist.map(r => {
+            const horseIdx = r.horse_idx;
+            const rider = riders[horseIdx];
+            const horse = horses[horseIdx];
+            const num = r.num;
+            const row = $('<tr>');
+            row.append($(`<td class="text-center col-40 text-center bg-color-macaroni text-color-black">${num}</td>`));
+            row.append($(`<td class="text-center text-center bg-white text-color-black">${num}</td>`));
+            row.append($(`<td>${horse.name}</td>`));
+            row.append($(`<td>${rider.firstName} ${rider.lastName}</td>`));
+            return row;
+        });
+        tbody.html('');
+        tbody.append(rows);
     }
 
     function updateRankingList() {
-        if (rankings.length <= 1) { return; }
-        clearRanking("ranking");
+        if (rankings.length >= 1) {
+            updateHeaders(rankings[0]);
+        }
+        updateTable("ranking", rankings);
+    }
+
+    function addRow(rowData, container, colType, classes) {
+        if (!rowData) { return; }
+        const row = $("<tr class=''></tr>");
+        for (let i = 0; i < rowData.length; i ++) {
+            let style = '';
+            if (i === 0) { style = classes.rnkClass; }
+            if (i === 1) { style = classes.numClass; }
+            if (i === 2) { style = classes.horseClass; }
+            if (i === 3) { style = classes.riderClass; }
+            if (i >= 4 && i % 2 === 0) { style = classes.pointsClass; }
+            if (i >= 4 && i % 2 === 1) { style = classes.timeClass; }
+            const col = $(`<${colType} class='${style}'>${rowData[i]}</${colType}>`);
+            row.append(col);
+        }
+        container.append(row);
+    };
+
+
+    function updateHeaders(header) {
+        const tables = ['ranking', 'current', 'finish'];
         const headerClasses = {
             rnkClass: 'col-40 text-center',
             numClass: 'col-40 text-center',
@@ -529,6 +533,16 @@ $(function () {
             pointsClass: 'col-50',
             timeClass: 'col-50'
         };
+        tables.forEach(tableName => {
+            const tableHeader = $(`#${tableName}_header`);
+            tableHeader.html('');
+            addRow(header, tableHeader, 'th', headerClasses);
+        });
+    }
+
+    function updateTable(tableName, table) {
+        if (table.length < 1) { return; }
+        
         const dataClasses = {
             rnkClass: 'col-40 text-center bg-color-macaroni text-color-black',
             numClass: 'col-40 text-center bg-white text-color-black',
@@ -538,114 +552,10 @@ $(function () {
             timeClass: 'col-50 text-right'
         };
 
-
-        const addRow = (rowData, container, colType, classes) => {
-            const row = $("<tr class=''></tr>");
-            console.log(classes);
-            for (let i = 0; i < rowData.length; i ++) {
-                let style = '';
-                if (i === 0) { style = classes.rnkClass; }
-                if (i === 1) { style = classes.numClass; }
-                if (i === 2) { style = classes.horseClass; }
-                if (i === 3) { style = classes.riderClass; }
-                if (i >= 4 && i % 2 === 0) { style = classes.pointsClass; }
-                if (i >= 4 && i % 2 === 1) { style = classes.timeClass; }
-                const col = $(`<${colType} class='${style}'>${rowData[i]}</${colType}>`);
-                row.append(col);
-            }
-            container.append(row);
-        };
-
-        const tableHeader = $("#ranking_header");
-        const tableBody = $("#ranking_body");
-        tableHeader.html('');
+        const tableBody = $(`#${tableName}_body`);        
         tableBody.html('');
-
-        addRow(rankings[0], tableHeader, 'th', headerClasses);
-        for (let i = 1; i < rankings.length; i ++) {
-            addRow(rankings[i], tableBody, 'td', dataClasses);
-        }
-    }
-
-    function addToRankingList(tableId, i, ranking) {
-        var tr = $('#' + tableId + ' tr:nth-child(' + i + ')');
-
-        let startlistentry = startlistmap[ranking.num];
-
-        if (tr.length == 0) {
-            $('#' + tableId).append($('<tr>'));
-            tr = $('#' + tableId + ' tr:last');
-            tr.append($('<td class="col-40 text-center text-color-black bg-color-macaroni">').html("&nbsp"));
-            tr.append($('<td class="col-40 text-center text-color-black bg-white">').html("&nbsp"));
-            tr.append($('<td>').html("&nbsp"));
-            tr.append($('<td>').html("&nbsp"));
-            tr.append($('<td class="col-50">').html("&nbsp"));
-
-            if(eventInfo.jumpoffNumber > 0) {
-                tr.append($('<td class="col-50">').addClass("right").html("&nbsp"));
-                tr.append($('<td class="col-50">').addClass("right").html("&nbsp"));
-                tr.append($('<td class="col-50">').addClass("right").html("&nbsp"));
-                tr.append($('<td class="col-50">').addClass("right").html("&nbsp"));
-            } else {
-                tr.append($('<td class="col-50">').addClass("right").html("&nbsp"));
-                tr.append($('<td class="col-50">').addClass("right").html("&nbsp"));
-            }
-        }
-
-        tr.children("td:nth-child(1)").html((ranking.rank===undefined)?"&nbsp":(ranking.rank + "."));
-        tr.children("td:nth-child(2)").html(ranking.num);
-
-        tr.children("td:nth-child(6)").html(formatPoint(ranking.score.lane1, true));
-        tr.children("td:nth-child(7)").html(formatTime(ranking.score.lane1, true));
-
-        if(eventInfo.jumpoffNumber > 0) {
-            tr.children("td:nth-child(8)").html(formatPoint(ranking.score.lane2, true));
-            tr.children("td:nth-child(9)").html(formatTime(ranking.score.lane2, true));
-        }
-
-        let horse = undefined;
-        if(startlistentry !== undefined) {
-            horse = horses[startlistentry.horse_idx];
-        }
-        if (horse !== undefined) {
-            tr.children("td:nth-child(3)").html(horse.name);
-        } else {
-            tr.children("td:nth-child(3)").html("&nbsp");
-        }
-
-        let rider = undefined;
-        if(startlistentry !== undefined) {
-            rider = riders[startlistentry.rider_idx];
-        }
-        if (rider !== undefined) {
-            tr.children("td:nth-child(4)").html(rider.lastName + "&nbsp" + rider.firstName);
-            tr.children("td:nth-child(5)").css("background", "#232323 url('flags/" + rider.nation + ".bmp') center no-repeat").css("background-size", "contain");
-            tr.children("td:nth-child(5)").attr("data-toggle", "tooltip").attr("title", rider.nation);
-        } else {
-            tr.children("td:nth-child(4)").html("&nbsp");
-            tr.children("td:nth-child(5)").html("&nbsp");
-        }
-
-        tr.children().each(function () {
-            if(this.scrollWidth > $(this).outerWidth()) {
-                $(this).addClass("small-font");
-            } else {
-                $(this).removeClass("small-font");
-            }
-        });
-    }
-
-    function clearRanking(tableId) {
-        $('#' + tableId).html("");
-    }
-
-    function clearRankingRemains(tableId, count) {
-        while (1) {
-            var tr = $('#' + tableId + ' tr:nth-child(' + count + ')');
-            if (tr.length == 0)
-                break;
-
-            tr.remove();
+        for (let i = 1; i < table.length; i ++) {
+            addRow(table[i], tableBody, 'td', dataClasses);
         }
     }
 
