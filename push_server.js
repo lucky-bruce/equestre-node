@@ -380,8 +380,9 @@ io.on('connection', function (socket) {
 
         // alarm to client
         console.log("[emit] " + event.id + ":ranking ");
+        const twoPhaseIntegrated = command.two_phase_integrated;
         event.ranking = ranking.generateRanking(command.round_score, command.jumpoff_score, command.round_count, command.jumpoff_count, command.round, command.jumpoff, command.round_table_types, command.jumpoff_table_types,
-            command.allowed_time_rounds, command.allowed_time_jumpoffs, command.against_time_clock_rounds, command.against_time_clock_jumpoffs);
+            command.allowed_time_rounds, command.allowed_time_jumpoffs, command.against_time_clock_rounds, command.against_time_clock_jumpoffs, twoPhaseIntegrated);
         socket.to(event.id).emit('ranking', event.ranking);
 
         // save to database

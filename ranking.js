@@ -5,7 +5,12 @@ function generateRanking(roundScore, jumpoffScore,
     round, jumpoff,
     roundTableTypes, jumpoffTableTypes,
     allowedTimeRounds, allowedTimeJumpoffs,
-    againstTimeClockRounds, againstTimeClockJumpoffs) {
+    againstTimeClockRounds, againstTimeClockJumpoffs,
+    twoPhaseIntegrated) {
+    if (twoPhaseIntegrated) {
+        round = 0;
+        jumpoff = 1;
+    }
     const roundDisplayCount = round !== 0 ? round : (roundCount + jumpoff);
     const scoreList = [...roundScore.slice(0, roundCount), ...jumpoffScore.slice(0, jumpoffCount)];
     const tableTypeList = [...roundTableTypes.slice(0, roundCount), ...jumpoffTableTypes.slice(0, jumpoffCount)];
@@ -63,7 +68,7 @@ function generateRanking(roundScore, jumpoffScore,
         }
         let applyAgainstTimeClock = false;
         // if (jumpoffCount === 0 || (jumpoffCount >= 1 && i >= roundCount) || roundCount === round) {
-            applyAgainstTimeClock = againstTimeClockList[i];
+        applyAgainstTimeClock = againstTimeClockList[i];
         // }
         const sortResult = sortTable(tableSlice, tableTypeList[i], applyAgainstTimeClock, allowedTimesList[i]);
         sortResult.forEach(s => {
@@ -103,6 +108,8 @@ function generateRanking(roundScore, jumpoffScore,
         result[0][5] = 'Points';
         result[0][6] = 'Time';
     }
+
+    console.table(result);
 
     return result;
 }
@@ -154,7 +161,6 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
             if (score2.point < 0) { return 1; }
             if (pointA < pointB) { return 1; }
             else if (pointA === pointB) {
-                if (pointA === 0) { return 0; }
                 if (!applyAgainstTimeClock) { return 1; }
                 if (timeA < timeB) { return 1; }
                 else if (timeA === timeB) { return 0; }
