@@ -396,6 +396,7 @@ $(function () {
 
     //  fill the list from index to the atstart list
     function updateLiveAtStart(index) {
+        console.log(`updating live at start ${index}`);
         let limit = (index + 3 < startlist.length)?(index + 3):startlist.length;
 
         const table = [];
@@ -404,9 +405,19 @@ $(function () {
         }
         let j = 1;
         for(i = limit - 1 ; i >= index ; i--) {
-            const num = startlist[i].num;
+            const startlistentry = startlist[i];
+            const num = startlistentry.num;
             const ranking = rankings.find(r => r[1] === num);
             table[j] = ranking;
+            if (!ranking) {
+                const horse = horses[startlistentry.horse_idx];
+                const rider = riders[startlistentry.rider_idx];
+                const data = Array(rankings[0].length).fill('');
+                data[0] = num; data[1] = num;
+                data[2] = `${horse.name}`;
+                data[3] = `${rider.firstName} ${rider.lastName}`;
+                table[j] = data;
+            }
             j += 1;
         }
         updateTable("nextriders", table);
