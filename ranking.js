@@ -60,9 +60,9 @@ function generateRanking(roundScore, jumpoffScore,
             }
         }
         let applyAgainstTimeClock = false;
-        if (jumpoffCount === 0 || (jumpoffCount >= 1 && i >= roundCount) || roundCount === round) {
+        // if (jumpoffCount === 0 || (jumpoffCount >= 1 && i >= roundCount) || roundCount === round) {
             applyAgainstTimeClock = againstTimeClockList[i];
-        }
+        // }
         const sortResult = sortTable(tableSlice, tableTypeList[i], applyAgainstTimeClock, allowedTimesList[i]);
         sortResult.forEach(s => {
             s[0] = s[0] + resultNums.length;
@@ -142,6 +142,9 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
     const pointB = score2.point + score2.pointPlus;
     const timeA = score1.time + score1.timePlus;
     const timeB = score2.time + score2.timePlus;
+    if (timeA === 0) { return -1; }
+    if (timeB === 0) { return 1; }
+    if (timeA === timeB && timeA === 0) { return 0; }
     switch (tableType) {
         case 0: { // Table A
             // least point and fastest time
@@ -149,6 +152,7 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
             if (score2.point < 0) { return 1; }
             if (pointA < pointB) { return 1; }
             else if (pointA === pointB) {
+                if (pointA === 0) { return 0; }
                 if (!applyAgainstTimeClock) { return 1; }
                 if (timeA < timeB) { return 1; }
                 else if (timeA === timeB) { return 0; }
@@ -158,7 +162,7 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
         }
         case 1: { // Table C
             // fastest time
-            if (timeA < timeB) { return 1; }
+        if (timeA < timeB) { return 1; }
             else if (timeA === timeB) { return 0; }
             else { return -1; }
         }
