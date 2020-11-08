@@ -3,6 +3,7 @@ const headerClasses = {
     numClass: 'col-40 text-center',
     riderClass: '',
     horseClass: '',
+    flagClass: 'col-50',
     pointsClass: 'col-50',
     timeClass: 'col-50'
 };
@@ -12,8 +13,9 @@ const dataClasses = {
     numClass: 'col-40 text-center bg-white text-color-black',
     riderClass: '',
     horseClass: '',
-    pointsClass: 'col-50 text-right',
-    timeClass: 'col-50 text-right'
+    flagClass: 'col-50',
+    pointsClass: 'col-50 text-right bg-color-perano text-color-black',
+    timeClass: 'col-50 text-right bg-color-pale-canary text-color-black'
 };
 
 $(function () {
@@ -165,6 +167,7 @@ $(function () {
 
                 rankings[i][2] = horses[horseIdx].name || '';
                 rankings[i][3] = rider ? `${rider.firstName} ${rider.lastName}` : '';
+                rankings[i][4] = rider.nation;
             }
         }
 
@@ -413,7 +416,8 @@ $(function () {
                 const horse = horses[startlistentry.horse_idx];
                 const rider = riders[startlistentry.rider_idx];
                 const data = Array(rankings[0].length).fill('');
-                data[0] = num; data[1] = num;
+                data[0] = num;
+                data[1] = num;
                 data[2] = `${horse.name}`;
                 data[3] = `${rider.firstName} ${rider.lastName}`;
                 table[j] = data;
@@ -462,7 +466,7 @@ $(function () {
 
         const currentBody = $('#current_body');
         const tr = $(currentBody.children(0));
-        tr.children(`td:nth-child(${4 + (offset - 1) * 2 + 2})`).html(label);
+        tr.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).html(label);
     }
 
     function setRuntimeList(fullupdate) {
@@ -506,9 +510,9 @@ $(function () {
 
         currentRider.children("td:nth-child(1)").html((realtime.rank===undefined)?"&nbsp":realtime.rank + ".");
         currentRider.children("td:nth-child(2)").html(realtime.num);
-        currentRider.children(`td:nth-child(${4 + (offset - 1) * 2 + 1})`).html(formatPoint(score, false));
+        currentRider.children(`td:nth-child(${5 + (offset - 1) * 2 + 1})`).html(formatPoint(score, false));
         if(fullupdate === true) {
-            currentRider.children(`td:nth-child(${4 + (offset - 1) * 2 + 2})`).html(formatTime(score, false));
+            currentRider.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).html(formatTime(score, false));
         }
 
         if (horse !== undefined) {
@@ -516,16 +520,17 @@ $(function () {
         } else {
             currentRider.children("td:nth-child(3)").html("&nbsp");
         }
+        currentRider.children("td:nth-child(3)").addClass("bg-white text-color-black");
 
         if (rider !== undefined) {
             currentRider.children("td:nth-child(4)").html(`${rider.firstName} ${rider.lastName}`);
-            // TODO: add this field
-            // currentRider.children("td:nth-child(5)").css("background", "#232323 url('flags/" + rider.nation + ".bmp') center no-repeat").css("background-size", "contain");
-            // currentRider.children("td:nth-child(5)").attr("data-toggle", "tooltip").attr("title", rider.nation);
+            currentRider.children("td:nth-child(5)").css("background", "#232323 url('flags/" + rider.nation + ".bmp') center no-repeat").css("background-size", "contain");
+            currentRider.children("td:nth-child(5)").attr("data-toggle", "tooltip").attr("title", rider.nation);
         } else {
             currentRider.children("td:nth-child(4)").html("&nbsp");
             // currentRider.children("td:nth-child(5)").html("&nbsp");
         }
+        currentRider.children("td:nth-child(4)").addClass("bg-white text-color-black");
     }
 
     function clearRuntimeList() {
@@ -548,6 +553,10 @@ $(function () {
             row.append($(`<td class="text-center text-center bg-white text-color-black">${num}</td>`));
             row.append($(`<td>${horse.name}</td>`));
             row.append($(`<td>${rider.firstName} ${rider.lastName}</td>`));
+            const flagCol = $('<td class="col-50"></td>');
+            flagCol.css("background", "#232323 url('flags/" + rider.nation + ".bmp') center no-repeat").css("background-size", "contain");
+            flagCol.attr("data-toggle", "tooltip").attr("title", rider.nation);
+            row.append(flagCol);
             return row;
         });
         tbody.html('');
@@ -566,13 +575,23 @@ $(function () {
         const row = $("<tr class=''></tr>");
         for (let i = 0; i < rowData.length; i ++) {
             let style = '';
+            const dot = i === 0 && colType === 'td' && rowData[i] !== '' ? '.' : '';
             if (i === 0) { style = classes.rnkClass; }
             if (i === 1) { style = classes.numClass; }
             if (i === 2) { style = classes.horseClass; }
-            if (i === 3) { style = classes.riderClass; }
-            if (i >= 4 && i % 2 === 0) { style = classes.pointsClass; }
-            if (i >= 4 && i % 2 === 1) { style = classes.timeClass; }
-            const col = $(`<${colType} class='${style}'>${rowData[i]}</${colType}>`);
+            if (i === 3) {
+                style = classes.riderClass;
+            }
+            if (i === 4) { style = classes.flagClass; }
+            if (i >= 5 && i % 2 === 0) { style = classes.pointsClass; }
+            if (i >= 5 && i % 2 === 1) { style = classes.timeClass; }
+            const col = $(`<${colType} class='${style}'>${rowData[i]}${dot}</${colType}>`);
+            if (i === 4 && colType === 'td') {
+                col.css("background", "#232323 url('flags/" + rowData[i] + ".bmp') center no-repeat").css("background-size", "contain");
+                col.attr("data-toggle", "tooltip").attr("title", rowData[i]);
+                col.html('');
+            }
+
             row.append(col);
         }
         container.append(row);
@@ -585,6 +604,9 @@ $(function () {
         tables.forEach(tableName => {
             const tableHeader = $(`#${tableName}_header`);
             tableHeader.html('');
+            if (tableName === 'nextriders') {
+                header[0] = 'Pos';
+            }
             addRow(header, tableHeader, 'th', headerClasses);
         });
     }

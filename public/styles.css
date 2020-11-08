@@ -149,6 +149,11 @@ footer {
     font-size: 13px;
 }
 
+.table.highlight thead {
+    background-color: rgba(255, 92, 43, 0.92);
+    color: black;
+}
+
 .table thead th, .table tbody td {
     vertical-align: middle;
     padding: 8px 2px 8px 2px;
@@ -196,6 +201,22 @@ footer {
     font-size: 11px;
 }
 
+.font-size-mini {
+    font-size: 8px;
+}
+
 .no-wrap {
     white-space: nowrap;
+}
+
+.bg-color-pomegrant {
+    background-color: #EA491C !important;
+}
+
+.bg-color-perano {
+    background-color: #b8d1f3 !important;
+}
+
+.bg-color-pale-canary {
+    background-color: #ffff99 !important;
 }

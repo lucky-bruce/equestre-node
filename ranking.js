@@ -11,7 +11,7 @@ function generateRanking(roundScore, jumpoffScore,
     const tableTypeList = [...roundTableTypes.slice(0, roundCount), ...jumpoffTableTypes.slice(0, jumpoffCount)];
     const allowedTimesList = [...allowedTimeRounds.slice(0, roundCount), ...allowedTimeJumpoffs.slice(0, jumpoffCount)];
     const againstTimeClockList = [...againstTimeClockRounds.slice(0, roundCount), ...againstTimeClockJumpoffs.slice(0, jumpoffCount)];
-    const columnCount = 4 + 2 * roundDisplayCount;
+    const columnCount = 5 + 2 * roundDisplayCount;
     let riderCount = scoreList[0].length;
 
     for (let i = 1; i < roundDisplayCount; i ++) {
@@ -28,11 +28,13 @@ function generateRanking(roundScore, jumpoffScore,
     result[0][1] = "Num";
     result[0][2] = "Horse";
     result[0][3] = "Rider";
+    result[0][4] = "Nation";
     for (let i = 0; i < roundDisplayCount; i++) {
         const roundType = i < roundCount ? 'Round' : 'Jump-Off';
         const ii = i < roundCount ? `${i + 1}` : `${i + 1 - roundCount}`;
-        result[0][4 + i * 2] = `<div class="font-size-medium no-wrap">${roundType} ${ii}</div><div class="font-size-small">Points</div>`;
-        result[0][4 + i * 2 + 1] = `<div class="font-size-medium no-wrap">${roundType} ${ii}</div><div class="font-size-small">Time</div>`;
+        const fontSize = roundType === 'Round' ? 'font-size-small' : 'font-size-mini';
+        result[0][5 + i * 2] = `<div class="${fontSize} no-wrap">${roundType} ${ii}</div><div class="font-size-small">Points</div>`;
+        result[0][5 + i * 2 + 1] = `<div class="${fontSize} no-wrap">${roundType} ${ii}</div><div class="font-size-small">Time</div>`;
     }
 
     // calculate ranking
@@ -80,8 +82,8 @@ function generateRanking(roundScore, jumpoffScore,
         for (let j = 0; j < roundDisplayCount; j++) {
             const score = scoreList[j].find(s => s.num === num);
             if (!score) { continue; }
-            result[i + 1][4 + j * 2] = score.point < 0 ? formatPoint(score.point) : formatPoint(score.point + score.pointPlus);
-            result[i + 1][4 + j * 2 + 1] = score.point < 0 ? '' : formatTime(score.time + score.timePlus);
+            result[i + 1][5 + j * 2] = score.point < 0 ? formatPoint(score.point) : formatPoint(score.point + score.pointPlus);
+            result[i + 1][5 + j * 2 + 1] = score.point < 0 ? '' : formatTime(score.time + score.timePlus);
             if (score.point >= 0) {
                 displayRank = true;
                 scoreSummary += score.point;
@@ -89,17 +91,17 @@ function generateRanking(roundScore, jumpoffScore,
         }
         if (!displayRank) { result[i + 1][0] = ''; }
         if (round > 1 && round <= roundCount) {
-            result[i + 1][4 + (roundDisplayCount - 1) * 2 + 2] = displayRank ? formatPoint(scoreSummary) : '';
+            result[i + 1][5 + (roundDisplayCount - 1) * 2 + 2] = displayRank ? formatPoint(scoreSummary) : '';
         }
     }
 
     // update table header
     if (round > 1 && round <= roundCount) {
-        result[0][4 + (roundDisplayCount - 1) * 2 + 2] = 'Points';
+        result[0][5 + (roundDisplayCount - 1) * 2 + 2] = 'Points';
     }
     if (round === 1) {
-        result[0][4] = 'Points';
-        result[0][5] = 'Time';
+        result[0][5] = 'Points';
+        result[0][6] = 'Time';
     }
 
     return result;
