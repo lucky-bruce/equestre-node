@@ -414,7 +414,6 @@ $(function () {
 
     // fill the rank from index to the atstart list
     function updateLiveAtFinish(index) {
-
         let limit = (index - 3 >= 0)?(index - 3):-1;
 
         const table = [];
@@ -425,9 +424,7 @@ $(function () {
         for(let i = index ; i > limit ; i--) {
             let num = startlist[i].num;
 
-            let ranking = rankings.find(function(ranking) {
-                return ranking.num === num;
-            });
+            let ranking = rankings.find(r => r[1] === num);
             table[j] = ranking;
             j += 1;
         }
