@@ -631,6 +631,10 @@ $(function () {
         $('#event_list').hide();
         $('#start_list').hide();
         $('#event_view').show();
+        $("#nextriders_list").show();
+        $("#current_list").show();
+        $("#finished_list").show();
+        $("#ranking_list").show();
     }
 
     // goto event list
