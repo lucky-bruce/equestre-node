@@ -1,173 +1,160 @@
-
 <!doctype html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<title>Live-Timing Equestre Version 1.3</title>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<script src="js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <title>Live-Timing Equestre Version 1.3</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-<div class="container">
-<header>
-  <div class="logo"></div>
-  <div class="dropdown right-align">
-    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-      English
-    </button>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" href="index.html">English</a>
-      <a class="dropdown-item" href="index_ge.html">Deutsch</a>
-      <a class="dropdown-item" href="index_fr.html">Français</a>
-      <a class="dropdown-item" href="index_it.html">Italiano</a>
-    </div>
-  </div>
-</header>
-<main>
-  <div id="event_list" class="page">
-    <div class="subboard">
-      <div class="subtitle">
-        <h3>Live Events</h3>
+  <div class="container">
+    <header>
+      <div class="logo"></div>
+      <div class="dropdown right-align">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+          English
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="index.html">English</a>
+          <a class="dropdown-item" href="index_ge.html">Deutsch</a>
+          <a class="dropdown-item" href="index_fr.html">Français</a>
+          <a class="dropdown-item" href="index_it.html">Italiano</a>
+        </div>
       </div>
-      <table class="table table-scoreboard eventboard">
-        <thead>
-          <tr class="d-flex">
-            <th class="col-3">Event</th>
-            <th class="col-5">Competition</th>
-            <th class="col-2">Start Date</th>
-            <th class="col-2">End Date</th>
-          </tr>
-        </thead>
-        <tbody id="live-events">
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div id="event_view" class="page">
-  <nav class="navbar navbar-expand-sm navbar-dark navbar-dark">
-    <ul class="nav nav-pills">
-      <li class="nav-item">
-        <div id="nav-live" class="nav-link active">Live</div>
-      </li>
-      <li class="nav-item">
-        <div id="nav-startlist" class="nav-link">Start List</div>
-      </li>
-      <li class="nav-item">
-        <div id="nav-ranking" class="nav-link">Ranking</div>
-      </li>
-    </ul>
-    <div class="dropdown pagelink">
-      <button id="goto-events" type="button" class="btn btn-secondary">Event List</button>
-    </div>
-  </nav>
-<div class="title">
-  <div class="clear"><h2 id="meeting-title" >&nbsp</h2></div>
-  <div class="right-align"><h2 id="event-date" >&nbsp</h2></div>
-  <div class="clear"><h4 id="event-title" >&nbsp</h4></div>
-</div>
-<section id="sec-live">
-  <div class="subboard d-none">
-    <div class="subtitle">
-      <h3>Start List</h3>
-    </div>
-    <table class="table table-scoreboard">
-      <thead id="startlist_header">
-        <th class="col-40 text-center bg-color-macaroni text-color-black">Pos</th>
-        <th class="col-40 text-center bg-white text-color-black">Num</th>
-        <th>Horse</th>
-        <th>Rider</th>
-      </thead>
-      <tbody id="startlist_body">
-      </tbody>
-    </table>
-  </div>
-    <div class="subboard">
-      <div class="subtitle highlight">
-        <h3>Current</h3>
+    </header>
+    <main>
+      <div id="event_list" class="page">
+        <div class="subboard">
+          <div class="subtitle">
+            <h3>Live Events</h3>
+          </div>
+          <table class="table table-scoreboard eventboard">
+            <thead>
+              <tr class="d-flex">
+                <th class="col-3">Event</th>
+                <th class="col-5">Competition</th>
+                <th class="col-2">Start Date</th>
+                <th class="col-2">End Date</th>
+              </tr>
+            </thead>
+            <tbody id="live-events">
+            </tbody>
+          </table>
+        </div>
       </div>
-      <table class="table table-scoreboard highlight">
-        <thead id="current_header">
-        </thead>
-        <tbody id="current_body">
-        </tbody>
-      </table>
-    </div>
-    <div class="subboard">
-      <div class="subtitle">
-        <h3>At Finish</h3>
+
+      <div id="event_view" class="page">
+        <nav class="navbar navbar-expand-sm navbar-dark navbar-dark">
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <div id="nav-live" class="nav-link active">Live</div>
+            </li>
+            <li class="nav-item">
+              <div id="nav-startlist" class="nav-link">Start List</div>
+            </li>
+            <li class="nav-item">
+              <div id="nav-ranking" class="nav-link">Ranking</div>
+            </li>
+          </ul>
+          <div class="dropdown pagelink">
+            <button id="goto-events" type="button" class="btn btn-secondary">Event List</button>
+          </div>
+        </nav>
+
+        <div class="title">
+          <div class="clear">
+            <h2 id="meeting-title">&nbsp</h2>
+          </div>
+          <div class="right-align">
+            <h2 id="event-date">&nbsp</h2>
+          </div>
+          <div class="clear">
+            <h4 id="event-title">&nbsp</h4>
+          </div>
+        </div>
+
+        <div class="subboard" id="nextriders_list">
+          <div class="subtitle">
+            <h3>Start List</h3>
+          </div>
+          <table class="table table-scoreboard">
+            <thead id="nextriders_header">
+              <th class="col-40 text-center bg-color-macaroni text-color-black">Pos</th>
+              <th class="col-40 text-center bg-white text-color-black">Num</th>
+              <th>Horse</th>
+              <th>Rider</th>
+            </thead>
+            <tbody id="nextriders_body">
+            </tbody>
+          </table>
+        </div>
+
+        <div class="subboard" id="current_list">
+          <div class="subtitle highlight">
+            <h3>Current</h3>
+          </div>
+          <table class="table table-scoreboard highlight">
+            <thead id="current_header">
+            </thead>
+            <tbody id="current_body">
+            </tbody>
+          </table>
+        </div>
+
+        <div class="subboard" id="finished_list">
+          <div class="subtitle">
+            <h3>At Finish</h3>
+          </div>
+          <table class="table table-scoreboard">
+            <thead id="finish_header">
+            </thead>
+            <tbody id="finish_body">
+            </tbody>
+          </table>
+        </div>
+
+        <div class="subboard" id="ranking_list">
+          <div class="subtitle">
+            <h3>Ranking</h3>
+          </div>
+          <table class="table table-scoreboard">
+            <thead id="ranking_header"></thead>
+            <tbody id="ranking_body"></tbody>
+          </table>
+        </div>
+
+        <div class="subboard" id="start_list">
+          <table class="table table-scoreboard">
+            <thead id="startlist_header">
+              <th class="col-40 text-center bg-color-macaroni text-color-black">Pos</th>
+              <th class="col-40 text-center bg-white text-color-black">Num</th>
+              <th>Horse</th>
+              <th>Rider</th>
+            </thead>
+            <tbody id="startlist_body">
+            </tbody>
+          </table>
+        </div>
+
       </div>
-       <table class="table table-scoreboard">
-        <thead id="finish_header">
-        </thead>
-        <tbody id="finish_body">
-        </tbody>
-      </table>
-    </div>
-  <div class="subboard">
-    <div class="subtitle">
-      <h3>Ranking</h3>
-    </div>
-    <table class="table table-scoreboard">
-      <thead id="ranking_header"></thead>
-      <tbody id="ranking_body"></tbody>
-    </table>
+      <div class="errors">
+        <div id="error_noevent" class="alert alert-danger" style="display: none;">There is no running event.</div>
+        <div id="error_finishevent" class="alert alert-danger" style="display: none;">Event is finished.</div>
+      </div>
+    </main>
+    <footer>© 2015-2019 www.weratv.ch, CH-3176 Neuenegg. All Rights Reserved.</footer>
   </div>
-    <!--<button class="btn btn-success load">Load</button>-->
-</section>
-  <section id="sec-startlist" style="display: none;">
-    <div class="subboard">
-    <table class="table table-scoreboard">
-      <thead>
-      <tr>
-        <th>Pos</th>
-        <th>Num</th>
-        <th>Horse</th>
-        <th>Rider</th>
-        <th>Nation</th>
-        <th>Round/<br>Point</th>
-        <th>Round/<br>Time</th>
-        <th>Jump-Off/<br>Point</th>
-        <th>Jump-Off/<br>Time</th>
-      </tr>
-      </thead>
-      <tbody id="startlist">
-      </tbody>
-    </table>
-    </div>
-  </section>
-  <section id="sec-ranking" style="display: none;">
-    <div class="subboard">
-    <table class="table table-scoreboard">
-      <thead>
-      <tr>
-        <th>Rank</th>
-        <th>Num</th>
-        <th>Horse</th>
-        <th>Rider</th>
-        <th>Nation</th>
-        <th>Round/<br>Point</th>
-        <th>Round/<br>Time</th>
-        <th>Jump-Off/<br>Point</th>
-        <th>Jump-Off/<br>Time</th>
-      </tr>
-      </thead>
-      <tbody id="ranking">
-      </tbody>
-    </table>
-    </div>
-  </section>
-  </div>
-  <div class="errors">
-    <div id="error_noevent" class="alert alert-danger" style="display: none;">There is no running event.</div>
-    <div id="error_finishevent" class="alert alert-danger" style="display: none;">Event is finished.</div>
-  </div>
-</main>
-<footer>© 2015-2019 www.weratv.ch, CH-3176 Neuenegg. All Rights Reserved.</footer>
-</div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/main.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/main.js"></script>
 </body>
+
 </html>

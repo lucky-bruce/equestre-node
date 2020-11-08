@@ -601,6 +601,7 @@ $(function () {
         curEvent = eventId;
 
         $('#event_list').hide();
+        $('#start_list').hide();
         $('#event_view').show();
     }
 
@@ -632,11 +633,23 @@ $(".nav .nav-link").click(function() {
     $("section#sec-ranking").css("display", "none");
 
     if(menu_id == "nav-live") {
-        $("section#sec-live").css("display", "block");
+        $("#nextriders_list").show();
+        $("#current_list").show();
+        $("#finished_list").show();
+        $("#ranking_list").show();
+        $("#start_list").hide();
     } else if(menu_id == "nav-startlist") {
-        $("section#sec-startlist").css("display", "block");
+        $("#nextriders_list").hide();
+        $("#current_list").hide();
+        $("#finished_list").hide();
+        $("#ranking_list").hide();
+        $("#start_list").show();
     } else if(menu_id == "nav-ranking") {
-        $("section#sec-ranking").css("display", "block");
+        $("#nextriders_list").hide();
+        $("#current_list").hide();
+        $("#finished_list").hide();
+        $("#ranking_list").show();
+        $("#start_list").hide();
     }
 });
 
