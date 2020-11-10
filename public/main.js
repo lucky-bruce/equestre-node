@@ -28,13 +28,14 @@ function localizedValue(key, lang) {
     return pack[key] || key;
 }
 
-function localizeAll(lang) {
+function localizeAll(lan) {
+    lang = lan;
     const elements = $('[data-key]');
     const elementCount = elements.length;
     for (let i = 0; i < elementCount; i ++)
     {
         key = $(elements[i]).attr('data-key');
-        $(elements[i]).html(localizedValue(key, lang));
+        $(elements[i]).html(localizedValue(key, lan));
     }
 }
 
