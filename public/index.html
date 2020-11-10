@@ -24,10 +24,10 @@
           English
         </button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="index.html">English</a>
-          <a class="dropdown-item" href="index_ge.html">Deutsch</a>
-          <a class="dropdown-item" href="index_fr.html">Français</a>
-          <a class="dropdown-item" href="index_it.html">Italiano</a>
+          <a class="dropdown-item" href="#" onclick="onEn()">English</a>
+          <a class="dropdown-item" href="#" onclick="onGe()">Deutsch</a>
+          <a class="dropdown-item" href="#" onclick="onFr()">Français</a>
+          <a class="dropdown-item" href="#" onclick="onIt()">Italiano</a>
         </div>
       </div>
     </header>
@@ -35,15 +35,15 @@
       <div id="event_list" class="page">
         <div class="subboard">
           <div class="subtitle">
-            <h3>Live Events</h3>
+            <h3 data-key="LIVE_EVENTS">Live Events</h3>
           </div>
           <table class="table table-scoreboard eventboard">
             <thead>
               <tr class="d-flex">
-                <th class="col-3">Event</th>
-                <th class="col-5">Competition</th>
-                <th class="col-2">Start Date</th>
-                <th class="col-2">End Date</th>
+                <th class="col-3" data-key="EVENT">Event</th>
+                <th class="col-5" data-key="COMPETITION">Competition</th>
+                <th class="col-2" data-key="START_DATE">Start Date</th>
+                <th class="col-2" data-key="END_DATE">End Date</th>
               </tr>
             </thead>
             <tbody id="live-events">
@@ -56,17 +56,17 @@
         <nav class="navbar navbar-expand-sm navbar-dark navbar-dark">
           <ul class="nav nav-pills">
             <li class="nav-item">
-              <div id="nav-live" class="nav-link active">Live</div>
+              <div id="nav-live" class="nav-link active" data-key="LIVE">Live</div>
             </li>
             <li class="nav-item">
-              <div id="nav-startlist" class="nav-link">Start List</div>
+              <div id="nav-startlist" class="nav-link" data-key="START_LIST">Start List</div>
             </li>
             <li class="nav-item">
-              <div id="nav-ranking" class="nav-link">Ranking</div>
+              <div id="nav-ranking" class="nav-link" data-key="RANKING">Ranking</div>
             </li>
           </ul>
           <div class="dropdown pagelink">
-            <button id="goto-events" type="button" class="btn btn-secondary">Event List</button>
+            <button id="goto-events" type="button" class="btn btn-secondary" data-key="EVENT_LIST">Event List</button>
           </div>
         </nav>
 
@@ -84,7 +84,7 @@
 
         <div class="subboard" id="nextriders_list">
           <div class="subtitle">
-            <h3>Start List</h3>
+            <h3 data-key="START_LIST">Start List</h3>
           </div>
           <table class="table table-scoreboard">
             <thead id="nextriders_header">
@@ -96,7 +96,7 @@
 
         <div class="subboard" id="current_list">
           <div class="subtitle highlight">
-            <h3>Current</h3>
+            <h3 data-key="CURRENT">Current</h3>
           </div>
           <table class="table table-scoreboard highlight">
             <thead id="current_header">
@@ -108,7 +108,7 @@
 
         <div class="subboard" id="finished_list">
           <div class="subtitle">
-            <h3>At Finish</h3>
+            <h3 data-key="AT_FINISH">At Finish</h3>
           </div>
           <table class="table table-scoreboard">
             <thead id="finish_header">
@@ -120,7 +120,7 @@
 
         <div class="subboard" id="ranking_list">
           <div class="subtitle" id="ranking_badge">
-            <h3>Ranking</h3>
+            <h3 data-key="RANKING">Rankings</h3>
           </div>
           <table class="table table-scoreboard">
             <thead id="ranking_header"></thead>
@@ -146,6 +146,7 @@
     <footer>© 2015-2021 www.weratv.ch, CH-3176 Neuenegg. All Rights Reserved.</footer>
   </div>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="/localization.js"></script>
   <script src="/main.js"></script>
 </body>
 

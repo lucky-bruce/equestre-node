@@ -29,17 +29,17 @@ function generateRanking(roundScore, jumpoffScore,
     let result = Array(riderCount + 1).fill(0).map(() => Array(columnCount).fill(''));
 
     // format result table header
-    result[0][0] = "Rnk";
-    result[0][1] = "Num";
-    result[0][2] = "Horse";
-    result[0][3] = "Rider";
-    result[0][4] = "Nation";
+    result[0][0] = `<span data-key="RANK"></span>`;
+    result[0][1] = `<span data-key="NUMBER"></span>`;
+    result[0][2] = `<span data-key="HORSE"></span>`;
+    result[0][3] = `<span data-key="RIDER"></span>`;
+    result[0][4] = `<span data-key="NATION"></span>`;
     for (let i = 0; i < roundDisplayCount; i++) {
-        const roundType = i < roundCount ? 'Round' : 'Jump-Off';
+        const roundType = i < roundCount ? 'ROUND' : 'JUMP_OFF';
         const ii = i < roundCount ? `${i + 1}` : `${i + 1 - roundCount}`;
-        const fontSize = roundType === 'Round' ? 'font-size-small' : 'font-size-mini';
-        result[0][5 + i * 2] = `<div class="${fontSize} no-wrap">${roundType} ${ii}</div><div class="font-size-small">Points</div>`;
-        result[0][5 + i * 2 + 1] = `<div class="${fontSize} no-wrap">${roundType} ${ii}</div><div class="font-size-small">Time</div>`;
+        const fontSize = roundType === 'ROUND' ? 'font-size-small' : 'font-size-mini';
+        result[0][5 + i * 2] = `<div class="${fontSize} no-wrap"><span data-key="${roundType}">${roundType}</span> ${ii}</div><div class="font-size-small">Points</div>`;
+        result[0][5 + i * 2 + 1] = `<div class="${fontSize} no-wrap"><span data-key="${roundType}">${roundType}</span> ${ii}</div><div class="font-size-small">Time</div>`;
     }
 
     // calculate ranking
@@ -102,11 +102,11 @@ function generateRanking(roundScore, jumpoffScore,
 
     // update table header
     if (round > 1 && round <= roundCount) {
-        result[0][5 + (roundDisplayCount - 1) * 2 + 2] = 'Points';
+        result[0][5 + (roundDisplayCount - 1) * 2 + 2] = `<span data-key="POINTS"></span>`;
     }
     if (round === 1) {
-        result[0][5] = 'Points';
-        result[0][6] = 'Time';
+        result[0][5] = `<span data-key="POINTS"></span>`;
+        result[0][6] = `<span data-key="TIME"></span>`;
     }
 
     return result;

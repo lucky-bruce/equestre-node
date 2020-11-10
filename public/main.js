@@ -1,5 +1,7 @@
+var lang = 'en';
 
-const labels = ["Classified", "Not Present", "Not Started", "Retired", "Eliminated", "Off-course", "Disqualified"];
+ 
+const labels = ["CLASSFIED", "NOT_PRESENT", "NOT_STARTED", "RETIRED", "ELIMINATED", "OFF_COURSE", "DISQUALIFIED"];
 const headerClasses = {
     rnkClass: 'col-40 text-center px-02',
     numClass: 'col-40 text-center px-02',
@@ -19,6 +21,27 @@ const dataClasses = {
     pointsClass: 'col-50 text-right bg-color-perano text-color-black px-02',
     timeClass: 'col-50 text-right bg-color-pale-canary text-color-black px-02'
 };
+
+function localizedValue(key, lang) {
+    const pack = localization[lang];
+    if (!pack) { return key; }
+    return pack[key] || key;
+}
+
+function localizeAll(lang) {
+    const elements = $('[data-key]');
+    const elementCount = elements.length;
+    for (let i = 0; i < elementCount; i ++)
+    {
+        key = $(elements[i]).attr('data-key');
+        $(elements[i]).html(localizedValue(key, lang));
+    }
+}
+
+function onEn() { lang = 'en'; localizeAll(lang); }
+function onGe() { lang = 'ge'; localizeAll(lang); }
+function onFr() { lang = 'fr'; localizeAll(lang); }
+function onIt() { lang = 'it'; localizeAll(lang); }
 
 $(function () {
     var FADETIMOUT      = 2000;
@@ -166,7 +189,7 @@ $(function () {
 
                 rankings[i][2] = horses[horseIdx].name || '';
                 rankings[i][3] = rider ? `${rider.firstName} ${rider.lastName}` : '';
-                rankings[i][4] = rider.nation;
+                rankings[i][4] = rider.nation || 'swe';
             }
         }
 
@@ -342,7 +365,7 @@ $(function () {
         if(score.point < 0) {
             let index = Math.abs(score.point) - 1;
             if(index > 0 && index <= 6) {
-                return `<span class="font-size-small">${labels[index]}</span>`;
+                return `<span class="font-size-small" data-key="${labels[index]}">${labels[index]}</span>`;
             }
         }
 
@@ -572,7 +595,7 @@ $(function () {
                 row[1] = num; // rank
                 row[2] = horse.name;
                 row[3] = `${rider.firstName} ${rider.lastName}`;
-                row[4] = rider.nation;
+                row[4] = rider.nation || 'swe';
             }
             addRow(ranking || row, tbody, true, dataClasses, true);
         });
@@ -583,6 +606,7 @@ $(function () {
             updateHeaders(rankings[0]);
         }
         updateTable("ranking", rankings);
+        localizeAll(lang);
     }
 
     function addRow(rowData, container, isData, classes, swapNumAndRank) {
@@ -607,7 +631,8 @@ $(function () {
             }
             if (i >= 5 && i % 2 === 1) {
                 if (v < 0) {
-                    v = `<span class="point-label">${labels[Math.abs(v) - 1]}</span>`;
+                    const label = labels[Math.abs(v) - 1];
+                    v = `<span class="point-label" data-key="${label}">${label}</span>`;
                 }
             }
             const colType = isData ? 'td' : 'th';
@@ -637,8 +662,8 @@ $(function () {
             const tableHeader = $(`#${tableName}_header`);
             tableHeader.html('');
             if (tableName === 'nextriders') {
-                header[0] = 'Num';
-                header[1] = 'Rnk';
+                header[0] = `<span data-key="NUMBER"></span>`;
+                header[1] = `<span data-key="RANK"></span>`;
                 addRow(header.slice(0, 5), tableHeader, false, headerClasses);
             } else {
                 addRow(header, tableHeader, false, headerClasses);
