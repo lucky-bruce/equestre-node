@@ -109,8 +109,6 @@ function generateRanking(roundScore, jumpoffScore,
         result[0][6] = 'Time';
     }
 
-    console.table(result);
-
     return result;
 }
 
