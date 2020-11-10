@@ -1,21 +1,21 @@
 const headerClasses = {
-    rnkClass: 'col-40 text-center',
-    numClass: 'col-40 text-center',
-    riderClass: '',
-    horseClass: '',
-    flagClass: 'col-50',
-    pointsClass: 'col-50',
-    timeClass: 'col-50'
+    rnkClass: 'col-40 text-center px-02',
+    numClass: 'col-40 text-center px-02',
+    riderClass: 'w-50',
+    horseClass: 'w-50',
+    flagClass: 'col-50 px-02',
+    pointsClass: 'col-50 px-02',
+    timeClass: 'col-50 px-02'
 };
 
 const dataClasses = {
-    rnkClass: 'col-40 text-center bg-color-macaroni text-color-black',
-    numClass: 'col-40 text-center bg-white text-color-black',
-    riderClass: '',
-    horseClass: '',
-    flagClass: 'col-50',
-    pointsClass: 'col-50 text-right bg-color-perano text-color-black',
-    timeClass: 'col-50 text-right bg-color-pale-canary text-color-black'
+    rnkClass: 'col-40 text-center bg-color-macaroni text-color-black px-02',
+    numClass: 'col-40 text-center bg-white text-color-black px-02',
+    riderClass: 'w-50',
+    horseClass: 'w-50',
+    flagClass: 'col-50 px-02',
+    pointsClass: 'col-50 text-right bg-color-perano text-color-black px-02',
+    timeClass: 'col-50 text-right bg-color-pale-canary text-color-black px-02'
 };
 
 $(function () {
