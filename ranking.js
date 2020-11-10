@@ -205,7 +205,7 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
 
 function formatPoint(score) {
     if (score < 0) {
-        return labels[Math.abs(score) - 1];
+        return score;
     }
     const s = score / 1000;
     return s.toFixed(2);

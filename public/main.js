@@ -1,3 +1,5 @@
+
+const labels = ["Classified", "Not Present", "Not Started", "Retired", "Eliminated", "Off-course", "Disqualified"];
 const headerClasses = {
     rnkClass: 'col-40 text-center px-02',
     numClass: 'col-40 text-center px-02',
@@ -122,7 +124,6 @@ $(function () {
 
         // update UI
         updateRankingList();
-        updateStartList();
     });
 
     // update rider info
@@ -135,7 +136,6 @@ $(function () {
 
         // update UI
         updateRankingList();
-        updateStartList();
     });
 
     // update startlist
@@ -149,7 +149,6 @@ $(function () {
         }
 
         // updateUI
-        updateStartList();
     });
 
     // update ranking info
@@ -173,6 +172,7 @@ $(function () {
 
         // Update UI
         updateRankingList();
+        updateStartList();
     });
 
     // one ready to race
@@ -334,14 +334,13 @@ $(function () {
         if(score.point === undefined)
             return "&nbsp";
 
-        let labels = ["Classified", "Not Present", "Not Started", "Retired", "Eliminated", "Off-course", "Disqualified"];
         if(score.point === undefined)
             return "&nbsp";
 
         if(score.point < 0) {
             let index = Math.abs(score.point) - 1;
             if(index > 0 && index <= 6) {
-                return labels[index];
+                return `<span class="font-size-small">${labels[index]}</span>`;
             }
         }
 
@@ -422,6 +421,7 @@ $(function () {
                 data[3] = `${rider.firstName} ${rider.lastName}`;
                 table[j] = data;
             }
+            table[j] = table[j].slice(0, 5);
             j += 1;
         }
         updateTable("nextriders", table);
@@ -498,7 +498,7 @@ $(function () {
                 }
             }
             console.log(`adding row: ${currentRiderData}`);
-            currentRider = addRow(currentRiderData, currentBody, 'td', dataClasses);
+            currentRider = addRow(currentRiderData, currentBody, true, dataClasses);
         }
 
         const jumpoffNumber = eventInfo.jumpoffNumber;
@@ -544,23 +544,23 @@ $(function () {
             return;
         }
         const tbody = $("#startlist_body");
-        const rows = startlist.map(r => {
-            const rider = riders[r.rider_idx];
-            const horse = horses[r.horse_idx];
-            const num = r.num;
-            const row = $('<tr>');
-            row.append($(`<td class="text-center col-40 text-center bg-color-macaroni text-color-black">${num}</td>`));
-            row.append($(`<td class="text-center text-center bg-white text-color-black">${num}</td>`));
-            row.append($(`<td>${horse.name}</td>`));
-            row.append($(`<td>${rider.firstName} ${rider.lastName}</td>`));
-            const flagCol = $('<td class="col-50"></td>');
-            flagCol.css("background", "#232323 url('flags/" + rider.nation + ".bmp') center no-repeat").css("background-size", "contain");
-            flagCol.attr("data-toggle", "tooltip").attr("title", rider.nation);
-            row.append(flagCol);
-            return row;
-        });
         tbody.html('');
-        tbody.append(rows);
+        const colCount = rankings.length ? rankings[0].length : 7;
+        startlist.forEach(r => {
+            const num = r.num;
+            const ranking = rankings.find(r2 => r2[1] === num);
+            const row = Array(colCount).fill('');
+            if (!ranking) {
+                const rider = riders[r.rider_idx];
+                const horse = horses[r.horse_idx];
+                row[0] = '';
+                row[1] = num; // rank
+                row[2] = horse.name;
+                row[3] = `${rider.firstName} ${rider.lastName}`;
+                row[4] = rider.nation;
+            }
+            addRow(ranking || row, tbody, true, dataClasses, true);
+        });
     }
 
     function updateRankingList() {
@@ -570,12 +570,13 @@ $(function () {
         updateTable("ranking", rankings);
     }
 
-    function addRow(rowData, container, colType, classes) {
+    function addRow(rowData, container, isData, classes, swapNumAndRank) {
         if (!rowData) { return; }
         const row = $("<tr class=''></tr>");
+        const cols = [];
         for (let i = 0; i < rowData.length; i ++) {
             let style = '';
-            const dot = i === 0 && colType === 'td' && rowData[i] !== '' ? '.' : '';
+            const dot = i === 0 && isData && rowData[i] !== '' ? '.' : '';
             if (i === 0) { style = classes.rnkClass; }
             if (i === 1) { style = classes.numClass; }
             if (i === 2) { style = classes.horseClass; }
@@ -583,31 +584,50 @@ $(function () {
                 style = classes.riderClass;
             }
             if (i === 4) { style = classes.flagClass; }
-            if (i >= 5 && i % 2 === 0) { style = classes.pointsClass; }
-            if (i >= 5 && i % 2 === 1) { style = classes.timeClass; }
-            const col = $(`<${colType} class='${style}'>${rowData[i]}${dot}</${colType}>`);
-            if (i === 4 && colType === 'td') {
+            if (i >= 5 && i % 2 === 1) { style = classes.pointsClass; }
+            if (i >= 5 && i % 2 === 0) { style = classes.timeClass; }
+            let v = rowData[i];
+            if (i === 0 && isData && v !== '') {
+                v = `${v}.`;
+            }
+            if (i >= 5 && i % 2 === 1) {
+                if (v < 0) {
+                    v = `<span class="point-label">${labels[Math.abs(v) - 1]}</span>`;
+                }
+            }
+            const colType = isData ? 'td' : 'th';
+            const col = $(`<${colType} class='${style}'>${v}</${colType}>`);
+            if (i === 4 && isData) {
                 col.css("background", "#232323 url('flags/" + rowData[i] + ".bmp') center no-repeat").css("background-size", "contain");
                 col.attr("data-toggle", "tooltip").attr("title", rowData[i]);
                 col.html('');
             }
 
-            row.append(col);
+            cols.push(col);
         }
+        if (swapNumAndRank) {
+            const temp = cols[0].html();
+            cols[0].html(cols[1].html());
+            cols[1].html(temp);
+        }
+        cols.forEach(col => row.append(col));
         container.append(row);
         return row;
     };
 
 
     function updateHeaders(header) {
-        const tables = ['ranking', 'current', 'finish', 'nextriders'];
+        const tables = ['ranking', 'current', 'finish', 'nextriders', 'startlist'];
         tables.forEach(tableName => {
             const tableHeader = $(`#${tableName}_header`);
             tableHeader.html('');
             if (tableName === 'nextriders') {
-                header[0] = 'Pos';
+                header[0] = 'Num';
+                header[1] = 'Rnk';
+                addRow(header.slice(0, 5), tableHeader, false, headerClasses);
+            } else {
+                addRow(header, tableHeader, false, headerClasses);
             }
-            addRow(header, tableHeader, 'th', headerClasses);
         });
     }
 
@@ -616,7 +636,7 @@ $(function () {
         const tableBody = $(`#${tableName}_body`);        
         tableBody.html('');
         for (let i = 1; i < table.length; i ++) {
-            addRow(table[i], tableBody, 'td', dataClasses);
+            addRow(table[i], tableBody, true, dataClasses);
         }
     }
 

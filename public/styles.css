@@ -230,3 +230,7 @@ footer {
     padding-left: 2px !important;
     padding-right: 2px !important;
 }
+
+.point-label { 
+    font-size: 14px;
+}
