@@ -271,6 +271,8 @@ $(function () {
             }
             updateRuntimeTimer(realtime.lane, started);
         }
+
+        setRuntimeListFinal();
     });
 
     // one player finished
@@ -469,6 +471,19 @@ $(function () {
         tr.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).html(label);
     }
 
+    function setRuntimeListFinal() {
+        const currentBody = $("#current_body");
+        if (!currentBody.children().length) {
+            return;
+        }
+        let currentRiderData = rankings.find(r => r[1] === realtime.num);
+        if (!currentRiderData) {
+            return;
+        }
+        $("#current_body").html('');
+        addRow(currentRiderData, currentBody, true, dataClasses);
+    }
+
     function setRuntimeList(fullupdate) {
         // clear content
         if (realtime.num == 0 || startlistmap[realtime.num] === undefined) {
@@ -477,7 +492,7 @@ $(function () {
         }
 
         const currentBody = $("#current_body");
-        if (currentBody.children().length > 1) {
+        if (currentBody.children().length) {
             $("#current_body").html('');
         }
 

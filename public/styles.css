@@ -162,10 +162,6 @@ footer {
     border: 1px solid grey;
 }
 
-.table thead th {
-    padding: 8px 2px 8px 2px;
-}
-
 .table tbody {
     color: white;
 }
