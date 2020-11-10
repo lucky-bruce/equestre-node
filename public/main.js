@@ -1,5 +1,8 @@
 var lang = 'en';
+var country = 'ch';
 
+const flagStyle = 'flat';
+const flagSize = 64;
  
 const labels = ["CLASSFIED", "NOT_PRESENT", "NOT_STARTED", "RETIRED", "ELIMINATED", "OFF_COURSE", "DISQUALIFIED"];
 const headerClasses = {
@@ -128,6 +131,8 @@ $(function () {
         // set eventInfo
         eventInfo = data;
 
+        country = eventInfo.country;
+
         // update UI
         $('#meeting-title').text(data.title);
         $('#event-title').text(data.eventTitle);
@@ -190,7 +195,7 @@ $(function () {
 
                 rankings[i][2] = horses[horseIdx].name || '';
                 rankings[i][3] = rider ? `${rider.firstName} ${rider.lastName}` : '';
-                rankings[i][4] = rider.nation || 'swe';
+                rankings[i][4] = rider.nation || country;
             }
         }
 
@@ -485,6 +490,7 @@ $(function () {
 
         const jumpoffNumber = eventInfo.jumpoffNumber;
         const roundNumber = eventInfo.roundNumber;
+        country = eventInfo.country.toLowerCase();
         const round = eventInfo.round;
         const jumpoff = eventInfo.jumpoff;
         const offset = round ? round : (jumpoff + roundNumber);
@@ -563,8 +569,10 @@ $(function () {
 
         if (rider !== undefined) {
             currentRider.children("td:nth-child(4)").html(`${rider.firstName} ${rider.lastName}`);
-            currentRider.children("td:nth-child(5)").css("background", "#232323 url('flags/" + rider.nation + ".bmp') center no-repeat").css("background-size", "contain");
-            currentRider.children("td:nth-child(5)").attr("data-toggle", "tooltip").attr("title", rider.nation);
+            const nation = rider.nation || country;
+            const url = `https://www.countryflags.io/${nation}/${flagStyle}/${flagSize}.png`;
+            currentRider.children("td:nth-child(5)").css("background", `#232323 url('${url}') center no-repeat`).css("background-size", "contain");
+            currentRider.children("td:nth-child(5)").attr("data-toggle", "tooltip").attr("title", nation);
         } else {
             currentRider.children("td:nth-child(4)").html("&nbsp");
             // currentRider.children("td:nth-child(5)").html("&nbsp");
@@ -596,7 +604,7 @@ $(function () {
                 row[1] = num; // rank
                 row[2] = horse.name;
                 row[3] = `${rider.firstName} ${rider.lastName}`;
-                row[4] = rider.nation || 'swe';
+                row[4] = rider.nation || country;
             }
             addRow(ranking || row, tbody, true, dataClasses, true);
         });
@@ -639,7 +647,8 @@ $(function () {
             const colType = isData ? 'td' : 'th';
             const col = $(`<${colType} class='${style}'>${v}</${colType}>`);
             if (i === 4 && isData) {
-                col.css("background", "#232323 url('flags/" + rowData[i] + ".bmp') center no-repeat").css("background-size", "contain");
+                const url = `https://www.countryflags.io/${rowData[i]}/${flagStyle}/${flagSize}.png`;
+                col.css("background", `#232323 url('${url}') center no-repeat`).css("background-size", "contain");
                 col.attr("data-toggle", "tooltip").attr("title", rowData[i]);
                 col.html('');
             }
