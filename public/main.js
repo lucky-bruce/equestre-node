@@ -660,6 +660,10 @@ $(function () {
 
         socket.emit("subscribe", eventId);
         curEvent = eventId;
+        realtime.num = 0;
+        $("#current_body").html('');
+        $("#nextriders_body").html('');
+        $("#finish_body").html('');
 
         $('#event_list').hide();
         $('#start_list').hide();
