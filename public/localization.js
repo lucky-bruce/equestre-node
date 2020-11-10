@@ -28,7 +28,7 @@ var localization = {
         OFF_COURSE: 'Off-course',
         DISQUALIFIED: 'Disqualified',
         NO_RUNNING_EVENT: 'There is no running event.',
-        EVENT_FINISHED: ' Event is finished.'
+        EVENT_FINISHED: 'Event is finished.'
     },
     ge: {
         LIVE_EVENTS: 'Live Events',
@@ -58,8 +58,8 @@ var localization = {
         ELIMINATED: 'Eliminated',
         OFF_COURSE: 'Off-course',
         DISQUALIFIED: 'Disqualified',
-        NO_RUNNING_EVENT: 'There is no running event.',
-        EVENT_FINISHED: ' Event is finished.'
+        NO_RUNNING_EVENT: 'Im Moment kein Live-Timing.',
+        EVENT_FINISHED: 'Veranstaltung ist zu Ende'
     },
     fr: {
         LIVE_EVENTS: 'Live Events',
@@ -89,8 +89,8 @@ var localization = {
         ELIMINATED: 'Eliminated',
         OFF_COURSE: 'Off-course',
         DISQUALIFIED: 'Disqualified',
-        NO_RUNNING_EVENT: 'There is no running event.',
-        EVENT_FINISHED: ' Event is finished.'
+        NO_RUNNING_EVENT: 'pas de Live-Timing pour le moment.',
+        EVENT_FINISHED: `L'événement est terminé.`
     },
     it: {
         LIVE_EVENTS: 'Live Events',
@@ -120,7 +120,7 @@ var localization = {
         ELIMINATED: 'Eliminated',
         OFF_COURSE: 'Off-course',
         DISQUALIFIED: 'Disqualified',
-        NO_RUNNING_EVENT: 'There is no running event.',
-        EVENT_FINISHED: ' Event is finished.'
+        NO_RUNNING_EVENT: 'Nessun tempismo live al momento.',
+        EVENT_FINISHED: `L'evento è finito.`
     }
 };
