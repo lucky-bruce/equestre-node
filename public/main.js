@@ -725,6 +725,7 @@ $(".nav .nav-link").click(function() {
         $("#nextriders_list").show();
         $("#current_list").show();
         $("#finished_list").show();
+        $("#ranking_badge").show();
         $("#ranking_list").show();
         $("#start_list").hide();
     } else if(menu_id == "nav-startlist") {
@@ -739,6 +740,7 @@ $(".nav .nav-link").click(function() {
         $("#finished_list").hide();
         $("#ranking_list").show();
         $("#start_list").hide();
+        $("#ranking_badge").hide();
     }
 });
 
