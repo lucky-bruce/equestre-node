@@ -570,7 +570,7 @@ $(function () {
         if (rider !== undefined) {
             currentRider.children("td:nth-child(4)").html(`${rider.firstName} ${rider.lastName}`);
             const nation = rider.nation || country;
-            const url = `https://www.countryflags.io/${nation}/${flagStyle}/${flagSize}.png`;
+            const url = `/flags/${nation}.bmp`;
             currentRider.children("td:nth-child(5)").css("background", `#232323 url('${url}') center no-repeat`).css("background-size", "contain");
             currentRider.children("td:nth-child(5)").attr("data-toggle", "tooltip").attr("title", nation);
         } else {
@@ -647,7 +647,7 @@ $(function () {
             const colType = isData ? 'td' : 'th';
             const col = $(`<${colType} class='${style}'>${v}</${colType}>`);
             if (i === 4 && isData) {
-                const url = `https://www.countryflags.io/${rowData[i]}/${flagStyle}/${flagSize}.png`;
+                const url = `/flags/${rowData[i]}.bmp`;
                 col.css("background", `#232323 url('${url}') center no-repeat`).css("background-size", "contain");
                 col.attr("data-toggle", "tooltip").attr("title", rowData[i]);
                 col.html('');
