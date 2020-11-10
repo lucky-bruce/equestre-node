@@ -663,6 +663,10 @@ $(function () {
                 joinToEvent(evendId);
             });
         }
+
+        $("#current_body").html('');
+        $("#nextriders_body").html('');
+        $("#finish_body").html('');
     }
 
     function joinToEvent(eventId) {

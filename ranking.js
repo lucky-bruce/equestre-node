@@ -62,7 +62,7 @@ function generateRanking(roundScore, jumpoffScore,
                     const num = tableSlice[k].num;
                     const found = table.find(t => t.num === num);
                     if (!found) { continue; }
-                    tableSlice[k].point += found.point + found.pointPlus;
+                    tableSlice[k].point += found.point;
                 }
             }
         }
@@ -87,7 +87,7 @@ function generateRanking(roundScore, jumpoffScore,
         for (let j = 0; j < roundDisplayCount; j++) {
             const score = scoreList[j].find(s => s.num === num);
             if (!score) { continue; }
-            result[i + 1][5 + j * 2] = score.point < 0 ? formatPoint(score.point) : formatPoint(score.point + score.pointPlus);
+            result[i + 1][5 + j * 2] = formatPoint(score.point, score.pointPlus);
             result[i + 1][5 + j * 2 + 1] = score.point < 0 ? '' : formatTime(score.time + score.timePlus);
             if (score.point >= 0) {
                 displayRank = true;
@@ -145,8 +145,8 @@ function sortTable(scoreTableSlice, tableType, applyAgainstTimeClock, optimumTim
 }
 
 function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime) {
-    const pointA = score1.point + score1.pointPlus;
-    const pointB = score2.point + score2.pointPlus;
+    const pointA = score1.point;
+    const pointB = score2.point;
     const timeA = score1.time + score1.timePlus;
     const timeB = score2.time + score2.timePlus;
     if (timeA === 0) { return -1; }
@@ -203,12 +203,17 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
     }
 }
 
-function formatPoint(score) {
+function formatPoint(score, pointSurpassing) {
     if (score < 0) {
         return score;
     }
-    const s = score / 1000;
-    return s.toFixed(2);
+    const s1 = (score / 1000).toFixed(2);
+    const s2 = (pointSurpassing / 1000).toFixed(2);
+    if (pointSurpassing !== 0) {
+        // TODO: uncomment if needed
+        // return `${s1} (${s2})`;
+    }
+    return s1;
 }
 
 function formatTime(time) {
