@@ -131,7 +131,7 @@ $(function () {
         // set eventInfo
         eventInfo = data;
 
-        country = eventInfo.country;
+        country = eventInfo.country.toLowerCase();
 
         // update UI
         $('#meeting-title').text(data.title);
