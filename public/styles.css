@@ -141,6 +141,7 @@ footer {
 
 .table {
     font-weight: 500;
+    table-layout: fixed;
 }
 
 .table thead {
@@ -158,8 +159,16 @@ footer {
     vertical-align: middle;
     padding-top: 4px;
     padding-bottom: 4px;
-    font-size: 18px;
     border: 1px solid grey;
+    overflow: hidden;
+}
+
+.table thead th {
+    font-size: 15px;
+}
+
+.table thead td {
+    font-size: 18px;
 }
 
 .table tbody {
@@ -178,12 +187,28 @@ footer {
     background-color: black;
 }
 
-.col-40 {
+.col-rank {
     width: 40px;
 }
 
-.col-50 {
+.col-nation {
     width: 50px;
+}
+
+.col-point {
+    width: 60px;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.col-point span {
+    display: inline-block;
+    line-height: 1;
+    margin: 0px;
+}
+
+.col-time {
+    width: 60px;
 }
 
 .bg-color-macaroni {

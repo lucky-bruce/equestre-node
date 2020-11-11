@@ -6,23 +6,23 @@ const flagSize = 64;
  
 const labels = ["CLASSFIED", "NOT_PRESENT", "NOT_STARTED", "RETIRED", "ELIMINATED", "OFF_COURSE", "DISQUALIFIED"];
 const headerClasses = {
-    rnkClass: 'col-40 text-center px-02',
-    numClass: 'col-40 text-center px-02',
+    rnkClass: 'col-rank text-center px-02',
+    numClass: 'col-rank text-center px-02',
     riderClass: 'w-50',
     horseClass: 'w-50',
-    flagClass: 'col-50 px-02',
-    pointsClass: 'col-50 px-02',
-    timeClass: 'col-50 px-02'
+    flagClass: 'col-nation px-0',
+    pointsClass: 'col-point px-02',
+    timeClass: 'col-time px-02'
 };
 
 const dataClasses = {
-    rnkClass: 'col-40 text-center bg-color-macaroni text-color-black px-02',
-    numClass: 'col-40 text-center bg-white text-color-black px-02',
+    rnkClass: 'col-rank text-center bg-color-macaroni text-color-black px-02',
+    numClass: 'col-rank text-center bg-white text-color-black px-02',
     riderClass: 'w-50',
     horseClass: 'w-50',
-    flagClass: 'col-50 px-02',
-    pointsClass: 'col-50 text-right bg-color-perano text-color-black px-02',
-    timeClass: 'col-50 text-right bg-color-pale-canary text-color-black px-02'
+    flagClass: 'col-nation px-02',
+    pointsClass: 'col-point text-right bg-color-perano text-color-black px-02',
+    timeClass: 'col-time text-right bg-color-pale-canary text-color-black px-02'
 };
 
 function localizedValue(key, lang) {
