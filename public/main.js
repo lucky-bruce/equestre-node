@@ -18,8 +18,8 @@ const headerClasses = {
 const dataClasses = {
     rnkClass: 'col-rank text-center bg-color-macaroni text-color-black px-02',
     numClass: 'col-rank text-center bg-white text-color-black px-02',
-    riderClass: 'w-50',
-    horseClass: 'w-50',
+    riderClass: 'w-50 col-rider',
+    horseClass: 'w-50 col-horse',
     flagClass: 'col-nation px-02',
     pointsClass: 'col-point text-right bg-color-perano text-color-black px-02',
     timeClass: 'col-time text-right bg-color-pale-canary text-color-black px-02'
@@ -636,9 +636,15 @@ $(function () {
             if (i >= 5 && i % 2 === 0) { style = classes.timeClass; }
             let v = rowData[i];
             if (i === 0 && isData && v !== '') {
+                // Rank column
                 v = `${v}.`;
             }
+            if (i === 2 || i === 3) {
+                // horse, rider column
+                v = `<span>${v}</span>`;
+            }
             if (i >= 5 && i % 2 === 1) {
+                // point column
                 if (v < 0) {
                     const label = labels[Math.abs(v) - 1];
                     v = `<span class="point-label" data-key="${label}">${label}</span>`;
