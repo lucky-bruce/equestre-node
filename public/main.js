@@ -324,7 +324,7 @@ $(function () {
         if(ranking !== undefined) {
             realtime.rank = ranking.rank;
         }
-        setRuntimeList(true);
+        setRuntimeListFinal();
     });
 
     socket.on('disconnect', function () {
