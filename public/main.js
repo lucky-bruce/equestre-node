@@ -11,8 +11,8 @@ const headerClasses = {
     riderClass: 'w-50',
     horseClass: 'w-50',
     flagClass: 'col-nation px-0',
-    pointsClass: 'col-point px-02',
-    timeClass: 'col-time px-02'
+    pointsClass: 'col-point px-02 text-center',
+    timeClass: 'col-time px-02 text-center'
 };
 
 const dataClasses = {
