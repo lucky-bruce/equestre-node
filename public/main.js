@@ -31,6 +31,15 @@ function localizedValue(key, lang) {
     return pack[key] || key;
 }
 
+function localizeKey(key) {
+    const elements = $(`[data-key="${key}"]`);
+    const elementCount = elements.length;
+    for (let i = 0; i < elementCount; i ++)
+    {
+        $(elements[i]).html(localizedValue(key, lang));
+    }
+}
+
 function localizeAll(lan) {
     lang = lan;
     const elements = $('[data-key]');
@@ -455,6 +464,7 @@ $(function () {
             j += 1;
         }
         updateTable("nextriders", table);
+        localizeAll(lang);
     }
 
     // fill the rank from index to the atstart list
@@ -474,6 +484,7 @@ $(function () {
             j += 1;
         }
         updateTable("finish", table);
+        localizeAll(lang);
     }
 
     function updateRuntimeTimer(lane, value)
@@ -498,6 +509,7 @@ $(function () {
         const currentBody = $('#current_body');
         const tr = $(currentBody.children(0));
         tr.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).html(label);
+        localizeAll(lang);
     }
 
     function setRuntimeListFinal() {
@@ -511,6 +523,7 @@ $(function () {
         }
         $("#current_body").html('');
         addRow(currentRiderData, currentBody, true, dataClasses);
+        localizeAll(lang);
     }
 
     function setRuntimeList(fullupdate) {
@@ -676,11 +689,10 @@ $(function () {
         tables.forEach(tableName => {
             const tableHeader = $(`#${tableName}_header`);
             tableHeader.html('');
-            // if (tableName === 'nextriders') {
-            //     header[0] = `<span data-key="NUMBER"></span>`;
-            //     header[1] = `<span data-key="RANK"></span>`;
-            // }
-            addRow(header, tableHeader, false, headerClasses);
+            const added = addRow(header, tableHeader, false, headerClasses);
+            if (tableName === 'nextriders') {
+                // added.children()[0].attr('col-s')
+            }
         });
     }
 
