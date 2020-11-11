@@ -224,7 +224,6 @@ $(function () {
             updateLiveAtStart(startlistentry['pos'] + 1);
             updateLiveAtFinish(startlistentry['pos'] - 1);
         }
-
         // init realtime and update
         console.log('ready');
         setRuntimeList(true);
@@ -509,6 +508,7 @@ $(function () {
         const currentBody = $('#current_body');
         const tr = $(currentBody.children(0));
         tr.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).html(label);
+        updateStartlistRowRealtimeTime(label, offset);
         localizeAll(lang);
     }
 
@@ -590,7 +590,27 @@ $(function () {
             // currentRider.children("td:nth-child(5)").html("&nbsp");
         }
         currentRider.children("td:nth-child(4)").addClass("bg-white text-color-black");
+        setTimeout(() => {
+            updateStartlistRealtimePoint(score, offset);
+        }, 10);
         localizeAll(lang);
+    }
+
+    function findRealtimeRow() {
+        const startlistBody = $("#startlist_body");
+        const i = startlist.findIndex(r => r.num === realtime.num);
+        return $(startlistBody.children()[i]);
+    }
+
+    function updateStartlistRealtimePoint(score, offset) {
+        const startlistRow = findRealtimeRow();
+        console.log(score, offset);
+        startlistRow.children(`td:nth-child(${5 + (offset - 1) * 2 + 1})`).html(formatPoint(score, false));
+    }
+
+    function updateStartlistRowRealtimeTime(label, offset) {
+        const startlistRow = findRealtimeRow();
+        startlistRow.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).html(label);
     }
 
     function clearRuntimeList() {
