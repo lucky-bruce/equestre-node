@@ -209,6 +209,9 @@ footer {
 
 .col-time {
     width: 60px;
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: 900;
 }
 
 .bg-color-macaroni {
