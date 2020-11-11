@@ -24,9 +24,9 @@ var localization = {
         NOT_PRESENT: 'Not Present',
         NOT_STARTED: 'Not Started',
         RETIRED: 'Retired',
-        ELIMINATED: 'Eliminated',
+        ELIMINATED: 'Elimin.',
         OFF_COURSE: 'Off-course',
-        DISQUALIFIED: 'Disqualified',
+        DISQUALIFIED: 'Disqual.',
         NO_RUNNING_EVENT: 'There is no running event.',
         EVENT_FINISHED: 'Event is finished.'
     },
@@ -55,9 +55,9 @@ var localization = {
         NOT_PRESENT: 'Not Present',
         NOT_STARTED: 'Not Started',
         RETIRED: 'Retired',
-        ELIMINATED: 'Eliminated',
+        ELIMINATED: 'Elimin.',
         OFF_COURSE: 'Off-course',
-        DISQUALIFIED: 'Disqualified',
+        DISQUALIFIED: 'Disqual.',
         NO_RUNNING_EVENT: 'Im Moment kein Live-Timing.',
         EVENT_FINISHED: 'Veranstaltung ist zu Ende'
     },
@@ -86,9 +86,9 @@ var localization = {
         NOT_PRESENT: 'Not Present',
         NOT_STARTED: 'Not Started',
         RETIRED: 'Retired',
-        ELIMINATED: 'Eliminated',
+        ELIMINATED: 'Elimin.',
         OFF_COURSE: 'Off-course',
-        DISQUALIFIED: 'Disqualified',
+        DISQUALIFIED: 'Disqual.',
         NO_RUNNING_EVENT: 'pas de Live-Timing pour le moment.',
         EVENT_FINISHED: `L'événement est terminé.`
     },
@@ -117,9 +117,9 @@ var localization = {
         NOT_PRESENT: 'Not Present',
         NOT_STARTED: 'Not Started',
         RETIRED: 'Retired',
-        ELIMINATED: 'Eliminated',
+        ELIMINATED: 'Elimin.',
         OFF_COURSE: 'Off-course',
-        DISQUALIFIED: 'Disqualified',
+        DISQUALIFIED: 'Disqual.',
         NO_RUNNING_EVENT: 'Nessun tempismo live al momento.',
         EVENT_FINISHED: `L'evento è finito.`
     }
