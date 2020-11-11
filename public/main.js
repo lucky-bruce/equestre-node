@@ -207,6 +207,7 @@ $(function () {
                 rankings[i][4] = rider.nation || country;
             }
         }
+        console.table(rankings);
 
         // Update UI
         updateRankingList();
@@ -606,11 +607,13 @@ $(function () {
         const startlistRow = findRealtimeRow();
         console.log(score, offset);
         startlistRow.children(`td:nth-child(${5 + (offset - 1) * 2 + 1})`).html(formatPoint(score, false));
+        localizeAll(lang);
     }
 
     function updateStartlistRowRealtimeTime(label, offset) {
         const startlistRow = findRealtimeRow();
         startlistRow.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).html(label);
+        localizeAll(lang);
     }
 
     function clearRuntimeList() {
@@ -641,6 +644,7 @@ $(function () {
             }
             addRow(ranking || row, tbody, true, dataClasses, true);
         });
+        localizeAll(lang);
     }
 
     function updateRankingList() {

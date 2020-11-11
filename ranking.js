@@ -82,7 +82,7 @@ function generateRanking(roundScore, jumpoffScore,
         const [rank, num] = resultNums[i];
         result[i + 1][0] = rank + 1;
         result[i + 1][1] = num;
-        let displayRank = false;
+        let displayRank = true;
         let scoreSummary = 0;
         for (let j = 0; j < roundDisplayCount; j++) {
             const score = scoreList[j].find(s => s.num === num);
@@ -90,7 +90,7 @@ function generateRanking(roundScore, jumpoffScore,
             result[i + 1][5 + j * 2] = formatPoint(score.point, score.pointPlus);
             result[i + 1][5 + j * 2 + 1] = score.point < 0 ? '' : formatTime(score.time + score.timePlus);
             if (score.point >= 0) {
-                displayRank = true;
+                // displayRank = true;
                 scoreSummary += score.point;
             }
         }
@@ -108,7 +108,6 @@ function generateRanking(roundScore, jumpoffScore,
         result[0][5] = `<span data-key="POINTS"></span>`;
         result[0][6] = `<span data-key="TIME"></span>`;
     }
-
     return result;
 }
 
@@ -149,12 +148,21 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
     const pointB = score2.point;
     const timeA = score1.time + score1.timePlus;
     const timeB = score2.time + score2.timePlus;
-    if (timeA === 0) { return -1; }
-    if (timeB === 0) { return 1; }
-    if (timeA === timeB && timeA === 0) { return 0; }
+    // if (timeA === 0) { return -1; }
+    // if (timeB === 0) { return 1; }
+    // if (timeA === timeB && timeA === 0) { return 0; }
     switch (tableType) {
         case 0: { // Table A
             // least point and fastest time
+            if (score1.point < 0 && score2.point < 0) {
+                if (score1.point === score2.point) {
+                    return 0;
+                }
+                if (Math.abs(score1.point) > Math.abs(score2.point)) {
+                    return 1;
+                }
+                return -1;
+            }
             if (score1.point < 0) { return -1; }
             if (score2.point < 0) { return 1; }
             if (pointA < pointB) { return 1; }
@@ -173,6 +181,15 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
             else { return -1; }
         }
         case 2: { // Table Penalties
+            if (score1.point < 0 && score2.point < 0) {
+                if (score1.point === score2.point) {
+                    return 0;
+                }
+                if (Math.abs(score1.point) > Math.abs(score2.point)) {
+                    return 1;
+                }
+                return -1;
+            }
             if (score1.point < 0) { return -1; }
             if (score2.point < 0) { return 1; }
             if (pointA > pointB) { return 1; }
@@ -185,6 +202,15 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
             else { return -1; }
         }
         case 10: { // Table Optimum
+            if (score1.point < 0 && score2.point < 0) {
+                if (score1.point === score2.point) {
+                    return 0;
+                }
+                if (Math.abs(score1.point) > Math.abs(score2.point)) {
+                    return 1;
+                }
+                return -1;
+            }
             if (score1.point < 0) { return -1; }
             if (score2.point < 0) { return 1; }
             if (pointA < pointB) { return 1; }
