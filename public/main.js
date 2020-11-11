@@ -452,7 +452,6 @@ $(function () {
                 data[3] = `${rider.firstName} ${rider.lastName}`;
                 table[j] = data;
             }
-            table[j] = table[j].slice(0, 5);
             j += 1;
         }
         updateTable("nextriders", table);
@@ -561,14 +560,14 @@ $(function () {
         }
 
         if (horse !== undefined) {
-            currentRider.children("td:nth-child(3)").html(horse.name);
+            currentRider.children("td:nth-child(3)").html(`<span>${horse.name}</span>`);
         } else {
             currentRider.children("td:nth-child(3)").html("&nbsp");
         }
         currentRider.children("td:nth-child(3)").addClass("bg-white text-color-black");
 
         if (rider !== undefined) {
-            currentRider.children("td:nth-child(4)").html(`${rider.firstName} ${rider.lastName}`);
+            currentRider.children("td:nth-child(4)").html(`<span>${rider.firstName} ${rider.lastName}</span>`);
             const nation = rider.nation || country;
             const url = `/flags/${nation}.bmp`;
             currentRider.children("td:nth-child(5)").css("background", `#232323 url('${url}') center no-repeat`).css("background-size", "contain");
@@ -677,13 +676,11 @@ $(function () {
         tables.forEach(tableName => {
             const tableHeader = $(`#${tableName}_header`);
             tableHeader.html('');
-            if (tableName === 'nextriders') {
-                header[0] = `<span data-key="NUMBER"></span>`;
-                header[1] = `<span data-key="RANK"></span>`;
-                addRow(header.slice(0, 5), tableHeader, false, headerClasses);
-            } else {
-                addRow(header, tableHeader, false, headerClasses);
-            }
+            // if (tableName === 'nextriders') {
+            //     header[0] = `<span data-key="NUMBER"></span>`;
+            //     header[1] = `<span data-key="RANK"></span>`;
+            // }
+            addRow(header, tableHeader, false, headerClasses);
         });
     }
 
