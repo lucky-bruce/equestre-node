@@ -203,12 +203,27 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
     }
 }
 
+function formatFloat(point, digit, round) {
+    digit = (digit > 5)?5:digit;
+    digit = (digit < 0)?0:digit;
+
+    let pos = Math.pow(10, digit);
+    if(round==='round') {
+        point = Math.round(point * pos);
+    } else if(round ==='ceil') {
+        point = Math.ceil(point * pos);
+    } else if(round==='floor') {
+        point = Math.floor(point * pos);
+    }
+    return (point / pos).toFixed(digit);
+}
+
 function formatPoint(score, pointSurpassing) {
     if (score < 0) {
         return score;
     }
-    const s1 = (score / 1000).toFixed(2);
-    const s2 = (pointSurpassing / 1000).toFixed(2);
+    const s1 = formatFloat(score / 1000, 2, 'floor');
+    const s2 = formatFloat(pointSurpassing / 1000, 2, 'floor');
     if (pointSurpassing !== 0) {
         // TODO: uncomment if needed
         // return `${s1} (${s2})`;

@@ -380,7 +380,7 @@ $(function () {
         if(score.point < 0) {
             let index = Math.abs(score.point) - 1;
             if(index > 0 && index <= 6) {
-                return `<span class="font-size-small" data-key="${labels[index]}">${labels[index]}</span>`;
+                return `<span class="point-label" data-key="${labels[index]}">${labels[index]}</span>`;
             }
         }
 
@@ -590,6 +590,7 @@ $(function () {
             // currentRider.children("td:nth-child(5)").html("&nbsp");
         }
         currentRider.children("td:nth-child(4)").addClass("bg-white text-color-black");
+        localizeAll(lang);
     }
 
     function clearRuntimeList() {
@@ -630,7 +631,7 @@ $(function () {
         localizeAll(lang);
     }
 
-    function addRow(rowData, container, isData, classes, swapNumAndRank) {
+    function addRow(rowData, container, isData, classes, swapNumAndRank, hideRank) {
         if (!rowData) { return; }
         const row = $("<tr class=''></tr>");
         const cols = [];
@@ -670,7 +671,15 @@ $(function () {
                 col.attr("data-toggle", "tooltip").attr("title", rowData[i]);
                 col.html('');
             }
-
+            if (hideRank) {
+                console.log('hiding rank');
+            }
+            if (i === 0 && hideRank) {
+                col.addClass("d-none");
+            }
+            if (i === 1 && hideRank) {
+                col.addClass("col-num-lg");
+            }
             cols.push(col);
         }
         if (swapNumAndRank) {
@@ -689,10 +698,12 @@ $(function () {
         tables.forEach(tableName => {
             const tableHeader = $(`#${tableName}_header`);
             tableHeader.html('');
-            const added = addRow(header, tableHeader, false, headerClasses);
-            if (tableName === 'nextriders') {
-                // added.children()[0].attr('col-s')
+            if (tableName === 'startlist') {
+                const temp = header[0];
+                header[0] = header[1];
+                header[1] = temp;
             }
+            addRow(header, tableHeader, false, headerClasses, false, tableName === 'nextriders');
         });
     }
 
@@ -701,7 +712,7 @@ $(function () {
         const tableBody = $(`#${tableName}_body`);        
         tableBody.html('');
         for (let i = 1; i < table.length; i ++) {
-            addRow(table[i], tableBody, true, dataClasses);
+            addRow(table[i], tableBody, true, dataClasses, false, tableName === 'nextriders');
         }
     }
 

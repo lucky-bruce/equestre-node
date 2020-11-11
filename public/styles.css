@@ -195,6 +195,10 @@ footer {
     width: 50px;
 }
 
+.col-num-lg {
+    width: 80px;
+}
+
 .col-point {
     width: 60px;
     padding-top: 0 !important;
