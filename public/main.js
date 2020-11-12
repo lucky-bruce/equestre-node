@@ -22,7 +22,7 @@ const dataClasses = {
     horseClass: 'w-50 col-horse',
     flagClass: 'col-nation px-02',
     pointsClass: 'col-point col-font-monospace text-right bg-color-perano text-color-black px-02',
-    timeClass: 'col-time text-right bg-color-pale-canary text-color-black px-02'
+    timeClass: 'col-time col-font-monospace text-right bg-color-pale-canary text-color-black px-02'
 };
 
 function localizedValue(key, lang) {
