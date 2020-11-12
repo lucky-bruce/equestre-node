@@ -216,11 +216,9 @@ footer {
 }
 
 .col-font-monospace {
-    font-family: monospace;
-    font-size: 16px;
-    font-weight: 900;
-    letter-spacing: -0.6px;
+    font-variant-numeric: tabular-nums;
 }
+
 
 .bg-color-macaroni {
     background-color: #ffbf80 !important;
