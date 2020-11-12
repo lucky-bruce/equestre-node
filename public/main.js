@@ -69,6 +69,7 @@ $(function () {
     var riders = {};    // indexed map
     var startlistmap = {};  // number indexed map
     var rankings = [];  // ranking list
+    var gameInfo = {};
     var realtime = {};  // live info
 
 
@@ -191,9 +192,12 @@ $(function () {
 
     // update ranking info
     socket.on('ranking', function (data) {
-        console.log("[on] ranking:" + data.length/* + JSON.stringify(data) */);
+        console.log("[on] ranking:" + data.ranking.length/* + JSON.stringify(data) */);
         // move "labeled" to the bottom
-        rankings = data;
+        gameInfo = data.gameInfo;
+        rankings = data.ranking;
+        console.log(gameInfo);
+        updateGameInfo();
         for (let i = 1 ; i < rankings.length ; i++) {
             let num = rankings[i][1];
             let startlistentry = startlistmap[num];
@@ -353,6 +357,11 @@ $(function () {
 
     ///////////////////////////////////////////////////
     // UI management function
+
+    function updateGameInfo() {
+        const label = (gameInfo && gameInfo.allowed_time) ? formatFloat(gameInfo.allowed_time / 1000, 2, 'floor') : '-';
+        $("#allowed_time").html(label);
+    }
 
     function formatFloat(point, digit, round) {
         digit = (digit > 5)?5:digit;
@@ -741,9 +750,6 @@ $(function () {
                 col.css("background", `#232323 url('${url}') center no-repeat`).css("background-size", "contain");
                 col.attr("data-toggle", "tooltip").attr("title", rowData[i]);
                 col.html('');
-            }
-            if (hideRank) {
-                console.log('hiding rank');
             }
             if (i === 0 && hideRank) {
                 col.addClass("d-none");

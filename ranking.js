@@ -108,7 +108,41 @@ function generateRanking(roundScore, jumpoffScore,
         result[0][5] = `<span data-key="POINTS"></span>`;
         result[0][6] = `<span data-key="TIME"></span>`;
     }
-    return result;
+
+    // calculate game info
+    const iRound = roundDisplayCount - 1;
+    const allowedTime = againstTimeClockList[iRound] ? allowedTimesList[iRound] : 0;
+    const registeredCount = riderCount;
+    let rankingCount = 0;
+    let startedCount = 0;
+    let clearedCount = 0;
+    let expeledCount = 0;
+    let comingUpCount = 0; // TODO:
+    for (let i = 0; i < result.length; i++) {
+        if (parseInt(result[i][0]) >= 0) {
+            rankingCount ++;
+        }
+    }
+    const currentRound = scoreList[iRound];
+    for (let i = 0; i < currentRound.length; i++) {
+        if (currentRound[i].point === 0 && currentRound[i].time !== 0) {
+            clearedCount ++;
+        }
+        if (currentRound[i].point < 0) {
+            expeledCount ++;
+        }
+    }
+    startedCount = currentRound.length;
+    comingUpCount = startedCount - clearedCount - expeledCount;
+
+    return [result, {
+        allowed_time: allowedTime,
+        registered_count: registeredCount,
+        rankingCount,
+        started: startedCount,
+        clearedCount: clearedCount,
+        comingup: comingUpCount
+    }];
 }
 
 function sortTable(scoreTableSlice, tableType, applyAgainstTimeClock, optimumTime) {
