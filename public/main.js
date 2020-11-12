@@ -21,7 +21,7 @@ const dataClasses = {
     riderClass: 'w-50 col-rider',
     horseClass: 'w-50 col-horse',
     flagClass: 'col-nation px-02',
-    pointsClass: 'col-point text-right bg-color-perano text-color-black px-02',
+    pointsClass: 'col-point col-font-monospace text-right bg-color-perano text-color-black px-02',
     timeClass: 'col-time text-right bg-color-pale-canary text-color-black px-02'
 };
 
@@ -207,7 +207,6 @@ $(function () {
                 rankings[i][4] = rider.nation || country;
             }
         }
-        console.table(rankings);
 
         // Update UI
         updateRankingList();
@@ -439,7 +438,26 @@ $(function () {
     //  fill the list from index to the atstart list
     function updateLiveAtStart(index) {
         console.log(`updating live at start ${index}`);
-        let limit = (index + 3 < startlist.length)?(index + 3):startlist.length;
+        const jumpoff = eventInfo.jumpoff;
+        const roundCount = eventInfo.roundNumber;
+        const l = index;
+        index = 0;
+        const filtered = startlist.filter((r, i) => {
+            const num = r.num;
+            const ranking = rankings.find(r2 => r2[1] === num);
+            if (jumpoff) {
+                if (!ranking) { return false; }
+                const point = parseFloat(ranking[5 + (roundCount - 1) * 2]);
+                const time = parseFloat(ranking[5 + (roundCount -1 ) * 2 + 1]);
+                if (point !== 0 || time === 0) { return false; }
+            }
+            if (i < l) {
+                index ++;
+            }
+            return true;
+        });
+
+        let limit = (index + 3 < filtered.length)?(index + 3):filtered.length;
 
         const table = [];
         if (rankings.length >= 1) {
@@ -447,7 +465,7 @@ $(function () {
         }
         let j = 1;
         for(i = limit - 1 ; i >= index ; i--) {
-            const startlistentry = startlist[i];
+            const startlistentry = filtered[i];
             const num = startlistentry.num;
             const ranking = rankings.find(r => r[1] === num);
             table[j] = ranking;
@@ -469,6 +487,26 @@ $(function () {
 
     // fill the rank from index to the atstart list
     function updateLiveAtFinish(index) {
+        
+        const jumpoff = eventInfo.jumpoff;
+        const roundCount = eventInfo.roundNumber;
+        const l = index;
+        index = 0;
+        const filtered = startlist.filter((r, i) => {
+            const num = r.num;
+            const ranking = rankings.find(r2 => r2[1] === num);
+            if (jumpoff) {
+                if (!ranking) { return false; }
+                const point = parseFloat(ranking[5 + (roundCount - 1) * 2]);
+                const time = parseFloat(ranking[5 + (roundCount -1 ) * 2 + 1]);
+                if (point !== 0 || time === 0) { return false; }
+            }
+            if (i < l) {
+                index ++;
+            }
+            return true;
+        });
+
         let limit = (index - 3 >= 0)?(index - 3):-1;
 
         const table = [];
@@ -477,7 +515,7 @@ $(function () {
         }
         let j = 1;
         for(let i = index ; i > limit ; i--) {
-            let num = startlist[i].num;
+            let num = filtered[i].num;
 
             let ranking = rankings.find(r => r[1] === num);
             table[j] = ranking;
@@ -629,9 +667,18 @@ $(function () {
         const tbody = $("#startlist_body");
         tbody.html('');
         const colCount = rankings.length ? rankings[0].length : 7;
+        const jumpoff = eventInfo.jumpoff;
+        const roundCount = eventInfo.roundNumber;
+        console.log(roundCount);
         startlist.forEach(r => {
             const num = r.num;
             const ranking = rankings.find(r2 => r2[1] === num);
+            if (jumpoff) {
+                if (!ranking) { return; }
+                const point = parseFloat(ranking[5 + (roundCount - 1) * 2]);
+                const time = parseFloat(ranking[5 + (roundCount -1 ) * 2 + 1]);
+                if (point !== 0 || time === 0) { return; }
+            }
             const row = Array(colCount).fill('');
             if (!ranking) {
                 const rider = riders[r.rider_idx];
