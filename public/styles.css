@@ -284,3 +284,11 @@ footer {
     line-height: 1;
 }
 
+.ranking-badge {
+    width: 25%;
+}
+
+.gameinfo-badge {
+    width: 73%;
+    font-size: 14px !important;
+}

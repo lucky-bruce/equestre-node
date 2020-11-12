@@ -361,6 +361,11 @@ $(function () {
     function updateGameInfo() {
         const label = (gameInfo && gameInfo.allowed_time) ? formatFloat(gameInfo.allowed_time / 1000, 2, 'floor') : '-';
         $("#allowed_time").html(label);
+        $("#ranking_count").html(gameInfo.ranking_count);
+        $("#registered_count").html(gameInfo.registered_count);
+        $("#started_count").html(gameInfo.started_count);
+        $("#cleared_count").html(gameInfo.cleared_count);
+        $("#comingup_count").html(gameInfo.comingup_count);
     }
 
     function formatFloat(point, digit, round) {

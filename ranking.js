@@ -138,10 +138,10 @@ function generateRanking(roundScore, jumpoffScore,
     return [result, {
         allowed_time: allowedTime,
         registered_count: registeredCount,
-        rankingCount,
-        started: startedCount,
-        clearedCount: clearedCount,
-        comingup: comingUpCount
+        ranking_count: rankingCount,
+        started_count: startedCount,
+        cleared_count: clearedCount,
+        comingup_count: comingUpCount
     }];
 }
 
