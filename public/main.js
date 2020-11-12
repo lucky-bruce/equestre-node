@@ -215,6 +215,10 @@ $(function () {
         // Update UI
         updateRankingList();
         updateStartList();
+
+        if (!realtime || !realtime.num) {
+            updateLiveAtStart(0);
+        }
     });
 
     // one ready to race
