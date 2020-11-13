@@ -384,7 +384,7 @@ io.on('connection', function (socket) {
         event.gameInfo = {};
         [event.ranking, event.gameInfo] = ranking.generateRanking(command.round_score, command.jumpoff_score, command.round_count, command.jumpoff_count, command.round, command.jumpoff, command.round_table_types, command.jumpoff_table_types,
             command.allowed_time_rounds, command.allowed_time_jumpoffs, command.against_time_clock_rounds, command.against_time_clock_jumpoffs, twoPhaseIntegrated);
-        socket.to(event.id).emit('ranking', { ranking: event.ranking, gameInfo: gameInfo });
+        socket.to(event.id).emit('ranking', { ranking: event.ranking, gameInfo: event.gameInfo });
 
         // save to database
         try {

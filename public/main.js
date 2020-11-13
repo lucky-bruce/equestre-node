@@ -3,7 +3,7 @@ var country = 'ch';
 
 const flagStyle = 'flat';
 const flagSize = 64;
- 
+
 const labels = ["CLASSFIED", "NOT_PRESENT", "NOT_STARTED", "RETIRED", "ELIMINATED", "OFF_COURSE", "DISQUALIFIED"];
 const headerClasses = {
     rnkClass: 'col-rank text-center px-02',
@@ -82,7 +82,7 @@ $(function () {
     // Prompt for setting a username
     var connected = false;
     var socket = io();
-    
+
     socket.emit("subscribe", "consumer");
 //
 
@@ -292,7 +292,7 @@ $(function () {
 		    }
 		    updateRuntimeTimer(realtime.lane, started + (Date.now() - tickFrom));
 	    }, 100);
-	  
+
             timer_running = false;
         }
     });
@@ -505,7 +505,7 @@ $(function () {
 
     // fill the rank from index to the atstart list
     function updateLiveAtFinish(index) {
-        
+
         const jumpoff = eventInfo.jumpoff;
         const roundCount = eventInfo.roundNumber;
         const l = index;
@@ -795,7 +795,7 @@ $(function () {
 
     function updateTable(tableName, table) {
         if (table.length < 1) { return; }
-        const tableBody = $(`#${tableName}_body`);        
+        const tableBody = $(`#${tableName}_body`);
         tableBody.html('');
         for (let i = 1; i < table.length; i ++) {
             addRow(table[i], tableBody, true, dataClasses, false, tableName === 'nextriders');
