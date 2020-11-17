@@ -95,6 +95,10 @@ function generateRanking(roundScore, jumpoffScore,
             const score = scoreList[j].find(s => s.num === num);
             const roundType = tableTypeList[j];
             if (!score) { continue; }
+            if (roundType === TABLE_OPTIMUM) {
+                const optimumTime = allowedTimesList[j];
+                result[i + 1][5 + j * 2 + 2] = (score.point > -10 && score.point < 0) ? '' : formatFloat(Math.abs(score.time - optimumTime) / 1000, 2, 'floor');
+            }
             result[i + 1][5 + j * 2] = formatPoint(score.point, score.pointPlus);
             result[i + 1][5 + j * 2 + 1] = (score.point > -10 && score.point < 0) ? '' : formatFloat((score.time) / 1000, 2, 'floor');
             if (score.point >= 0) {
@@ -116,11 +120,16 @@ function generateRanking(roundScore, jumpoffScore,
         result[0][5] = `<span data-key="POINTS"></span>`;
         result[0][6] = `<span data-key="TIME"></span>`;
     }
+    
+    const iRound = roundDisplayCount - 1;
+    const tableType = roundTableTypes[iRound];
+
+    if (roundTableTypes[iRound] === TABLE_OPTIMUM) {
+        result[0][7] = `<span data-key="TIME_DIFF"></span>`;
+    }
 
     // calculate game info
-    const iRound = roundDisplayCount - 1;
     const allowedTime = againstTimeClockList[iRound] ? allowedTimesList[iRound] : 0;
-    const tableType = roundTableTypes[iRound];
     const registeredCount = riderCount;
     let rankingCount = 0;
     let startedCount = 0;
