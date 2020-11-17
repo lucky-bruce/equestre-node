@@ -88,7 +88,7 @@ function generateRanking(roundScore, jumpoffScore,
             const score = scoreList[j].find(s => s.num === num);
             if (!score) { continue; }
             result[i + 1][5 + j * 2] = formatPoint(score.point, score.pointPlus);
-            result[i + 1][5 + j * 2 + 1] = score.point < 0 ? '' : formatTime(score.time + score.timePlus);
+            result[i + 1][5 + j * 2 + 1] = score.point < 0 ? '' : formatFloat((score.time + score.timePlus) / 1000, 2, 'floor');
             if (score.point >= 0) {
                 // displayRank = true;
                 scoreSummary += score.point;

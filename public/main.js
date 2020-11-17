@@ -198,6 +198,7 @@ $(function () {
         gameInfo = data.gameInfo;
         rankings = data.ranking;
         console.log(gameInfo);
+        console.table(rankings);
         updateGameInfo();
         for (let i = 1 ; i < rankings.length ; i++) {
             let num = rankings[i][1];
@@ -267,7 +268,7 @@ $(function () {
         // update atstart and atend
         if(startlistentry !== undefined) {
             updateLiveAtStart(startlistentry['pos'] + 1);
-            updateLiveAtFinish(startlistentry['pos'] - 1);
+            updateLiveAtFinish();
         }
 
         // start rolling timer
