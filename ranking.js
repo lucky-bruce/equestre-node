@@ -42,7 +42,7 @@ function generateRanking(roundScore, jumpoffScore,
     for (let i = 0; i < roundDisplayCount; i++) {
         const roundType = i < roundCount ? 'ROUND' : 'JUMP_OFF';
         const tableType = tableTypeList[i];
-        const pointType = tableType === 1 ? 'PENALTIES' : 'POINTS';
+        const pointType = tableType === TABLE_C ? 'PENALTIES' : 'POINTS';
         const ii = i < roundCount ? `${i + 1}` : `${i + 1 - roundCount}`;
         const fontSize = roundType === 'ROUND' ? 'font-size-small' : 'font-size-mini';
         result[0][5 + i * 2] = `<div class="${fontSize} no-wrap"><span data-key="${roundType}">${roundType}</span> ${ii}</div><div data-key="${pointType}" class="font-size-small"></div>`;
@@ -117,7 +117,9 @@ function generateRanking(roundScore, jumpoffScore,
         result[0][5 + (roundDisplayCount - 1) * 2 + 2] = `<span data-key="POINTS"></span>`;
     }
     if (round === 1) {
-        result[0][5] = `<span data-key="POINTS"></span>`;
+        const tableType = tableTypeList[0];
+        const pointType = tableType === TABLE_C ? 'PENALTIES' : 'POINTS';
+        result[0][5] = `<span data-key="${pointType}"></span>`;
         result[0][6] = `<span data-key="TIME"></span>`;
     }
     
