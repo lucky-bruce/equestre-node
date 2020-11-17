@@ -197,7 +197,6 @@ $(function () {
         // move "labeled" to the bottom
         gameInfo = data.gameInfo;
         rankings = data.ranking;
-        console.log(gameInfo);
         console.table(rankings);
         updateGameInfo();
         for (let i = 1 ; i < rankings.length ; i++) {
@@ -235,13 +234,11 @@ $(function () {
             updateLiveAtFinish();
         }
         // init realtime and update
-        console.log('ready');
         setRuntimeList(true);
     });
 
     // get live race info
     socket.on('realtime', function (data) {
-        // console.log("[on] realtime:" + JSON.stringify(data));
         realtime = data;
         realtime.updateTick = Date.now();
         // update except time
@@ -461,7 +458,6 @@ $(function () {
 
     //  fill the list from index to the atstart list
     function updateLiveAtStart(index) {
-        console.log(`updating live at start ${index}`);
         const jumpoff = eventInfo.jumpoff;
         const roundCount = eventInfo.roundNumber;
         const l = index;
@@ -605,7 +601,6 @@ $(function () {
         const jumpoff = eventInfo.jumpoff;
         const offset = round ? round : (jumpoff + roundNumber);
         const score = realtime.lane === 2 ? realtime.score.lane2 : realtime.score.lane1;
-        console.log('score', score);
 
         currentRider.children("td:nth-child(1)").html((realtime.rank===undefined)?"&nbsp":realtime.rank + ".");
         currentRider.children("td:nth-child(2)").html(realtime.num);
@@ -646,7 +641,6 @@ $(function () {
 
     function updateStartlistRealtimePoint(score, offset) {
         const startlistRow = findRealtimeRow();
-        console.log(score, offset);
         startlistRow.children(`td:nth-child(${5 + (offset - 1) * 2 + 1})`).html(formatPoint(score, false));
         localizeAll(lang);
     }
@@ -672,7 +666,6 @@ $(function () {
         const colCount = rankings.length ? rankings[0].length : 7;
         const jumpoff = eventInfo.jumpoff;
         const roundCount = eventInfo.roundNumber;
-        console.log(roundCount);
         startlist.forEach(r => {
             const num = r.num;
             const ranking = rankings.find(r2 => r2[1] === num);
@@ -731,11 +724,7 @@ $(function () {
                 v = `<span>${v}</span>`;
             }
             if (i >= 5 && i % 2 === 1) {
-                // point column
-                if (v < 0) {
-                    const label = labels[Math.abs(v) - 1];
-                    v = `<span class="point-label" data-key="${label}">${label}</span>`;
-                }
+                // TODO: point column
             }
             const colType = isData ? 'td' : 'th';
             const col = $(`<${colType} class='${style}'>${v}</${colType}>`);
