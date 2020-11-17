@@ -120,6 +120,7 @@ function generateRanking(roundScore, jumpoffScore,
     // calculate game info
     const iRound = roundDisplayCount - 1;
     const allowedTime = againstTimeClockList[iRound] ? allowedTimesList[iRound] : 0;
+    const tableType = roundTableTypes[iRound];
     const registeredCount = riderCount;
     let rankingCount = 0;
     let startedCount = 0;
@@ -149,7 +150,8 @@ function generateRanking(roundScore, jumpoffScore,
         ranking_count: rankingCount,
         started_count: startedCount,
         cleared_count: clearedCount,
-        comingup_count: comingUpCount
+        comingup_count: comingUpCount,
+        table_type: tableType,
     }];
 }
 

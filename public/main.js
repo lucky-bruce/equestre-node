@@ -4,6 +4,11 @@ var country = 'ch';
 const flagStyle = 'flat';
 const flagSize = 64;
 
+const TABLE_A = 0;
+const TABLE_C = 1;
+const TABLE_PENALTIES = 2;
+const TABLE_OPTIMUM = 10;
+
 const labels = ["CLASSFIED", "NOT_PRESENT", "NOT_STARTED", "RETIRED", "ELIMINATED", "OFF_COURSE", "DISQUALIFIED"];
 const headerClasses = {
     rnkClass: 'col-rank text-center px-02',
@@ -373,6 +378,7 @@ $(function () {
         $("#started_count").html(gameInfo.started_count);
         $("#cleared_count").html(gameInfo.cleared_count);
         $("#comingup_count").html(gameInfo.comingup_count);
+        $("#allowed_time_label").attr('data-key', gameInfo.table_type === TABLE_OPTIMUM ? 'TIME_OPTIMUM' : 'TIME_ALLOWED');
     }
 
     function formatFloat(point, digit, round) {
