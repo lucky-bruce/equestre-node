@@ -71,7 +71,7 @@ $(function () {
     var rankings = [];  // ranking list
     var gameInfo = {};
     var realtime = {};  // live info
-    var finished = [];
+    var finished = Array();
 
 
     var rolling_timer;
@@ -308,8 +308,9 @@ $(function () {
 
         // full update
         if(data.finished === true) {
-            finished.push(realtime.num);
-            console.log(`finished: ${finished}`);
+            if (!finished.find(num => num === realtime.num)) {
+                finished.push(realtime.num);
+            }
             updateLiveAtFinish();
             setRuntimeList(true);
         } else {
@@ -548,7 +549,7 @@ $(function () {
 
         const currentBody = $('#current_body');
         const tr = $(currentBody.children(0));
-        tr.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).html(label);
+        tr.children(`td:nth-child(${5 + (lane - 1) * 2 + (offset - 1) * 2 + 2})`).html(label);
         updateStartlistRowRealtimeTime(label, offset);
         localizeAll(lang);
     }
@@ -603,11 +604,12 @@ $(function () {
         const round = eventInfo.round;
         const jumpoff = eventInfo.jumpoff;
         const offset = round ? round : (jumpoff + roundNumber);
-        const score = round ? realtime.score.lane1 : realtime.score.lane2;
+        const score = realtime.lane === 2 ? realtime.score.lane2 : realtime.score.lane1;
+        console.log('score', score);
 
         currentRider.children("td:nth-child(1)").html((realtime.rank===undefined)?"&nbsp":realtime.rank + ".");
         currentRider.children("td:nth-child(2)").html(realtime.num);
-        currentRider.children(`td:nth-child(${5 + (offset - 1) * 2 + 1})`).html(formatPoint(score, false));
+        currentRider.children(`td:nth-child(${5 + (realtime.lane - 1) * 2 + (offset - 1) * 2 + 1})`).html(formatPoint(score, false));
         if(fullupdate === true) {
             currentRider.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).html(formatTime(score, false));
         }
@@ -830,7 +832,7 @@ $(function () {
         socket.emit("subscribe", eventId);
         curEvent = eventId;
         realtime.num = 0;
-        finished = [];
+        finished = Array();
         $("#current_body").html('');
         $("#nextriders_body").html('');
         $("#finish_body").html('');
