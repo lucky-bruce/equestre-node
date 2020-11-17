@@ -377,7 +377,7 @@ $(function () {
         $("#registered_count").html(startlist.length);
         $("#started_count").html(gameInfo.started_count);
         $("#cleared_count").html(gameInfo.cleared_count);
-        $("#comingup_count").html(gameInfo.comingup_count);
+        $("#comingup_count").html(startlist.length - gameInfo.started_count);
         $("#allowed_time_label").attr('data-key', gameInfo.table_type === TABLE_OPTIMUM ? 'TIME_OPTIMUM' : 'TIME_ALLOWED');
     }
 
