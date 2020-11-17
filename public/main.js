@@ -732,6 +732,7 @@ $(function () {
             }
             if (i >= 5 && i % 2 === 1) {
                 // TODO: point column
+                v = `<span>${v}</span>`;
             }
             const colType = isData ? 'td' : 'th';
             const col = $(`<${colType} class='${style}'>${v}</${colType}>`);

@@ -309,7 +309,7 @@ function formatPoint(score, pointSurpassing) {
     const s2 = formatFloat(pointSurpassing / 1000, 2, 'floor');
     if (pointSurpassing !== 0) {
         // TODO: comment/uncomment if needed
-        // return `${s1} (${s2})`;
+        return `${s1} <span class="font-point-surpassing">(${s2})</span>`;
     }
     return s1;
 }

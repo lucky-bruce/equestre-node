@@ -294,3 +294,8 @@ footer {
 .font-13 {
     font-size: 13px !important;
 }
+
+.font-point-surpassing {
+    font-size: 12px !important;
+    font-weight: bold;
+}
