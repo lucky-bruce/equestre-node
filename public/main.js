@@ -71,6 +71,7 @@ $(function () {
     var rankings = [];  // ranking list
     var gameInfo = {};
     var realtime = {};  // live info
+    var finished = [];
 
 
     var rolling_timer;
@@ -230,7 +231,7 @@ $(function () {
         // update atstart and atend
         if(startlistentry !== undefined) {
             updateLiveAtStart(startlistentry['pos'] + 1);
-            updateLiveAtFinish(startlistentry['pos'] - 1);
+            updateLiveAtFinish();
         }
         // init realtime and update
         console.log('ready');
@@ -306,6 +307,9 @@ $(function () {
 
         // full update
         if(data.finished === true) {
+            finished.push(realtime.num);
+            console.log(`finished: ${finished}`);
+            updateLiveAtFinish();
             setRuntimeList(true);
         } else {
             let started;
@@ -330,7 +334,7 @@ $(function () {
         // update atstart and atend
         if(startlistentry !== undefined) {
             updateLiveAtStart(startlistentry['pos'] + 1);
-            updateLiveAtFinish(startlistentry['pos']);
+            updateLiveAtFinish();
         }
 
         // update runtime with ranking
@@ -504,37 +508,16 @@ $(function () {
     }
 
     // fill the rank from index to the atstart list
-    function updateLiveAtFinish(index) {
-
-        const jumpoff = eventInfo.jumpoff;
-        const roundCount = eventInfo.roundNumber;
-        const l = index;
-        index = 0;
-        const filtered = startlist.filter((r, i) => {
-            const num = r.num;
-            const ranking = rankings.find(r2 => r2[1] === num);
-            if (jumpoff) {
-                if (!ranking) { return false; }
-                const point = parseFloat(ranking[5 + (roundCount - 1) * 2]);
-                const time = parseFloat(ranking[5 + (roundCount -1 ) * 2 + 1]);
-                if (point !== 0 || time === 0) { return false; }
-            }
-            if (i < l) {
-                index ++;
-            }
-            return true;
-        });
-
-        let limit = (index - 3 >= 0)?(index - 3):-1;
-
+    function updateLiveAtFinish() {
+        const len = finished.length;
         const table = [];
+
         if (rankings.length >= 1) {
             table[0] = rankings[0];
         }
         let j = 1;
-        for(let i = index ; i > limit ; i--) {
-            let num = filtered[i].num;
-
+        for(let i = len - 1 ; i >= Math.max(0, len - 3) ; i--) {
+            let num = finished[i];
             let ranking = rankings.find(r => r[1] === num);
             table[j] = ranking;
             j += 1;
@@ -551,7 +534,7 @@ $(function () {
         } else {
             show_timer = true;
         }
-            let label = formatFloat(Math.abs(value) / 1000, 1, 'floor');
+            let label = formatFloat(Math.abs(value) / 1000, 2, 'floor');
         if (!show_timer) { label = ''; }
 
         const jumpoffNumber = eventInfo.jumpoffNumber;
@@ -611,7 +594,6 @@ $(function () {
                     currentRiderData[i] = '';
                 }
             }
-            console.log(`adding row: ${currentRiderData}`);
             currentRider = addRow(currentRiderData, currentBody, true, dataClasses);
         }
 
@@ -847,6 +829,7 @@ $(function () {
         socket.emit("subscribe", eventId);
         curEvent = eventId;
         realtime.num = 0;
+        finished = [];
         $("#current_body").html('');
         $("#nextriders_body").html('');
         $("#finish_body").html('');
