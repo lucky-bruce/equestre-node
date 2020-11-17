@@ -315,6 +315,7 @@ $(function () {
             }
             updateLiveAtFinish();
             setRuntimeList(true);
+            updateStartList();
         } else {
             let started;
             if(realtime.lane === 1) {
@@ -538,7 +539,7 @@ $(function () {
         } else {
             show_timer = true;
         }
-            let label = formatFloat(Math.abs(value) / 1000, 2, 'floor');
+            let label = formatFloat(Math.abs(value) / 1000, 1, 'floor');
         if (!show_timer) { label = ''; }
 
         const jumpoffNumber = eventInfo.jumpoffNumber;
