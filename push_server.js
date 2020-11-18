@@ -152,7 +152,6 @@ io.on('connection', function (socket) {
     });
 
     socket.on('push', function (msg) {
-        console.log("[on] push: ");
 
         // console.log("push: " + msg);
         // check if provider
@@ -174,7 +173,6 @@ io.on('connection', function (socket) {
             console.error("invalid message");
             return;
         }
-        console.log("push cmd=" + obj.cmd);
 
         if (obj.cmd === 'atstart') {
             processAtStart(obj);
@@ -502,7 +500,6 @@ io.on('connection', function (socket) {
         event.realtime = { ...event.realtime, ...updated };
 
         // alarm to client
-        console.log("[emit] " + event.id + ":realtime(run) " + JSON.stringify(event.realtime));
         socket.to(event.id).emit('realtime', event.realtime);
 
         if(event.running === false) {
