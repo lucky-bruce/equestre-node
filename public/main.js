@@ -26,8 +26,8 @@ const dataClasses = {
     riderClass: 'w-50 col-rider',
     horseClass: 'w-50 col-horse',
     flagClass: 'col-nation px-02',
-    pointsClass: 'col-point col-font-monospace text-right bg-color-perano text-color-black px-02',
-    timeClass: 'col-time col-font-monospace text-right bg-color-pale-canary text-color-black px-02'
+    pointsClass: 'col-point col-font-monospace text-right bg-color-perano text-color-black px-02 body',
+    timeClass: 'col-time col-font-monospace text-right bg-color-pale-canary text-color-black px-02 body'
 };
 
 function localizedValue(key, lang) {
@@ -732,8 +732,8 @@ $(function () {
                 // horse, rider column
                 v = `<span>${v}</span>`;
             }
-            if (i >= 5 && i % 2 === 1) {
-                // TODO: point column
+            if (i >= 5 && (i % 2 === 1 || i % 2 === 0)) {
+                // TODO: point column or time column
                 v = `<span>${v}</span>`;
             }
             const colType = isData ? 'td' : 'th';

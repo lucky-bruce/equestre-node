@@ -100,7 +100,7 @@ function generateRanking(roundScore, jumpoffScore,
                 result[i + 1][5 + j * 2 + 2] = (score.point > -10 && score.point < 0) ? '' : formatFloat(Math.abs(score.time - optimumTime) / 1000, 2, 'floor');
             }
             result[i + 1][5 + j * 2] = formatPoint(score.point, score.pointPlus);
-            result[i + 1][5 + j * 2 + 1] = (score.point > -10 && score.point < 0) ? '' : formatFloat((score.time) / 1000, 2, 'floor');
+            result[i + 1][5 + j * 2 + 1] = formatTime(score.point, score.time, score.timePlus);
             if (score.point >= 0) {
                 // displayRank = true;
                 scoreSummary += score.point;
@@ -312,6 +312,18 @@ function formatPoint(score, pointSurpassing) {
         return `${s1} <span class="font-point-surpassing">(${s2})</span>`;
     }
     return s1;
+}
+
+function formatTime(point, time, timePenalty) {
+    if (point > -10 && point < 0) {
+        return '';
+    }
+   const s1 = formatFloat(time / 1000, 2, 'floor');
+   const s2 = formatFloat(timePenalty / 1000, 2, 'floor');
+   if (timePenalty !== 0) {
+       return `${s1} <span class="font-point-surpassing">(${s2})</span>`;
+   }
+   return s1;
 }
 
 module.exports = { generateRanking };

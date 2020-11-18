@@ -199,22 +199,17 @@ footer {
     width: 80px;
 }
 
-.col-point {
+.col-point, .col-time {
     width: 60px;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
     font-weight: bold;
 }
 
-.col-point span {
+.col-time.body span, .col-point.body span {
     display: inline-block;
     line-height: 1;
     margin: 0px;
-}
-
-.col-time {
-    width: 60px;
-    font-weight: bold;
 }
 
 .col-font-monospace {
