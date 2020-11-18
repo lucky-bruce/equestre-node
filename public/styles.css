@@ -203,6 +203,7 @@ footer {
     width: 60px;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+    font-weight: bold;
 }
 
 .col-point span {
@@ -213,6 +214,7 @@ footer {
 
 .col-time {
     width: 60px;
+    font-weight: bold;
 }
 
 .col-font-monospace {

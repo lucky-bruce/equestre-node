@@ -383,6 +383,7 @@ $(function () {
     }
 
     function formatFloat(point, digit, round) {
+        point = point || 0;
         digit = (digit > 5)?5:digit;
         digit = (digit < 0)?0:digit;
 
@@ -553,7 +554,7 @@ $(function () {
         const currentBody = $('#current_body');
         const tr = $(currentBody.children(0));
         tr.children(`td:nth-child(${5 + (lane - 1) * 2 + (offset - 1) * 2 + 2})`).html(label);
-        updateStartlistRowRealtimeTime(label, offset);
+        updateStartlistRowRealtimeTime(label, 5 + (lane - 1) * 2 + (offset - 1) * 2 + 2);
         localizeAll(lang);
     }
 
@@ -635,7 +636,7 @@ $(function () {
         }
         currentRider.children("td:nth-child(4)").addClass("bg-white text-color-black");
         setTimeout(() => {
-            updateStartlistRealtimePoint(score, offset);
+            updateStartlistRealtimePoint(score, 5 + (realtime.lane - 1) * 2 + (offset - 1) * 2 + 1);
         }, 10);
         localizeAll(lang);
     }
@@ -648,13 +649,14 @@ $(function () {
 
     function updateStartlistRealtimePoint(score, offset) {
         const startlistRow = findRealtimeRow();
-        startlistRow.children(`td:nth-child(${5 + (offset - 1) * 2 + 1})`).html(formatPoint(score, false));
+        startlistRow.children(`td:nth-child(${offset})`).html(formatPoint(score, false));
         localizeAll(lang);
     }
 
     function updateStartlistRowRealtimeTime(label, offset) {
         const startlistRow = findRealtimeRow();
-        startlistRow.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).html(label);
+        startlistRow.children(`td:nth-child(${offset})`).html(label);
+        // startlistRow.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).addClass();
         localizeAll(lang);
     }
 
