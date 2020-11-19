@@ -12,6 +12,7 @@ const TABLE_OPTIMUM = 10;
 let currentTableType = TABLE_A;
 let twoPhaseGame = 0;
 let isRealtime = false;
+var _startlist;
 
 const labels = ["CLASSFIED", "NOT_PRESENT", "NOT_STARTED", "RETIRED", "ELIMINATED", "OFF_COURSE", "DISQUALIFIED"];
 const headerClasses = {
@@ -634,7 +635,6 @@ $(function () {
         const round = eventInfo.round;
         const jumpoff = eventInfo.jumpoff;
         const offset = round ? round : (jumpoff + roundNumber);
-        console.log(offset);
         const score = realtime.lane === 2 ? realtime.score.lane2 : realtime.score.lane1;
 
         currentRider.children("td:nth-child(1)").html((realtime.rank===undefined)?"&nbsp":realtime.rank + ".");
@@ -671,9 +671,29 @@ $(function () {
     }
 
     function findRealtimeRow() {
+        _startlist = startlist;
         const startlistBody = $("#startlist_body");
-        const i = startlist.findIndex(r => r.num === realtime.num);
-        return $(startlistBody.children()[i]);
+
+        const jumpoff = eventInfo.jumpoff;
+        const roundCount = eventInfo.roundNumber;
+        const startListCount = startlist.length;
+        let index = 0;
+        for (let i = 0; i < startListCount; i ++) {
+            const r = startlist[i];
+            const num = r.num;
+            const ranking = rankings.find(r2 => r2[1] === num);
+            if (jumpoff) {
+                if (!ranking) { continue; }
+                const point = parseFloat(ranking[5 + (roundCount - 1) * 2]);
+                const time = parseFloat(ranking[5 + (roundCount - 1) * 2 + 1]);
+                if (point !== 0 || time === 0) { continue; }
+            }
+            if (num === realtime.num) {
+                break;
+            }
+            index ++;
+        }
+        return $(startlistBody.children()[index]);
     }
 
     function updateStartlistRealtimePoint(score, offset) {
@@ -686,7 +706,6 @@ $(function () {
         const startlistRow = findRealtimeRow();
         startlistRow.children(`td:nth-child(${offset})`).html(label);
         localizeAll(lang);
-        console.log('update start list row realtime time');
     }
 
     function updateStartList()
@@ -718,11 +737,9 @@ $(function () {
                 row[3] = `${rider.firstName} ${rider.lastName}`;
                 row[4] = rider.nation || country;
             }
-            console.log(ranking);
             addRow(ranking || row, tbody, true, dataClasses, true);
         });
         localizeAll(lang);
-        console.log('startlist updated');
     }
 
     function updateRankingList() {
@@ -731,7 +748,6 @@ $(function () {
         }
         updateTable("ranking", rankings);
         localizeAll(lang);
-        console.log('ranking list updated');
     }
 
     function addRow(rowData, container, isData, classes, swapNumAndRank, hideRank) {
