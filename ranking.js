@@ -99,7 +99,7 @@ function generateRanking(roundScore, jumpoffScore,
                 const optimumTime = allowedTimesList[j];
                 result[i + 1][5 + j * 2 + 2] = (score.point > -10 && score.point < 0) ? '' : formatFloat(Math.abs(score.time - optimumTime) / 1000, 2, 'floor');
             }
-            result[i + 1][5 + j * 2] = formatPoint(score.point, score.pointPlus);
+            result[i + 1][5 + j * 2] = formatPoint(score.point, score.pointPlus, roundType);
             result[i + 1][5 + j * 2 + 1] = formatTime(score.point, score.time, score.timePlus);
             if (score.point >= 0) {
                 // displayRank = true;
@@ -108,7 +108,7 @@ function generateRanking(roundScore, jumpoffScore,
         }
         if (!displayRank) { result[i + 1][0] = ''; }
         if (round > 1 && round <= roundCount) {
-            result[i + 1][5 + (roundDisplayCount - 1) * 2 + 2] = displayRank ? formatPoint(scoreSummary, 0) : '';
+            result[i + 1][5 + (roundDisplayCount - 1) * 2 + 2] = displayRank ? formatPoint(scoreSummary, 0, TABLE_A) : '';
         }
     }
 
@@ -231,7 +231,20 @@ function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime
         }
         case TABLE_C: { // Table C
             // fastest time
-        if (timeA < timeB) { return 1; }
+            if (score1.point < 0 && score2.point < 0 && score1.point > -10 && score2.point > -10) {
+                // when the point represents the status of the rider
+                if (score1.point === score2.point) {
+                    return 0;
+                }
+                if (Math.abs(score1.point) > Math.abs(score2.point)) {
+                    return 1;
+                }
+                return -1;
+            }
+            if (score1.point < 0 && score1.point > -10) { return -1; }
+            if (score2.point < 0 && score2.point > -10) { return 1; }
+
+            if (timeA < timeB) { return 1; }
             else if (timeA === timeB) { return 0; }
             else { return -1; }
         }
@@ -300,7 +313,7 @@ function formatFloat(point, digit, round) {
     return (point / pos).toFixed(digit);
 }
 
-function formatPoint(score, pointSurpassing) {
+function formatPoint(score, pointSurpassing, roundType) {
     if (score > -10 && score < 0) {
         const label = labels[Math.abs(score) - 1];
         return `<span class="point-label" data-key="${label}">${label}</span>`;
@@ -310,6 +323,9 @@ function formatPoint(score, pointSurpassing) {
     if (pointSurpassing !== 0) {
         // TODO: comment/uncomment if needed
         return `${s1} <span class="font-point-surpassing">(${s2})</span>`;
+    }
+    if (roundType === TABLE_C && score !== 0) {
+        return `(${s1})`;
     }
     return s1;
 }
