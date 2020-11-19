@@ -201,8 +201,8 @@ function sortTable(scoreTableSlice, tableType, applyAgainstTimeClock, optimumTim
 function compareFn(score1, score2, tableType, applyAgainstTimeClock, optimumTime) {
     const pointA = score1.point;
     const pointB = score2.point;
-    const timeA = score1.time + score1.timePlus;
-    const timeB = score2.time + score2.timePlus;
+    const timeA = score1.time;
+    const timeB = score2.time;
     // if (timeA === 0) { return -1; }
     // if (timeB === 0) { return 1; }
     // if (timeA === timeB && timeA === 0) { return 0; }
