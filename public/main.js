@@ -775,6 +775,10 @@ $(function () {
             const temp = cols[0].html();
             cols[0].html(cols[1].html());
             cols[1].html(temp);
+
+            const tempStyle = cols[0].attr('class');
+            cols[0].attr('class', cols[1].attr('class'));
+            cols[1].attr('class', tempStyle);
         }
         cols.forEach(col => row.append(col));
         container.append(row);
