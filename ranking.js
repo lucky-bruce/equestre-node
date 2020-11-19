@@ -163,6 +163,7 @@ function generateRanking(roundScore, jumpoffScore,
         cleared_count: clearedCount,
         comingup_count: comingUpCount,
         table_type: tableType,
+        two_phase: twoPhaseIntegrated,
     }];
 }
 

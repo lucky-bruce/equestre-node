@@ -10,6 +10,7 @@ const TABLE_PENALTIES = 2;
 const TABLE_OPTIMUM = 10;
 
 let currentTableType = TABLE_A;
+let twoPhaseGame = 0;
 
 const labels = ["CLASSFIED", "NOT_PRESENT", "NOT_STARTED", "RETIRED", "ELIMINATED", "OFF_COURSE", "DISQUALIFIED"];
 const headerClasses = {
@@ -204,6 +205,7 @@ $(function () {
         // move "labeled" to the bottom
         gameInfo = data.gameInfo;
         currentTableType = gameInfo.table_type;
+        twoPhaseGame = gameInfo.two_phase;
         rankings = data.ranking;
         updateGameInfo();
         for (let i = 1 ; i < rankings.length ; i++) {
@@ -569,8 +571,8 @@ $(function () {
 
         const currentBody = $('#current_body');
         const tr = $(currentBody.children(0));
-        tr.children(`td:nth-child(${5 + (lane - 1) * 2 + (offset - 1) * 2 + 2})`).html(label);
-        updateStartlistRowRealtimeTime(label, 5 + (lane - 1) * 2 + (offset - 1) * 2 + 2);
+        tr.children(`td:nth-child(${5 + twoPhaseGame * (lane - 1) * 2 + (offset - 1) * 2 + 2})`).html(label);
+        updateStartlistRowRealtimeTime(label, 5 + twoPhaseGame * (lane - 1) * 2 + (offset - 1) * 2 + 2);
         localizeAll(lang);
     }
 
@@ -624,11 +626,12 @@ $(function () {
         const round = eventInfo.round;
         const jumpoff = eventInfo.jumpoff;
         const offset = round ? round : (jumpoff + roundNumber);
+        console.log(offset);
         const score = realtime.lane === 2 ? realtime.score.lane2 : realtime.score.lane1;
 
         currentRider.children("td:nth-child(1)").html((realtime.rank===undefined)?"&nbsp":realtime.rank + ".");
         currentRider.children("td:nth-child(2)").html(realtime.num);
-        currentRider.children(`td:nth-child(${5 + (realtime.lane - 1) * 2 + (offset - 1) * 2 + 1})`).html(formatPoint(score, false));
+        currentRider.children(`td:nth-child(${5 + twoPhaseGame * (realtime.lane - 1) * 2 + (offset - 1) * 2 + 1})`).html(formatPoint(score, false));
         if(fullupdate === true) {
             currentRider.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).html(formatTime(score, false));
         }
@@ -652,7 +655,7 @@ $(function () {
         }
         currentRider.children("td:nth-child(4)").addClass("bg-white text-color-black");
         setTimeout(() => {
-            updateStartlistRealtimePoint(score, 5 + (realtime.lane - 1) * 2 + (offset - 1) * 2 + 1);
+            updateStartlistRealtimePoint(score, 5 + twoPhaseGame * (realtime.lane - 1) * 2 + (offset - 1) * 2 + 1);
         }, 10);
         localizeAll(lang);
     }
