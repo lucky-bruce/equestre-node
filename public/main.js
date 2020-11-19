@@ -11,6 +11,7 @@ const TABLE_OPTIMUM = 10;
 
 let currentTableType = TABLE_A;
 let twoPhaseGame = 0;
+let isRealtime = false;
 
 const labels = ["CLASSFIED", "NOT_PRESENT", "NOT_STARTED", "RETIRED", "ELIMINATED", "OFF_COURSE", "DISQUALIFIED"];
 const headerClasses = {
@@ -255,6 +256,7 @@ $(function () {
     socket.on('realtime', function (data) {
         realtime = data;
         realtime.updateTick = Date.now();
+        isRealtime = true;
         // update except time
         setRuntimeList(false);
 
@@ -313,6 +315,7 @@ $(function () {
     // racing is paused (every round)
     socket.on('pause', function (data) {
         console.log("[on] pause");
+        isRealtime = false;
         // stop rolling timer
         clearInterval(rolling_timer);
         timer_running = false;
@@ -341,7 +344,7 @@ $(function () {
     // one player finished
     socket.on('final', function (data) {
         console.log("[on] final:" + JSON.stringify(data));
-
+        isRealtime = false;
         // find position
         let startlistentry = startlistmap[realtime.num];
 
@@ -359,6 +362,7 @@ $(function () {
             realtime.rank = ranking.rank;
         }
         setRuntimeListFinal();
+        updateStartList();
     });
 
     socket.on('disconnect', function () {
@@ -574,7 +578,9 @@ $(function () {
         const currentBody = $('#current_body');
         const tr = $(currentBody.children(0));
         tr.children(`td:nth-child(${5 + twoPhaseGame * (lane - 1) * 2 + (offset - 1) * 2 + 2})`).html(label);
-        updateStartlistRowRealtimeTime(label, 5 + twoPhaseGame * (lane - 1) * 2 + (offset - 1) * 2 + 2);
+        if (isRealtime) {
+            updateStartlistRowRealtimeTime(label, 5 + twoPhaseGame * (lane - 1) * 2 + (offset - 1) * 2 + 2);
+        }
         localizeAll(lang);
     }
 
@@ -657,7 +663,9 @@ $(function () {
         }
         currentRider.children("td:nth-child(4)").addClass("bg-white text-color-black");
         setTimeout(() => {
-            updateStartlistRealtimePoint(score, 5 + twoPhaseGame * (realtime.lane - 1) * 2 + (offset - 1) * 2 + 1);
+            if (isRealtime) {
+                updateStartlistRealtimePoint(score, 5 + twoPhaseGame * (realtime.lane - 1) * 2 + (offset - 1) * 2 + 1);
+            }
         }, 10);
         localizeAll(lang);
     }
@@ -677,13 +685,8 @@ $(function () {
     function updateStartlistRowRealtimeTime(label, offset) {
         const startlistRow = findRealtimeRow();
         startlistRow.children(`td:nth-child(${offset})`).html(label);
-        // startlistRow.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).addClass();
         localizeAll(lang);
-    }
-
-    function clearRuntimeList() {
-        var tds = $('#live-realtime tr td');
-        tds.html("&nbsp");
+        console.log('update start list row realtime time');
     }
 
     function updateStartList()
@@ -702,7 +705,7 @@ $(function () {
             if (jumpoff) {
                 if (!ranking) { return; }
                 const point = parseFloat(ranking[5 + (roundCount - 1) * 2]);
-                const time = parseFloat(ranking[5 + (roundCount -1 ) * 2 + 1]);
+                const time = parseFloat(ranking[5 + (roundCount - 1) * 2 + 1]);
                 if (point !== 0 || time === 0) { return; }
             }
             const row = Array(colCount).fill('');
@@ -715,9 +718,11 @@ $(function () {
                 row[3] = `${rider.firstName} ${rider.lastName}`;
                 row[4] = rider.nation || country;
             }
+            console.log(ranking);
             addRow(ranking || row, tbody, true, dataClasses, true);
         });
         localizeAll(lang);
+        console.log('startlist updated');
     }
 
     function updateRankingList() {
@@ -726,6 +731,7 @@ $(function () {
         }
         updateTable("ranking", rankings);
         localizeAll(lang);
+        console.log('ranking list updated');
     }
 
     function addRow(rowData, container, isData, classes, swapNumAndRank, hideRank) {
@@ -868,6 +874,7 @@ $(function () {
         $("#current_list").show();
         $("#finished_list").show();
         $("#ranking_list").show();
+        // $("#start_list").show();
     }
 
     // goto event list
