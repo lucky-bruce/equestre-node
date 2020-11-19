@@ -205,7 +205,6 @@ $(function () {
         gameInfo = data.gameInfo;
         currentTableType = gameInfo.table_type;
         rankings = data.ranking;
-        console.table(rankings);
         updateGameInfo();
         for (let i = 1 ; i < rankings.length ; i++) {
             let num = rankings[i][1];
@@ -227,6 +226,11 @@ $(function () {
 
         if (!realtime || !realtime.num) {
             updateLiveAtStart(0);
+        }
+
+        if (!timer_running) {
+            updateLiveAtFinish();
+            setRuntimeListFinal();
         }
     });
 
