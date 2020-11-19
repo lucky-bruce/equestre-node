@@ -156,7 +156,8 @@ function generateRanking(roundScore, jumpoffScore,
     comingUpCount = startedCount - clearedCount - expeledCount;
 
     return [result, {
-        allowed_time: allowedTime,
+        allowed_time: twoPhaseIntegrated ? allowedTimesList[0] : allowedTime,
+        allowed_time_jumpoff: twoPhaseIntegrated ? allowedTimesList[1] : 0,
         registered_count: registeredCount,
         ranking_count: rankingCount,
         started_count: startedCount,

@@ -381,8 +381,10 @@ $(function () {
     // UI management function
 
     function updateGameInfo() {
-        const label = (gameInfo && gameInfo.allowed_time) ? formatFloat(gameInfo.allowed_time / 1000, 2, 'floor') : '-';
-        $("#allowed_time").html(label);
+        const allowedTimeLabel = (gameInfo && gameInfo.allowed_time) ? formatFloat(gameInfo.allowed_time / 1000, 2, 'floor') : '-';
+        const allowedTimeJumpoff = (gameInfo && gameInfo.two_phase) ?  formatFloat(gameInfo.allowed_time_jumpoff / 1000, 2, 'floor') : '-';
+        const allowedTime = (gameInfo && gameInfo.two_phase) ? `${allowedTimeLabel}, ${allowedTimeJumpoff}` : allowedTimeLabel;
+        $("#allowed_time").html(allowedTime);
         $("#ranking_count").html(gameInfo.ranking_count);
         $("#registered_count").html(startlist.length);
         $("#started_count").html(gameInfo.started_count);
