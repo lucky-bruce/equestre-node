@@ -9,6 +9,8 @@ const TABLE_C = 1;
 const TABLE_PENALTIES = 2;
 const TABLE_OPTIMUM = 10;
 
+let currentTableType = TABLE_A;
+
 const labels = ["CLASSFIED", "NOT_PRESENT", "NOT_STARTED", "RETIRED", "ELIMINATED", "OFF_COURSE", "DISQUALIFIED"];
 const headerClasses = {
     rnkClass: 'col-rank text-center px-02',
@@ -201,6 +203,7 @@ $(function () {
         console.log("[on] ranking:" + data.ranking.length/* + JSON.stringify(data) */);
         // move "labeled" to the bottom
         gameInfo = data.gameInfo;
+        currentTableType = gameInfo.table_type;
         rankings = data.ranking;
         console.table(rankings);
         updateGameInfo();
@@ -416,6 +419,15 @@ $(function () {
         if(detail && (score.pointPenalty !== undefined && score.pointPenalty != 0)) {
             label += "<span class=\"text-small\">(+" + formatFloat(score.pointPenalty / 1000, 2, 'floor') + ")</span>";
         }
+
+        if (currentTableType === TABLE_C) {
+            if (score.point === 0) {
+                return '<span></span>';
+            } else {
+                return `(${label})`;
+            }
+        }
+
         return label;
     }
 

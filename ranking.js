@@ -324,8 +324,12 @@ function formatPoint(score, pointSurpassing, roundType) {
         // TODO: comment/uncomment if needed
         return `${s1} <span class="font-point-surpassing">(${s2})</span>`;
     }
-    if (roundType === TABLE_C && score !== 0) {
-        return `(${s1})`;
+    if (roundType === TABLE_C) {
+        if (score !== 0) {
+            return `(${s1})`;
+        } else {
+            return '';
+        }
     }
     return s1;
 }
