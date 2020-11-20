@@ -388,8 +388,20 @@ $(function () {
     function updateGameInfo() {
         const allowedTimeLabel = (gameInfo && gameInfo.allowed_time) ? formatFloat(gameInfo.allowed_time / 1000, 2, 'floor') : '-';
         const allowedTimeJumpoff = (gameInfo && gameInfo.two_phase) ?  formatFloat(gameInfo.allowed_time_jumpoff / 1000, 2, 'floor') : '-';
-        const allowedTime = (gameInfo && gameInfo.two_phase) ? `${allowedTimeLabel}, ${allowedTimeJumpoff}` : allowedTimeLabel;
-        $("#allowed_time").html(allowedTime);
+
+        $("#allowed_time_1").html(allowedTimeLabel);
+
+        if (gameInfo && gameInfo.two_phase) {
+            $("#allowed_time_2").html(allowedTimeJumpoff);
+            $("#allowed_time_2").show();
+            $(".allowed-time-slot").width(240);
+        } else {
+            $("#allowed_time_2").hide();
+            $(".allowed-time-slot").width(120);
+        }
+
+
+
         $("#ranking_count").html(gameInfo.ranking_count);
         $("#registered_count").html(startlist.length);
         $("#started_count").html(gameInfo.started_count);
