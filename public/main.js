@@ -393,10 +393,16 @@ $(function () {
 
         if (gameInfo && gameInfo.two_phase) {
             $("#allowed_time_2").html(allowedTimeJumpoff);
+            $("#allowed_time_splitter").show();
             $("#allowed_time_2").show();
             $(".allowed-time-slot").width(240);
+            $("#allowed_time_1").removeClass('w-100');
+            $("#allowed_time_1").addClass('w-50');
         } else {
+            $("#allowed_time_1").removeClass('w-50');
+            $("#allowed_time_1").addClass('w-100');
             $("#allowed_time_2").hide();
+            $("#allowed_time_splitter").hide();
             $(".allowed-time-slot").width(120);
         }
 

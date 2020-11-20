@@ -124,6 +124,12 @@ div.clear {
     width: 120px;
 }
 
+span.static-splitter {
+    width: 1px;
+    height: 100%;
+    border: 1px solid #b4b4b4;
+}
+
 .subtitle.highlight {
     background-color: #d6251e;
     color: white;
