@@ -961,3 +961,8 @@ $(".nav .nav-link").click(function() {
     }
 });
 
+$(document).ready(() => {
+    const language = navigator.language;
+    lang = language.match(/(\w+)(-\w+)?/)[1];
+    $("#lang").val(lang);
+});

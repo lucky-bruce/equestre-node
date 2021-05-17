@@ -38,7 +38,7 @@ var localization = {
         COMING_UP: 'Coming up',
         TIME_DIFF: 'Diff.'
     },
-    ge: {
+    de: {
         LIVE_EVENTS: 'Live Events',
         EVENT: 'Veranstaltung',
         COMPETITION: 'Prüfung',
