@@ -147,7 +147,7 @@ $(function () {
 
     // update event info
     socket.on("info", function (data) {
-        console.log("[on] info:" + JSON.stringify(data));
+        console.log('event info', data);
 
         // set eventInfo
         eventInfo = data;
@@ -206,6 +206,7 @@ $(function () {
         console.log("[on] ranking:" + data.ranking.length/* + JSON.stringify(data) */);
         // move "labeled" to the bottom
         gameInfo = data.gameInfo;
+        gameInfo.eventId = +curEvent;
         currentTableType = gameInfo.table_type;
         twoPhaseGame = gameInfo.two_phase;
         rankings = data.ranking;
@@ -224,7 +225,7 @@ $(function () {
             }
         }
 
-        // Update UI
+        // Update UI`
         updateRankingList();
         updateStartList();
 
@@ -414,6 +415,8 @@ $(function () {
         $("#cleared_count").html(gameInfo.cleared_count);
         $("#comingup_count").html(startlist.length - gameInfo.started_count);
         $("#allowed_time_label").attr('data-key', gameInfo.table_type === TABLE_OPTIMUM ? 'TIME_OPTIMUM' : 'TIME_ALLOWED');
+
+        updateEventProgress();
     }
 
     function formatFloat(point, digit, round) {
@@ -477,6 +480,10 @@ $(function () {
         var d = new Date(dateString.replace(/\s/, 'T'));
 
         return ("0" + d.getDate()).slice(-2) + "." + ("0"+(d.getMonth()+1)).slice(-2) + "." + d.getFullYear();
+    }
+
+    function formatSimpleTime(date) {
+        return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     }
 
     function updateTableHeaderColumns() {
@@ -854,7 +861,8 @@ $(function () {
     function updateEventList() {
         $('#live-events').html('');
 
-        for(event of events) {
+        for(let i = 0; i < events.length; i++) {
+            const event = events[i];
             $('#live-events').append($('<tr class="d-flex">'));
             tr = $('#live-events tr:last');
             tr.append($('<td class="col-3">').html("&nbsp"));
@@ -863,7 +871,14 @@ $(function () {
             tr.append($('<td class="col-2">').html("&nbsp"));
 
             tr.children("td:nth-child(1)").html(event.info.title);
-            tr.children("td:nth-child(2)").html(event.info.eventTitle);
+            const eventTitle = $(`<div> <div class="mb-2">${event.info.eventTitle}</div> </div>`);
+            const eventProgress = $(`<div class="progress"><div class="progress-bar" role="progressbar" style="width: 70%">35 / 75</div></div> <div class="mt-2"><span data-key="ETA">Estimated Time of Completion: </span><span id="eta">11:45</span></div>`);
+            if (gameInfo.eventId === event.id) {
+                console.log('gameinfo = ', gameInfo);
+                eventTitle.append(eventProgress);
+            }
+            tr.children("td:nth-child(2)").html($(eventTitle));
+
             tr.children("td:nth-child(3)").html(formatDate(event.info.startDate));
             tr.children("td:nth-child(4)").html(formatDate(event.info.endDate));
 
@@ -875,9 +890,40 @@ $(function () {
             });
         }
 
+        updateEventProgress();
+
         $("#current_body").html('');
         $("#nextriders_body").html('');
         $("#finish_body").html('');
+    }
+
+    function updateEventProgress() {
+        const eventCount = events.length;
+        for (let i = 0; i < eventCount; i++) {
+            const event = events[i];
+            if (gameInfo.eventId === event.id) {
+                const progress = Math.floor(100 * gameInfo.started_count / startlist.length);
+                const startDate = new Date('2021-05-17 00:00:00'); // TODO: get start date from the event
+                const now = new Date();
+                const diff = (now.getTime() - startDate.getTime()) / 1000;
+                const remainingProgress = 100 - progress;
+                const remainingTime = diff * remainingProgress / 100;
+                const endDate = new Date(now.getTime() + remainingTime);
+
+                let progressElement = $(`#live-events tr:nth-child(${i+1}) td:nth-child(2) .progress-bar`);
+                let etaElement = $(`#live-events tr:nth-child(${i+1}) td:nth-child(2) #eta`);
+                progressElement.css('width', `${progress}%`);
+                progressElement.html(`${gameInfo.started_count} / ${startlist.length}`);
+                etaElement.html(formatSimpleTime(endDate));
+
+                progressElement = $(".progress-wrapper .progress-bar");
+                etaElement = $(".progress-wrapper #eta");
+                progressElement.css('width', `${progress}%`);
+                progressElement.html(`${gameInfo.started_count} / ${startlist.length}`);
+                etaElement.html(formatSimpleTime(endDate));
+            }
+        }
+        localizedValue('eta', lang);
     }
 
     function joinToEvent(eventId) {
@@ -922,6 +968,8 @@ $(function () {
 
         $('#event_list').show();
         $('#event_view').hide();
+
+        updateEventList();    
     });
 
     $('#event_view').hide();

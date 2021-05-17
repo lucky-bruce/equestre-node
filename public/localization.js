@@ -36,7 +36,8 @@ var localization = {
         STARTED: 'Started',
         CLEAR_ROUND: 'Clear Round',
         COMING_UP: 'Coming up',
-        TIME_DIFF: 'Diff.'
+        TIME_DIFF: 'Diff.',
+        ETA: 'Estimated Time of Completion: '
     },
     de: {
         LIVE_EVENTS: 'Live Events',
@@ -75,7 +76,8 @@ var localization = {
         STARTED: 'Started',
         CLEAR_ROUND: 'Clear Round',
         COMING_UP: 'Coming up',
-        TIME_DIFF: 'Diff.'
+        TIME_DIFF: 'Diff.',
+        ETA: 'Estimated Time of Completion: '
     },
     fr: {
         LIVE_EVENTS: 'Live Events',
@@ -114,7 +116,8 @@ var localization = {
         STARTED: 'Started',
         CLEAR_ROUND: 'Clear Round',
         COMING_UP: 'Coming up',
-        TIME_DIFF: 'Diff.'
+        TIME_DIFF: 'Diff.',
+        ETA: 'Estimated Time of Completion: '
     },
     it: {
         LIVE_EVENTS: 'Live Events',
@@ -153,6 +156,7 @@ var localization = {
         STARTED: 'Started',
         CLEAR_ROUND: 'Clear Round',
         COMING_UP: 'Coming up',
-        TIME_DIFF: 'Diff.'
+        TIME_DIFF: 'Diff.',
+        ETA: 'Estimated Time of Completion: '
     }
 };
