@@ -34,8 +34,14 @@
     <main>
       <div id="event_list" class="page">
         <div class="subboard">
-          <div class="subtitle">
-            <h3 data-key="LIVE_EVENTS">Live Events</h3>
+          <div class="d-flex justify-content-between">
+            <div class="subtitle">
+              <h3 data-key="LIVE_EVENTS">Live Events</h3>
+            </div>
+            <div>
+              <span data-key="CONNECTED_COUNT">Connected Count: </span>
+              <span id="connected-count1">1</span>
+            </div>
           </div>
           <table class="table table-scoreboard eventboard">
             <thead>
@@ -53,6 +59,11 @@
       </div>
 
       <div id="event_view" class="page">
+        <div class="px-3 text-right">
+          <span data-key="CONNECTED_COUNT"></span>
+          <span id="connected-count2">1</span>
+        </div>
+
         <nav class="navbar navbar-expand-sm navbar-dark navbar-dark">
           <ul class="nav nav-pills">
             <li class="nav-item">

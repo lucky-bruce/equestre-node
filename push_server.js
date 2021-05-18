@@ -8,6 +8,8 @@ var io = require('socket.io')(server);
 var port = process.env.SOCKETIO_PORT || 21741;
 var ranking = require('./ranking');
 
+var totalConnected = 0;
+
 var dbaction = require('./db_actions');
 var Q = require('q');
 
@@ -47,8 +49,17 @@ var events = [];
 
  */
 io.on('connection', function (socket) {
+
+    socket.on('disconnect', () => {
+        totalConnected -= 1;
+        io.emit('connectedUserCount', Math.max(1, totalConnected - 1));
+    });
+
     socket.on('subscribe', function (room) {
         console.log("[on] subscribe: " + room);
+
+        totalConnected = Object.keys(io.sockets.sockets).length
+        io.emit('connectedUserCount', Math.max(1, totalConnected - 1));
 
         // send about the event
         if(room === "provider") {
@@ -131,6 +142,8 @@ io.on('connection', function (socket) {
 
     socket.on('unsubscribe', function (room) {
         console.log("[on] unsubscribe: " + room);
+        totalConnected -= 1;
+        console.log('connections: ', totalConnected);
 
         roomId = '' + room;
         let rooms = Object.keys(socket.rooms);

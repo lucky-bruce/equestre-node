@@ -314,6 +314,11 @@ $(function () {
         }
     });
 
+    socket.on('connectedUserCount', function (data) {
+        $("#connected-count1").html(data);
+        $("#connected-count2").html(data);
+    });
+
     // racing is paused (every round)
     socket.on('pause', function (data) {
         console.log("[on] pause");
