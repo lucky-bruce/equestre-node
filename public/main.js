@@ -44,8 +44,7 @@ function localizedValue(key, lang) {
 function localizeKey(key) {
     const elements = $(`[data-key="${key}"]`);
     const elementCount = elements.length;
-    for (let i = 0; i < elementCount; i ++)
-    {
+    for (let i = 0; i < elementCount; i++) {
         $(elements[i]).html(localizedValue(key, lang));
     }
 }
@@ -54,20 +53,34 @@ function localizeAll(lan) {
     lang = lan;
     const elements = $('[data-key]');
     const elementCount = elements.length;
-    for (let i = 0; i < elementCount; i ++)
-    {
+    for (let i = 0; i < elementCount; i++) {
         key = $(elements[i]).attr('data-key');
         $(elements[i]).html(localizedValue(key, lan));
     }
 }
 
-function onEn() { lang = 'en'; localizeAll(lang); }
-function onGe() { lang = 'ge'; localizeAll(lang); }
-function onFr() { lang = 'fr'; localizeAll(lang); }
-function onIt() { lang = 'it'; localizeAll(lang); }
+function onEn() {
+    lang = 'en';
+    localizeAll(lang);
+}
 
-$(function () {
-    var FADETIMOUT      = 2000;
+function onGe() {
+    lang = 'ge';
+    localizeAll(lang);
+}
+
+function onFr() {
+    lang = 'fr';
+    localizeAll(lang);
+}
+
+function onIt() {
+    lang = 'it';
+    localizeAll(lang);
+}
+
+$(function() {
+    var FADETIMOUT = 2000;
 
     // running events
     var events = [];
@@ -75,12 +88,12 @@ $(function () {
 
     // info of current event
     var startlist = []; // startlist
-    var horses = {};    // indexed map
-    var riders = {};    // indexed map
-    var startlistmap = {};  // number indexed map
-    var rankings = [];  // ranking list
+    var horses = {}; // indexed map
+    var riders = {}; // indexed map
+    var startlistmap = {}; // number indexed map
+    var rankings = []; // ranking list
     var gameInfo = {};
-    var realtime = {};  // live info
+    var realtime = {}; // live info
     var finished = Array();
 
 
@@ -95,7 +108,7 @@ $(function () {
     var socket = io();
 
     socket.emit("subscribe", "consumer");
-//
+    //
 
     //// messages to process
     //   socket.to('consumer').emit('start', { id: event.id} );
@@ -121,14 +134,14 @@ $(function () {
     });
 
     // add new event started
-    socket.on("start", function (data) {
+    socket.on("start", function(data) {
         console.log("[on] start:" + JSON.stringify(data));
         events.push(data);
         updateEventList();
     });
 
     // an event is ended
-    socket.on("end", function (data) {
+    socket.on("end", function(data) {
         console.log("[on] end:" + JSON.stringify(data));
 
         // stop timer
@@ -146,7 +159,7 @@ $(function () {
     });
 
     // update event info
-    socket.on("info", function (data) {
+    socket.on("info", function(data) {
         console.log('event info', data);
 
         // set eventInfo
@@ -165,8 +178,8 @@ $(function () {
     });
 
     // update horse info
-    socket.on('horses', function (data) {
-        console.log("[on] horses:" + data.length/* + JSON.stringify(data) */);
+    socket.on('horses', function(data) {
+        console.log("[on] horses:" + data.length /* + JSON.stringify(data) */ );
         horses = {};
         for (let horse of data) {
             horses[horse.idx] = horse;
@@ -177,8 +190,8 @@ $(function () {
     });
 
     // update rider info
-    socket.on('riders', function (data) {
-        console.log("[on] riders:" + data.length/* + JSON.stringify(data) */);
+    socket.on('riders', function(data) {
+        console.log("[on] riders:" + data.length /* + JSON.stringify(data) */ );
         riders = {};
         for (let rider of data) {
             riders[rider.idx] = rider;
@@ -189,8 +202,8 @@ $(function () {
     });
 
     // update startlist
-    socket.on('startlist', function (data) {
-        console.log("[on] startlist:" + data.length/* + JSON.stringify(data) */);
+    socket.on('startlist', function(data) {
+        console.log("[on] startlist:" + data.length /* + JSON.stringify(data) */ );
         startlist = data;
 
         startlistmap = {};
@@ -202,8 +215,8 @@ $(function () {
     });
 
     // update ranking info
-    socket.on('ranking', function (data) {
-        console.log("[on] ranking:" + data.ranking.length/* + JSON.stringify(data) */);
+    socket.on('ranking', function(data) {
+        console.log("[on] ranking:" + data.ranking.length /* + JSON.stringify(data) */ );
         // move "labeled" to the bottom
         gameInfo = data.gameInfo;
         gameInfo.eventId = +curEvent;
@@ -211,10 +224,10 @@ $(function () {
         twoPhaseGame = gameInfo.two_phase;
         rankings = data.ranking;
         updateGameInfo();
-        for (let i = 1 ; i < rankings.length ; i++) {
+        for (let i = 1; i < rankings.length; i++) {
             let num = rankings[i][1];
             let startlistentry = startlistmap[num];
-            if(startlistentry !== undefined) {
+            if (startlistentry !== undefined) {
                 const horseIdx = startlistentry.horse_idx;
                 const riderIdx = startlistentry.rider_idx;
                 const rider = riders[riderIdx];
@@ -246,7 +259,7 @@ $(function () {
         let startlistentry = startlistmap[realtime.num];
 
         // update atstart and atend
-        if(startlistentry !== undefined) {
+        if (startlistentry !== undefined) {
             updateLiveAtStart(startlistentry['pos'] + 1);
             updateLiveAtFinish();
         }
@@ -255,16 +268,16 @@ $(function () {
     });
 
     // get live race info
-    socket.on('realtime', function (data) {
+    socket.on('realtime', function(data) {
         realtime = data;
         realtime.updateTick = Date.now();
         isRealtime = true;
         // update except time
         setRuntimeList(false);
 
-        if(timer_running == false) {
+        if (timer_running == false) {
             let curTime;
-            if(realtime.lane === 1) {
+            if (realtime.lane === 1) {
                 curTime = realtime.score.lane1.time;
             } else {
                 curTime = realtime.score.lane2.time;
@@ -274,53 +287,54 @@ $(function () {
     });
 
     // racing is started (every round)
-    socket.on('resume', function (data) {
+    socket.on('resume', function(data) {
         console.log("[on] resume");
 
         // find position
         let startlistentry = startlistmap[realtime.num];
 
         // update atstart and atend
-        if(startlistentry !== undefined) {
+        if (startlistentry !== undefined) {
             updateLiveAtStart(startlistentry['pos'] + 1);
             updateLiveAtFinish();
         }
 
         // start rolling timer
-        if(timer_running) {
+        if (timer_running) {
             console.log("timer already running");
         } else {
-            let started = 0, tickFrom = Date.now();
-            if(realtime.lane === 1) {
+            let started = 0,
+                tickFrom = Date.now();
+            if (realtime.lane === 1) {
                 started = realtime.score.lane1.time;
             } else {
                 started = realtime.score.lane2.time;
-	    }
-	    rolling_timer = setInterval(function() {
-		    if (Date.now() - tickFrom > 500) {
-			    tickFrom = realtime.updateTick;
-			    if (realtime.lane === 1) {
-				    started = realtime.score.lane1.time;
-			    } else {
-				    started = realtime.score.lane2.time;
-			    }
-		    } else {
-			    show_timer = true;
-		    }
-		    updateRuntimeTimer(realtime.lane, started + (Date.now() - tickFrom));
-	    }, 100);
+            }
+            rolling_timer = setInterval(function() {
+                if (Date.now() - tickFrom > 500) {
+                    tickFrom = realtime.updateTick;
+                    if (realtime.lane === 1) {
+                        started = realtime.score.lane1.time;
+                    } else {
+                        started = realtime.score.lane2.time;
+                    }
+                } else {
+                    show_timer = true;
+                }
+                updateRuntimeTimer(realtime.lane, started + (Date.now() - tickFrom));
+            }, 100);
 
             timer_running = false;
         }
     });
 
-    socket.on('connectedUserCount', function (data) {
+    socket.on('connectedUserCount', function(data) {
         $("#connected-count1").html(data);
         $("#connected-count2").html(data);
     });
 
     // racing is paused (every round)
-    socket.on('pause', function (data) {
+    socket.on('pause', function(data) {
         console.log("[on] pause");
         isRealtime = false;
         // stop rolling timer
@@ -328,7 +342,7 @@ $(function () {
         timer_running = false;
 
         // full update
-        if(data.finished === true) {
+        if (data.finished === true) {
             if (!finished.find(num => num === realtime.num)) {
                 finished.push(realtime.num);
             }
@@ -337,7 +351,7 @@ $(function () {
             updateStartList();
         } else {
             let started;
-            if(realtime.lane === 1) {
+            if (realtime.lane === 1) {
                 started = realtime.score.lane1.time;
             } else {
                 started = realtime.score.lane2.time;
@@ -349,14 +363,14 @@ $(function () {
     });
 
     // one player finished
-    socket.on('final', function (data) {
+    socket.on('final', function(data) {
         console.log("[on] final:" + JSON.stringify(data));
         isRealtime = false;
         // find position
         let startlistentry = startlistmap[realtime.num];
 
         // update atstart and atend
-        if(startlistentry !== undefined) {
+        if (startlistentry !== undefined) {
             updateLiveAtStart(startlistentry['pos'] + 1);
             updateLiveAtFinish();
         }
@@ -365,25 +379,25 @@ $(function () {
         let ranking = rankings.find(function(ranking) {
             return ranking.num === realtime.num;
         });
-        if(ranking !== undefined) {
+        if (ranking !== undefined) {
             realtime.rank = ranking.rank;
         }
         setRuntimeListFinal();
         updateStartList();
     });
 
-    socket.on('disconnect', function () {
+    socket.on('disconnect', function() {
         console.log('you have been disconnected');
     });
 
-    socket.on('reconnect', function () {
+    socket.on('reconnect', function() {
         console.log('you have been reconnected');
         events = [];
 
         socket.emit("subscribe", "consumer");
     });
 
-    socket.on('reconnect_error', function () {
+    socket.on('reconnect_error', function() {
         console.log('attempt to reconnect has failed');
     });
 
@@ -393,7 +407,7 @@ $(function () {
 
     function updateGameInfo() {
         const allowedTimeLabel = (gameInfo && gameInfo.allowed_time) ? formatFloat(gameInfo.allowed_time / 1000, 2, 'floor') : '-';
-        const allowedTimeJumpoff = (gameInfo && gameInfo.two_phase) ?  formatFloat(gameInfo.allowed_time_jumpoff / 1000, 2, 'floor') : '-';
+        const allowedTimeJumpoff = (gameInfo && gameInfo.two_phase) ? formatFloat(gameInfo.allowed_time_jumpoff / 1000, 2, 'floor') : '-';
 
         $("#allowed_time_1").html(allowedTimeLabel);
 
@@ -426,36 +440,36 @@ $(function () {
 
     function formatFloat(point, digit, round) {
         point = point || 0;
-        digit = (digit > 5)?5:digit;
-        digit = (digit < 0)?0:digit;
+        digit = (digit > 5) ? 5 : digit;
+        digit = (digit < 0) ? 0 : digit;
 
         let pos = Math.pow(10, digit);
-        if(round==='round') {
+        if (round === 'round') {
             point = Math.round(point * pos);
-        } else if(round ==='ceil') {
+        } else if (round === 'ceil') {
             point = Math.ceil(point * pos);
-        } else if(round==='floor') {
+        } else if (round === 'floor') {
             point = Math.floor(point * pos);
         }
         return (point / pos).toFixed(digit);
     }
 
     function formatPoint(score, detail) {
-        if(score.point === undefined)
+        if (score.point === undefined)
             return "&nbsp";
 
-        if(score.point === undefined)
+        if (score.point === undefined)
             return "&nbsp";
 
-        if(score.point < 0) {
+        if (score.point < 0) {
             let index = Math.abs(score.point) - 1;
-            if(index > 0 && index <= 6) {
+            if (index > 0 && index <= 6) {
                 return `<span class="point-label" data-key="${labels[index]}">${labels[index]}</span>`;
             }
         }
 
         let label = formatFloat(score.point / 1000, 2, 'floor');
-        if(detail && (score.pointPenalty !== undefined && score.pointPenalty != 0)) {
+        if (detail && (score.pointPenalty !== undefined && score.pointPenalty != 0)) {
             label += "<span class=\"text-small\">(+" + formatFloat(score.pointPenalty / 1000, 2, 'floor') + ")</span>";
         }
 
@@ -471,11 +485,11 @@ $(function () {
     }
 
     function formatTime(score, detail) {
-        if(score.time === undefined)
+        if (score.time === undefined)
             return "&nbsp";
 
         let label = formatFloat(Math.abs(score.time) / 1000, 2, 'floor');
-        if(detail && (score.timePenalty !== undefined && score.timePenalty != 0)) {
+        if (detail && (score.timePenalty !== undefined && score.timePenalty != 0)) {
             label += "(+" + formatFloat(Math.abs(score.timePenalty) / 1000, 2, 'floor') + ")";
         }
         return label;
@@ -484,7 +498,7 @@ $(function () {
     function formatDate(dateString) {
         var d = new Date(dateString.replace(/\s/, 'T'));
 
-        return ("0" + d.getDate()).slice(-2) + "." + ("0"+(d.getMonth()+1)).slice(-2) + "." + d.getFullYear();
+        return ("0" + d.getDate()).slice(-2) + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." + d.getFullYear();
     }
 
     function formatSimpleTime(date) {
@@ -495,20 +509,20 @@ $(function () {
         // change header
         let headers = $(".table-scoreboard thead tr");
 
-         if(eventInfo.jumpoffNumber > 0) {
-             headers.children("th:nth-child(6)").addClass("small-font");
-             headers.children("th:nth-child(7)").addClass("small-font");
-             headers.children("th:nth-child(8)").addClass("small-font");
-         } else {
-             headers.children("th:nth-child(6)").removeClass("small-font");
-             headers.children("th:nth-child(7)").removeClass("small-font");
-             headers.children("th:nth-child(8)").removeClass("small-font");
-         }
+        if (eventInfo.jumpoffNumber > 0) {
+            headers.children("th:nth-child(6)").addClass("small-font");
+            headers.children("th:nth-child(7)").addClass("small-font");
+            headers.children("th:nth-child(8)").addClass("small-font");
+        } else {
+            headers.children("th:nth-child(6)").removeClass("small-font");
+            headers.children("th:nth-child(7)").removeClass("small-font");
+            headers.children("th:nth-child(8)").removeClass("small-font");
+        }
 
         // realtime
         var tr = $('#live-realtime tr:first');
 
-        if(eventInfo.jumpoffNumber > 0) {
+        if (eventInfo.jumpoffNumber > 0) {
             tr.children("td:nth-child(6)");
             tr.children("td:nth-child(7)");
             tr.children("td:nth-child(8)");
@@ -531,23 +545,23 @@ $(function () {
             if (jumpoff) {
                 if (!ranking) { return false; }
                 const point = parseFloat(ranking[5 + (roundCount - 1) * 2]);
-                const time = parseFloat(ranking[5 + (roundCount -1 ) * 2 + 1]);
+                const time = parseFloat(ranking[5 + (roundCount - 1) * 2 + 1]);
                 if (point !== 0 || time === 0) { return false; }
             }
             if (i < l) {
-                index ++;
+                index++;
             }
             return true;
         });
 
-        let limit = (index + 3 < filtered.length)?(index + 3):filtered.length;
+        let limit = (index + 3 < filtered.length) ? (index + 3) : filtered.length;
 
         const table = [];
         if (rankings.length >= 1) {
             table[0] = rankings[0];
         }
         let j = 1;
-        for(i = limit - 1 ; i >= index ; i--) {
+        for (i = limit - 1; i >= index; i--) {
             const startlistentry = filtered[i];
             const num = startlistentry.num;
             const ranking = rankings.find(r => r[1] === num);
@@ -577,7 +591,7 @@ $(function () {
             table[0] = rankings[0];
         }
         let j = 1;
-        for(let i = len - 1 ; i >= Math.max(0, len - 3) ; i--) {
+        for (let i = len - 1; i >= Math.max(0, len - 3); i--) {
             let num = finished[i];
             let ranking = rankings.find(r => r[1] === num);
             table[j] = ranking;
@@ -587,15 +601,14 @@ $(function () {
         localizeAll(lang);
     }
 
-    function updateRuntimeTimer(lane, value)
-    {
+    function updateRuntimeTimer(lane, value) {
         const diff = Date.now() - realtime.updateTick;
         if (diff >= 300) {
             show_timer = false;
         } else {
             show_timer = true;
         }
-            let label = formatFloat(Math.abs(value) / 1000, 1, 'floor');
+        let label = formatFloat(Math.abs(value) / 1000, 1, 'floor');
         if (!show_timer) { label = ''; }
 
         const jumpoffNumber = eventInfo.jumpoffNumber;
@@ -653,7 +666,7 @@ $(function () {
             currentRiderData[3] = `${rider.firstName} ${rider.lastName}`;
             if (!data) {
                 const l = currentRiderData.length;
-                for (let i = 4; i < l; i ++) {
+                for (let i = 4; i < l; i++) {
                     currentRiderData[i] = '';
                 }
             }
@@ -667,10 +680,10 @@ $(function () {
         const offset = round ? round : (jumpoff + roundNumber);
         const score = realtime.lane === 2 ? realtime.score.lane2 : realtime.score.lane1;
 
-        currentRider.children("td:nth-child(1)").html((realtime.rank===undefined)?"&nbsp":realtime.rank + ".");
+        currentRider.children("td:nth-child(1)").html((realtime.rank === undefined) ? "&nbsp" : realtime.rank + ".");
         currentRider.children("td:nth-child(2)").html(realtime.num);
         currentRider.children(`td:nth-child(${5 + twoPhaseGame * (realtime.lane - 1) * 2 + (offset - 1) * 2 + 1})`).html(formatPoint(score, false));
-        if(fullupdate === true) {
+        if (fullupdate === true) {
             currentRider.children(`td:nth-child(${5 + (offset - 1) * 2 + 2})`).html(formatTime(score, false));
         }
 
@@ -708,7 +721,7 @@ $(function () {
         const roundCount = eventInfo.roundNumber;
         const startListCount = startlist.length;
         let index = 0;
-        for (let i = 0; i < startListCount; i ++) {
+        for (let i = 0; i < startListCount; i++) {
             const r = startlist[i];
             const num = r.num;
             const ranking = rankings.find(r2 => r2[1] === num);
@@ -721,7 +734,7 @@ $(function () {
             if (num === realtime.num) {
                 break;
             }
-            index ++;
+            index++;
         }
         return $(startlistBody.children()[index]);
     }
@@ -738,8 +751,7 @@ $(function () {
         localizeAll(lang);
     }
 
-    function updateStartList()
-    {
+    function updateStartList() {
         if ($.isEmptyObject(horses) || $.isEmptyObject(riders)) {
             return;
         }
@@ -784,7 +796,7 @@ $(function () {
         if (!rowData) { return; }
         const row = $("<tr class=''></tr>");
         const cols = [];
-        for (let i = 0; i < rowData.length; i ++) {
+        for (let i = 0; i < rowData.length; i++) {
             let style = '';
             const dot = i === 0 && isData && rowData[i] !== '' ? '.' : '';
             if (i === 0) { style = classes.rnkClass; }
@@ -858,7 +870,7 @@ $(function () {
         if (table.length < 1) { return; }
         const tableBody = $(`#${tableName}_body`);
         tableBody.html('');
-        for (let i = 1; i < table.length; i ++) {
+        for (let i = 1; i < table.length; i++) {
             addRow(table[i], tableBody, true, dataClasses, false, tableName === 'nextriders');
         }
     }
@@ -866,7 +878,7 @@ $(function () {
     function updateEventList() {
         $('#live-events').html('');
 
-        for(let i = 0; i < events.length; i++) {
+        for (let i = 0; i < events.length; i++) {
             const event = events[i];
             $('#live-events').append($('<tr class="d-flex">'));
             tr = $('#live-events tr:last');
@@ -908,8 +920,8 @@ $(function () {
             const event = events[i];
             if (gameInfo.eventId === event.id) {
                 const progress = Math.floor(100 * gameInfo.started_count / startlist.length);
-                const startDate = new Date('2021-05-17 00:00:00'); // TODO: get start date from the event
                 const now = new Date();
+                const startDate = new Date(`${now.getFullYear}-${now.getMonth()}-${now.getDate()} ${event.info.gameBeginTime}`);
                 const diff = (now.getTime() - startDate.getTime()) / 1000;
                 const remainingProgress = 100 - progress;
                 const remainingTime = diff * remainingProgress / 100;
@@ -932,13 +944,13 @@ $(function () {
     }
 
     function joinToEvent(eventId) {
-        let event = events.find( (event) => {
+        let event = events.find((event) => {
             return (event.id == eventId);
         });
 
-        if(event === undefined) {
+        if (event === undefined) {
             $("#error_noevent").show();
-            return ;
+            return;
         }
 
         $("#error_noevent").hide();
@@ -963,7 +975,7 @@ $(function () {
     }
 
     // goto event list
-    $("#goto-events").click(function () {
+    $("#goto-events").click(function() {
         socket.emit('unsubscribe', curEvent);
 
         clearInterval(rolling_timer);
@@ -974,7 +986,7 @@ $(function () {
         $('#event_list').show();
         $('#event_view').hide();
 
-        updateEventList();    
+        updateEventList();
     });
 
     $('#event_view').hide();
@@ -991,20 +1003,20 @@ $(".nav .nav-link").click(function() {
     $("section#sec-startlist").css("display", "none");
     $("section#sec-ranking").css("display", "none");
 
-    if(menu_id == "nav-live") {
+    if (menu_id == "nav-live") {
         $("#nextriders_list").show();
         $("#current_list").show();
         $("#finished_list").show();
         $("#ranking_badge").show();
         $("#ranking_list").show();
         $("#start_list").hide();
-    } else if(menu_id == "nav-startlist") {
+    } else if (menu_id == "nav-startlist") {
         $("#nextriders_list").hide();
         $("#current_list").hide();
         $("#finished_list").hide();
         $("#ranking_list").hide();
         $("#start_list").show();
-    } else if(menu_id == "nav-ranking") {
+    } else if (menu_id == "nav-ranking") {
         $("#nextriders_list").hide();
         $("#current_list").hide();
         $("#finished_list").hide();
