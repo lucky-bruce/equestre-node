@@ -283,7 +283,7 @@ io.on('connection', function(socket) {
             if (event.info.gameBeginTime) {
                 const time = event.info.gameBeginTime;
                 const match = time.match(/\[.*\]\s+(\d{1,2}:\d{1,2}:\d{1,2})\.\d+/);
-                if (match.length) {
+                if (match && match.length) {
                     event.info.gameBeginTime = match[1];
                 }
             }

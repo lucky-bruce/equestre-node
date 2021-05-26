@@ -770,16 +770,16 @@ $(function() {
                 if (point !== 0 || time === 0) { return; }
             }
             const row = Array(colCount).fill('');
+            const rider = riders[r.rider_idx];
+            const horse = horses[r.horse_idx];
             if (!ranking) {
-                const rider = riders[r.rider_idx];
-                const horse = horses[r.horse_idx];
                 row[0] = '';
                 row[1] = num; // rank
                 row[2] = horse.name;
                 row[3] = `${rider.firstName} ${rider.lastName}`;
                 row[4] = rider.nation || country;
             }
-            addRow(ranking || row, tbody, true, dataClasses, true);
+            addRow(ranking || row, tbody, true, dataClasses, horse, rider, true);
         });
         localizeAll(lang);
     }
@@ -792,7 +792,7 @@ $(function() {
         localizeAll(lang);
     }
 
-    function addRow(rowData, container, isData, classes, swapNumAndRank, hideRank) {
+    function addRow(rowData, container, isData, classes, horse, rider, swapNumAndRank, hideRank) {
         if (!rowData) { return; }
         const row = $("<tr class=''></tr>");
         const cols = [];
@@ -816,6 +816,22 @@ $(function() {
             if (i === 2 || i === 3) {
                 // horse, rider column
                 v = `<span>${v}</span>`;
+                if (i === 2 && horse) {
+                    const arr = [horse.passport, horse.gender, horse.owner, horse.father, horse.mother, horse.fatherOfMother, horse.signalementLabel];
+                    const filtered = arr.filter(v => v);
+                    if (arr.length <= filtered.length + 2) {
+                        const additional = `<span class="font-light">${filtered.join("/")}</span>`;
+                        v = `${v}<br>${additional}`;
+                    }
+                }
+                if (i === 3 && rider) {
+                    const arr = [rider.nation, rider.city, rider.license, rider.club];
+                    const filtered = arr.filter(v => v);
+                    if (arr.length <= filtered.length + 2) {
+                        const additional = `<span class="font-light">${filtered.join("/")}</span>`;
+                        v = `${v}<br>${additional}`;
+                    }
+                }
             }
             if (i >= 5 && (i % 2 === 1 || i % 2 === 0)) {
                 // TODO: point column or time column
@@ -862,7 +878,7 @@ $(function() {
                 header[0] = header[1];
                 header[1] = temp;
             }
-            addRow(header, tableHeader, false, headerClasses, false, tableName === 'nextriders');
+            addRow(header, tableHeader, false, headerClasses, null, null, false, tableName === 'nextriders');
         });
     }
 
@@ -871,7 +887,15 @@ $(function() {
         const tableBody = $(`#${tableName}_body`);
         tableBody.html('');
         for (let i = 1; i < table.length; i++) {
-            addRow(table[i], tableBody, true, dataClasses, false, tableName === 'nextriders');
+            let num = table[i][1];
+            let startlistentry = startlistmap[num];
+            if (startlistentry !== undefined) {
+                const horseIdx = startlistentry.horse_idx;
+                const riderIdx = startlistentry.rider_idx;
+                const horse = horses[horseIdx];
+                const rider = riders[riderIdx];
+                addRow(table[i], tableBody, true, dataClasses, horse, rider, false, tableName === 'nextriders');
+            }
         }
     }
 
@@ -889,7 +913,7 @@ $(function() {
 
             tr.children("td:nth-child(1)").html(event.info.title);
             const eventTitle = $(`<div> <div class="mb-2">${event.info.eventTitle}</div> </div>`);
-            const eventProgress = $(`<div class="progress"><div class="progress-bar" role="progressbar" style="width: 70%">35 / 75</div></div> <div class="mt-2"><span data-key="ETA">Estimated Time of Completion: </span><span id="eta">11:45</span></div>`);
+            const eventProgress = $(`<div class="progress"><div class="progress-bar" role="progressbar" style="width: 70%">35 / 75</div></div> <div class="mt-2"><span id="event" data-key="ETA">Estimated Time of Completion: </span><span id="eta">11:45</span></div>`);
             if (gameInfo.eventId === event.id) {
                 console.log('gameinfo = ', gameInfo);
                 eventTitle.append(eventProgress);
@@ -921,6 +945,12 @@ $(function() {
             if (gameInfo.eventId === event.id) {
                 const progress = Math.floor(100 * gameInfo.started_count / startlist.length);
                 const now = new Date();
+                const time = event.info.gameBeginTime;
+                const match = time.match(/\[.*\]\s+(\d{1,2}:\d{1,2}:\d{1,2})\.\d+/);
+                if (match && match.length) {
+                    event.info.gameBeginTime = match[1];
+                }
+
                 const startDate = new Date(`${now.getFullYear}-${now.getMonth()}-${now.getDate()} ${event.info.gameBeginTime}`);
                 const diff = (now.getTime() - startDate.getTime()) / 1000;
                 const remainingProgress = 100 - progress;
@@ -940,7 +970,7 @@ $(function() {
                 etaElement.html(formatSimpleTime(endDate));
             }
         }
-        localizedValue('eta', lang);
+        localizeKey('ETA');
     }
 
     function joinToEvent(eventId) {
