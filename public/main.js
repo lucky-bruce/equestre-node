@@ -817,6 +817,7 @@ $(function() {
                 // horse, rider column
                 v = `<span>${v}</span>`;
                 if (i === 2 && horse) {
+                    v = `<span>${horse.name}</span>`;
                     const arr = [horse.passport, horse.gender, horse.owner, horse.father, horse.mother, horse.fatherOfMother, horse.signalementLabel];
                     const filtered = arr.filter(v => v);
                     if (arr.length <= filtered.length + 2) {
@@ -825,6 +826,7 @@ $(function() {
                     }
                 }
                 if (i === 3 && rider) {
+                    v = `<span>${rider.firstName} ${rider.lastName}</span>`;
                     const arr = [rider.nation, rider.city, rider.license, rider.club];
                     const filtered = arr.filter(v => v);
                     if (arr.length <= filtered.length + 2) {
@@ -945,10 +947,12 @@ $(function() {
             if (gameInfo.eventId === event.id) {
                 const progress = Math.floor(100 * gameInfo.started_count / startlist.length);
                 const now = new Date();
-                const time = event.info.gameBeginTime;
+                const time = event.info.gameBeginTime || '';
                 const match = time.match(/\[.*\]\s+(\d{1,2}:\d{1,2}:\d{1,2})\.\d+/);
                 if (match && match.length) {
                     event.info.gameBeginTime = match[1];
+                } else {
+                    event.info.gameBeginTime = `${now.getHours() - 1}:${now.getMinutes()}:${now.getSeconds()}`;
                 }
 
                 const startDate = new Date(`${now.getFullYear}-${now.getMonth()}-${now.getDate()} ${event.info.gameBeginTime}`);
