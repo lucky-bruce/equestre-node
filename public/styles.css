@@ -311,3 +311,11 @@ footer {
     font-size: 14px;
     font-weight: 400;
 }
+
+#event-title {
+    padding-left: 0;
+}
+
+.hidden {
+    display: none;
+}

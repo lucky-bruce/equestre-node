@@ -915,7 +915,8 @@ $(function() {
 
             tr.children("td:nth-child(1)").html(event.info.title);
             const eventTitle = $(`<div> <div class="mb-2">${event.info.eventTitle}</div> </div>`);
-            const eventProgress = $(`<div class="progress"><div class="progress-bar" role="progressbar" style="width: 70%">35 / 75</div></div> <div class="mt-2"><span id="event" data-key="ETA">Estimated Time of Completion: </span><span id="eta">11:45</span></div>`);
+            // TODO: remove `hidden` class when the estimation calculation is fixed
+            const eventProgress = $(`<div class="progress"><div class="progress-bar" role="progressbar" style="width: 70%">35 / 75</div></div> <div class="mt-2 hidden"><span id="event" data-key="ETA">Estimated Time of Completion: </span><span id="eta">11:45</span></div>`);
             if (gameInfo.eventId === event.id) {
                 console.log('gameinfo = ', gameInfo);
                 eventTitle.append(eventProgress);
